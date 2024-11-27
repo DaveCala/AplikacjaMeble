@@ -52,8 +52,17 @@ try {
         </p>
       </div>
 
-  </div>
-  
+      <!-- Opis produktu -->
+      <p id="product-description" class="mb-4">
+        <?php echo htmlspecialchars($product['description'] ?? 'Ładowanie...'); ?>
+      </p>
+
+      <!-- Cena produktu -->
+      <p id="product-price" class="text-lg font-bold mb-4">
+        <?php echo htmlspecialchars($product['price'] ?? 'Cena: Ładowanie...'); ?>
+      </p>
+    </div>
+
     <!-- Sekcja: Wariacje Produktu -->
     <div id="product-variations" class="mt-10">
       <h2 class="text-2xl mb-6">Wariacje Produktu:</h2>

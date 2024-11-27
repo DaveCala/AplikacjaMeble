@@ -1,28 +1,20 @@
 <?php
+// Połączenie z bazą danych
 require_once '../db.php';
 
-// Sprawdzenie, czy podano ID produktu
-if (!isset($_GET['id'])) {
-    die('Brak ID produktu');
-}
+// Pobranie identyfikatora produktu z URL (przykład: product_details.php?id=1)
+$productId = isset($_GET['id']) ? $_GET['id'] : 0;
 
-// Pobranie ID produktu
-$productId = (int)$_GET['id'];
+// Zapytanie o dane produktu
+$query = "SELECT * FROM products WHERE id = $productId";
+$result = $conn->query($query);
 
-try {
-    // Przygotowanie zapytania
-    $stmt = $pdo->prepare("SELECT * FROM products WHERE id = :id");
-    $stmt->bindParam(':id', $productId, PDO::PARAM_INT);
-    $stmt->execute();
-
-    // Pobranie danych
-    $product = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$product) {
-        die('Produkt nie został znaleziony');
-    }
-} catch (PDOException $e) {
-    die("Błąd bazy danych: " . $e->getMessage());
+// Sprawdzanie, czy produkt został znaleziony
+if ($result->num_rows > 0) {
+    $product = $result->fetch_assoc();
+} else {
+    // Jeśli produkt nie istnieje, ustawiamy domyślne wartości
+    $product = null;
 }
 ?>
 
@@ -52,8 +44,17 @@ try {
         </p>
       </div>
 
-  </div>
-  
+      <!-- Opis produktu -->
+      <p id="product-description" class="mb-4">
+        <?php echo htmlspecialchars($product['description'] ?? 'Ładowanie...'); ?>
+      </p>
+
+      <!-- Cena produktu -->
+      <p id="product-price" class="text-lg font-bold mb-4">
+        <?php echo htmlspecialchars($product['price'] ?? 'Cena: Ładowanie...'); ?>
+      </p>
+    </div>
+
     <!-- Sekcja: Wariacje Produktu -->
     <div id="product-variations" class="mt-10">
       <h2 class="text-2xl mb-6">Wariacje Produktu:</h2>

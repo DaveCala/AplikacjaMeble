@@ -52,8 +52,7 @@ try {
         </p>
       </div>
 
-  </div>
-  
+
     <!-- Sekcja: Wariacje Produktu -->
     <div id="product-variations" class="mt-10">
       <h2 class="text-2xl mb-6">Wariacje Produktu:</h2>
