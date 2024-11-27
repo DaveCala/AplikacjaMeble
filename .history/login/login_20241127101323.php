@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: ../editor/editor_index.html');
             exit;
         } else {
-            header('Location: ../viewer/viewer_index.html');
+            header('Location: viewer_panel.html');
             exit;
         }
     } else {

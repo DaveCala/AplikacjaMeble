@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../db.php'; // Połącz z bazą danych
+require_once 'db.php'; // Połącz z bazą danych
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Pobierz dane z formularza
@@ -22,10 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Przekierowanie w zależności od roli
         if ($user['role'] === 'editor') {
-            header('Location: ../editor/editor_index.html');
+            header('Location: editor_index.html');
             exit;
         } else {
-            header('Location: ../viewer/viewer_index.html');
+            header('Location: viewer_panel.html');
             exit;
         }
     } else {
