@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Szczegóły Produktu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-800 text-white">
+  <div class="container mx-auto p-6">
+    <div id="product-details" class="bg-gray-900 p-6 rounded-lg shadow-lg">
+      <h1 id="product-title" class="text-3xl mb-4">Ładowanie...</h1>
+      <img id="product-image" src="" alt="Zdjęcie produktu" class="w-full h-auto max-h-96 object-contain mb-4">
+      <p id="product-description" class="mb-4">Ładowanie...</p>
+      <p id="product-price" class="text-lg font-bold mb-4"></p>
+    </div>
+
+    <div id="product-variations" class="mt-10">
+      <h2 class="text-2xl mb-6">Wariacje Produktu:</h2>
+      <!-- Wariacje będą dynamicznie generowane -->
+    </div>
+  </div>
+
+  <script>
+    const products = {
+      1: {
+        title: "Biurko młodzieżowe JOVI 14",
+        image: "logo_beautysofa_24_pionowe.png",
+        description: "Biurko młodzieżowe JOVI 14 z dębem lefkas, grafitowym korpusem i białymi akcentami.",
+        price: "799 zł",
+        variations: [
+          {
+            title: "JOVI 15",
+            ean: "1234567890123",
+            description: "Dąb san remo, szary korpus, biały.",
+            price: "849 zł",
+          },
+        ],
+      },
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get("id");
+
+    if (products[productId]) {
+      const product = products[productId];
+      document.getElementById("product-title").textContent = product.title;
+      document.getElementById("product-image").src = product.image;
+      document.getElementById("product-description").textContent = product.description;
+      document.getElementById("product-price").textContent = `Cena: ${product.price}`;
+
+      const variationsContainer = document.getElementById("product-variations");
+      product.variations.forEach((variation) => {
+        const variationElement = document.createElement("div");
+        variationElement.className = "bg-gray-900 p-4 mb-4 rounded-lg shadow";
+        variationElement.innerHTML = `
+          <h3 class="text-xl">${variation.title}</h3>
+          <p><strong>Opis:</strong> ${variation.description}</p>
+          <p><strong>Cena:</strong> ${variation.price}</p>
+          <p><strong>EAN:</strong> ${variation.ean}</p>
+        `;
+        variationsContainer.appendChild(variationElement);
+      });
+    } else {
+      document.getElementById("product-details").innerHTML = "<p>Produkt nie został znaleziony.</p>";
+    }
+  </script>
+</body>
+</html>

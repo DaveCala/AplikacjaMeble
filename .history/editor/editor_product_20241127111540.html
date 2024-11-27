@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strona z Kafelkami</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Funkcja do przełączania widoczności szczegółów wariacji
+    function toggleDetails(button) {
+      // Pobieramy kontener detali na podstawie ID powiązanego z przyciskiem
+      const details = button.closest('.product-card').querySelector('.variation-details');
+      details.classList.toggle('hidden'); // Przełączamy klasę hidden
+    }
+  </script>
+</head>
+<body class="bg-gray-800">
+
+  <header class="w-full bg-gray-900 py-6 text-center">
+    <h1 class="text-3xl font-bold">Biurko młodzieżowe JOVI 14</h1>
+  </header>
+
+  <!-- Pierwszy kafelek -->
+  <div class="bg-gray-900 w-full p-4 border border-gray-700 mb-4 product-card">
+    <!-- Kontener główny -->
+    <div class="grid grid-cols-5 gap-4 w-full h-12 items-center rounded-lg p-2 overflow-hidden">
+      
+      <!-- Tytuł - 2/5 szerokości -->
+      <div class="col-span-2 flex items-center justify-center text-white text-sm overflow-hidden">
+        <h3 class="truncate text-center">Biurko młodzieżowe JOVI 14 dąb lefkas, grafit, biały</h3>
+      </div>
+  
+      <!-- Główne zdjęcie - 1/5 szerokości -->
+      <div class="col-span-1 flex items-center justify-center">
+        <img src="logo_beautysofa_24_pionowe.png" alt="Główne zdjęcie" class="h-full max-h-8 w-auto object-contain rounded-lg">
+      </div>
+  
+      <!-- Kod EAN - 1/5 szerokości -->
+      <div class="col-span-1 flex items-center justify-center text-white overflow-hidden">
+        <p class="truncate text-sm">Kod EAN: 1234567890123</p>
+      </div>
+  
+      <!-- Przycisk Rozwiń - 1/5 szerokości -->
+      <div class="col-span-1 flex items-center justify-center">
+        <button class="bg-blue-500 text-white py-1 px-2 rounded-lg hover:bg-blue-600 text-sm" onclick="toggleDetails(this)">Rozwiń</button>
+      </div>
+  
+    </div>
+
+    <!-- Ukryte szczegóły wariacji (początkowo ukryte) -->
+    <div class="variation-details hidden w-full mt-4 text-white bg-gray-800 p-4 rounded-lg border border-gray-700">
+      <p><strong>Opis:</strong> Biurko młodzieżowe JOVI 14 z dębem lefkas, grafitowym korpusem i białymi akcentami.</p>
+      <p><strong>Cena:</strong> 799 zł</p>
+      <p><strong>EAN:</strong> 1234567890123</p>
+      <p><strong>Wymiary:</strong> 120x60x75 cm</p>
+      <p><strong>Materiał:</strong> Płyta MDF, drewno</p>
+      <p><strong>Dostępność:</strong> W magazynie</p>
+    </div>
+  </div>
+
+  <!-- Drugi kafelek -->
+  <div class="bg-gray-900 w-full p-4 border border-gray-700 mb-4 product-card">
+    <!-- Kontener główny -->
+    <div class="grid grid-cols-5 gap-4 w-full h-12 items-center rounded-lg p-2 overflow-hidden">
+      
+      <!-- Tytuł - 2/5 szerokości -->
+      <div class="col-span-2 flex items-center justify-center text-white text-sm overflow-hidden">
+        <h3 class="truncate text-center">Biurko młodzieżowe JOVI 15 dąb san remo, szary, biały</h3>
+      </div>
+  
+      <!-- Główne zdjęcie - 1/5 szerokości -->
+      <div class="col-span-1 flex items-center justify-center">
+        <img src="logo_beautysofa_24_pionowe.png" alt="Główne zdjęcie" class="h-full max-h-8 w-auto object-contain rounded-lg">
+      </div>
+  
+      <!-- Kod EAN - 1/5 szerokości -->
+      <div class="col-span-1 flex items-center justify-center text-white overflow-hidden">
+        <p class="truncate text-sm">Kod EAN: 9876543210987</p>
+      </div>
+  
+      <!-- Przycisk Rozwiń - 1/5 szerokości -->
+      <div class="col-span-1 flex items-center justify-center">
+        <button class="bg-blue-500 text-white py-1 px-2 rounded-lg hover:bg-blue-600 text-sm" onclick="toggleDetails(this)">Rozwiń</button>
+      </div>
+  
+    </div>
+
+    <!-- Ukryte szczegóły wariacji (początkowo ukryte) -->
+    <div class="variation-details hidden w-full mt-4 text-white bg-gray-800 p-4 rounded-lg border border-gray-700">
+      <p><strong>Opis:</strong> Biurko młodzieżowe JOVI 15 z dębem san remo, szarym korpusem i białymi akcentami.</p>
+      <p><strong>Cena:</strong> 849 zł</p>
+      <p><strong>EAN:</strong> 9876543210987</p>
+      <p><strong>Wymiary:</strong> 140x70x75 cm</p>
+      <p><strong>Materiał:</strong> Płyta MDF, drewno</p>
+      <p><strong>Dostępność:</strong> W magazynie</p>
+    </div>
+  </div>
+
+  <!-- Możesz dodać więcej kafelków według tego wzorca -->
+
+</body>
+</html>
