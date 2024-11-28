@@ -14,7 +14,7 @@ $username = trim($data['username']);
 $password = trim($data['password']);
 $role = trim($data['role']);
 
-// Sprawdź, czy hasło zostało zmienione
+// Hashowanie hasła tylko wtedy, gdy zostało zmienione
 $stmt = $pdo->prepare("SELECT password FROM users WHERE id = :id");
 $stmt->execute([':id' => $id]);
 $currentUser = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -25,7 +25,7 @@ if (!$currentUser) {
 }
 
 $hashedPassword = $currentUser['password'];
-if (!empty($password)) {
+if ($password !== $hashedPassword) {
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 }
 

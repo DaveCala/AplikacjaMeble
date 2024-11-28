@@ -117,7 +117,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if (data.success) {
                     // Aktualizujemy widok
                     row.querySelector('.username').textContent = usernameInput;
-                    row.querySelector('.password').textContent = '********'; // Ukrywamy hasło
+                    row.querySelector('.password').textContent = passwordInput;
                     row.querySelector('.role').textContent = roleSelect;
 
                     const actionsCell = row.querySelector('td:last-child');
@@ -136,7 +136,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 alert('Wystąpił błąd podczas zapisywania zmian.');
             });
         }
-
 
     </script>
 </body>

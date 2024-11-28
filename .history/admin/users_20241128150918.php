@@ -44,7 +44,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <tr data-id="<?= htmlspecialchars($user['id']); ?>">
                         <td class="border border-gray-700 p-2"><?= htmlspecialchars($user['id']); ?></td>
                         <td class="border border-gray-700 p-2 username"><?= htmlspecialchars($user['username']); ?></td>
-                        <td class="border border-gray-700 p-2 password">********</td>
+                        <td class="border border-gray-700 p-2 password"><?= htmlspecialchars($user['password']); ?></td>
                         <td class="border border-gray-700 p-2 role"><?= htmlspecialchars($user['role']); ?></td>
                         <td class="border border-gray-700 p-2">
                             <button onclick="editRow(this)" 
@@ -79,6 +79,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             actionsCell.innerHTML = `
                 <button onclick="saveRow(this)" class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600 mr-2">Zapisz</button>
+                <button onclick="cancelEditRow(this)" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">Anuluj</button>
             `;
 
             // Dodaj pole do zmiany hasła (opcjonalne)
@@ -117,7 +118,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if (data.success) {
                     // Aktualizujemy widok
                     row.querySelector('.username').textContent = usernameInput;
-                    row.querySelector('.password').textContent = '********'; // Ukrywamy hasło
+                    row.querySelector('.password').textContent = passwordInput;
                     row.querySelector('.role').textContent = roleSelect;
 
                     const actionsCell = row.querySelector('td:last-child');
@@ -136,7 +137,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 alert('Wystąpił błąd podczas zapisywania zmian.');
             });
         }
-
 
     </script>
 </body>
