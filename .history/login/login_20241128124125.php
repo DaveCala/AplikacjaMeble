@@ -21,8 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['role'] = $user['role']; // Dodaj inne dane użytkownika, np. email
 
         // Przekierowanie w zależności od roli
-        if ($user['role'] === 'editor' || $user['role'] === 'admin') {
-            header('Location: ../editor/editor_index.php');
+        if ($user['role'] === 'editor || admin') {
+            header('Location: ../editor/editor_index.');
             exit;
         } else {
             header('Location: ../viewer/viewer_index.html');

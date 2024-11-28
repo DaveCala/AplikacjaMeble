@@ -1,7 +1,6 @@
 <?php
 // Dołącz plik z połączeniem do bazy danych
 include('../db.php');
-session_start();
 
 // Zapytanie do bazy danych w celu pobrania wszystkich produktów
 $sql = "SELECT * FROM products";
@@ -24,20 +23,16 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <!-- Navbar -->
 <nav class="bg-gray-900 navbar w-full py-6 text-white flex justify-between items-center">
   <div class="flex items-center ml-6">
-      <img src="../img/logo_beautysofa_24_pionowe.png" class="w-10 h-10 mr-3" alt="Logo">
-      <div class="text-xl">Witaj <?php echo htmlspecialchars($_SESSION['username']); ?>!</div>
+    <img src="../img/logo_beautysofa_24_pionowe.png" class="w-10 h-10 mr-3" alt="Logo">
+    <div class="text-xl">Witaj!</div>
   </div>
-
   
   <div class="flex items-center mr-6">
     <!-- Przycisk Zarządzaj użytkownikami -->
-    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') : ?>
-        <a href="../admin/users.php" 
-          class="bg-gray-900 border border-white text-white py-2 px-4 rounded-lg hover:bg-gray-700 text-sm mr-4">
-          Zarządzaj użytkownikami
-        </a>
-    <?php endif; ?>
-
+    <a href="../admin/users.php" 
+       class="bg-gray-900 border border-white text-white py-2 px-4 rounded-lg hover:bg-gray-700 text-sm mr-4">
+       Zarządzaj użytkownikami
+    </a>
 
     <!-- Ikona Powiadomień -->
     <div class="relative">

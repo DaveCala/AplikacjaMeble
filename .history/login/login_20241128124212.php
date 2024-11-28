@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Przekierowanie w zależności od roli
         if ($user['role'] === 'editor' || $user['role'] === 'admin') {
-            header('Location: ../editor/editor_index.php');
+            header('Location: ../editor/editor_index.');
             exit;
         } else {
             header('Location: ../viewer/viewer_index.html');

@@ -21,11 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['role'] = $user['role']; // Dodaj inne dane użytkownika, np. email
 
         // Przekierowanie w zależności od roli
-        if ($user['role'] === 'editor' || $user['role'] === 'admin') {
+        if ($user['role'] === 'editor') {
             header('Location: ../editor/editor_index.php');
             exit;
-        } else {
-            header('Location: ../viewer/viewer_index.html');
+        } else if ($user['role'] === 'admin') {
+            header('Location: ../editor/editor_index.php');
             exit;
         }
     } else {
