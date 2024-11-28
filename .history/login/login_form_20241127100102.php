@@ -12,7 +12,7 @@
 
     <form action="login.php" method="POST" class="bg-gray-900 p-8 rounded-lg shadow-lg w-full max-w-sm">
         <div class="flex justify-center items-center">
-            <img src="../img/logo_beautysofa_24_pionowe.png" style="width: 100px; height: 100px; object-fit: contain;" alt="Logo BeautySofa">
+            <img src="img/logo_beautysofa_24_pionowe.png" style="width: 100px; height: 100px; object-fit: contain;" alt="Logo BeautySofa">
         </div>
         <h2 class="text-2xl text-center mb-6">Zaloguj się</h2>
 
