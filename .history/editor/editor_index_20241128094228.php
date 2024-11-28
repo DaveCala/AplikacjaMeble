@@ -21,27 +21,20 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body class="bg-gray-800">
 
   <!-- Navbar -->
-<nav class="bg-gray-900 navbar w-full py-6 text-white flex justify-between items-center">
-  <div class="flex items-center ml-6">
-    <img src="../img/logo_beautysofa_24_pionowe.png" class="w-10 h-10 mr-3" alt="Logo">
-    <div class="text-xl">Witaj!</div>
-  </div>
-  
-  <div class="flex items-center mr-6">
-    <!-- Przycisk Zarządzaj użytkownikami -->
-    <a href="../admin/users.php" 
-       class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm mr-4">
-       Zarządzaj użytkownikami
-    </a>
-
-    <!-- Ikona Powiadomień -->
-    <div class="relative">
-      <img src="../img/mailbox.png" alt="Ikona Powiadomień" 
-           class="w-10 h-10 cursor-pointer" onclick="toggleNotifications()">
+  <nav class="bg-gray-900 navbar w-full py-6 text-white flex justify-between items-center">
+    <div class="flex items-center ml-6">
+      <img src="../img/logo_beautysofa_24_pionowe.png" class="w-10 h-10 mr-3" alt="Logo">
+      <div class="text-xl">Witaj!</div>
     </div>
-  </div>
-</nav>
-
+    <div class="mr-6">
+      <a href="manage_users.php" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm">
+        Zarządzaj użytkownikami
+      </a>
+      <div class="relative">
+        <img src="../img/mailbox.png" alt="Ikona Powiadomień" class="w-10 h-10 cursor-pointer" onclick="toggleNotifications()">
+      </div>
+    </div>
+  </nav>
 
   <!-- Sekcja wyszukiwania -->
   <div class="mx-auto my-10 w-3/4 md:w-1/2">

@@ -29,7 +29,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
   
   <div class="flex items-center mr-6">
     <!-- Przycisk Zarządzaj użytkownikami -->
-    <a href="../admin/users.php" 
+    <a href="users.php" 
        class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm mr-4">
        Zarządzaj użytkownikami
     </a>
