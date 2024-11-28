@@ -23,7 +23,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="text-xl">Panel zarządzania użytkownikami</div>
         </div>
         <div class="mr-6">
-            <a href="../editor/editor_index.php" class="text-white hover:text-gray-300">Powrót</a>
+            <a href="editor_index.html" class="text-white hover:text-gray-300">Powrót</a>
         </div>
     </nav>
 
@@ -81,7 +81,9 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             roleCell.innerHTML = `<select class="w-full bg-gray-800 text-green-500 border border-green-500 p-2 rounded">${roleOptions}</select>`;
 
             actionsCell.innerHTML = `
-                <button onclick="saveRow(this)" class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600 mr-2">Zapisz</button>`;
+                <button onclick="saveRow(this)" class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600 mr-2">Zapisz</button>
+                <button onclick="cancelEdit(this, '${username}', '${password}', '${role}')" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">Anuluj</button>
+            `;
         }
 
 

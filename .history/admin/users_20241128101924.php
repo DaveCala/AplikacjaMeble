@@ -23,7 +23,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="text-xl">Panel zarządzania użytkownikami</div>
         </div>
         <div class="mr-6">
-            <a href="../editor/editor_index.php" class="text-white hover:text-gray-300">Powrót</a>
+            <a href="editor_index.html" class="text-white hover:text-gray-300">Powrót</a>
         </div>
     </nav>
 
@@ -81,59 +81,66 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             roleCell.innerHTML = `<select class="w-full bg-gray-800 text-green-500 border border-green-500 p-2 rounded">${roleOptions}</select>`;
 
             actionsCell.innerHTML = `
-                <button onclick="saveRow(this)" class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600 mr-2">Zapisz</button>`;
+                <button onclick="saveRow(this)" class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600 mr-2">Zapisz</button>
+                <button onclick="cancelEdit(this, '${username}', '${password}', '${role}')" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">Anuluj</button>
+            `;
         }
 
 
         // Funkcja do zapisywania zmian
         function saveRow(button) {
             const row = button.closest('tr');
-            const userId = row.getAttribute('data-id'); // Pobieramy ID użytkownika
-            const usernameInput = row.querySelector('.username input').value.trim();
-            const passwordInput = row.querySelector('.password input').value.trim();
-            const roleSelect = row.querySelector('.role select').value;
+            const id = row.getAttribute('data-id');
+            const updatedUsername = row.querySelector('.username input').value.trim();
+            const updatedPassword = row.querySelector('.password input').value.trim();
+            const updatedRole = row.querySelector('.role input').value.trim();
 
-            // Dane do wysłania
-            const updatedUser = {
-                id: userId,
-                username: usernameInput,
-                password: passwordInput,
-                role: roleSelect,
-            };
-
-            // Wyślij dane do serwera
             fetch('update_user.php', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedUser),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id,
+                    username: updatedUsername,
+                    password: updatedPassword,
+                    role: updatedRole
+                })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Aktualizujemy widok
-                    row.querySelector('.username').textContent = usernameInput;
-                    row.querySelector('.password').textContent = passwordInput;
-                    row.querySelector('.role').textContent = roleSelect;
-
-                    const actionsCell = row.querySelector('td:last-child');
-                    actionsCell.innerHTML = `
+                    row.querySelector('.username').textContent = updatedUsername;
+                    row.querySelector('.password').textContent = updatedPassword;
+                    row.querySelector('.role').textContent = updatedRole;
+                    row.querySelector('td:last-child').innerHTML = `
                         <button onclick="editRow(this)" 
                                 class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
                             Edytuj
                         </button>
                     `;
                 } else {
-                    alert('Wystąpił błąd podczas zapisywania: ' + data.message);
+                    alert('Błąd podczas zapisywania: ' + (data.error || 'Nieznany problem.'));
                 }
             })
-            .catch(error => {
-                console.error('Błąd:', error);
-                alert('Wystąpił błąd podczas zapisywania zmian.');
+            .catch(err => {
+                console.error('Błąd żądania:', err);
+                alert('Nie udało się zapisać zmian.');
             });
         }
 
+        // Funkcja do anulowania edycji
+        function cancelEdit(button, username, password, role) {
+            const row = button.closest('tr');
+            row.querySelector('.username').textContent = username;
+            row.querySelector('.password').textContent = password;
+            row.querySelector('.role').textContent = role;
+
+            row.querySelector('td:last-child').innerHTML = `
+                <button onclick="editRow(this)" 
+                        class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
+                    Edytuj
+                </button>
+            `;
+        }
     </script>
 </body>
 </html>

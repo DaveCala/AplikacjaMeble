@@ -66,23 +66,35 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             const usernameCell = row.querySelector('.username');
             const passwordCell = row.querySelector('.password');
             const roleCell = row.querySelector('.role');
+
+            // Zapisujemy oryginalne wartości jako atrybuty wiersza
+            row.setAttribute('data-original-username', usernameCell.textContent.trim());
+            row.setAttribute('data-original-password', passwordCell.textContent.trim());
+            row.setAttribute('data-original-role', roleCell.textContent.trim());
+
+            // Wprowadzamy pola edycyjne
+            usernameCell.innerHTML = `<input type="text" value="${usernameCell.textContent.trim()}" class="w-full px-2 py-1 border rounded">`;
+            passwordCell.innerHTML = `<input type="text" value="${passwordCell.textContent.trim()}" class="w-full px-2 py-1 border rounded">`;
+            roleCell.innerHTML = `
+                <select class="w-full px-2 py-1 border rounded">
+                    <option value="editor" ${roleCell.textContent.trim() === 'editor' ? 'selected' : ''}>Editor</option>
+                    <option value="viewer" ${roleCell.textContent.trim() === 'viewer' ? 'selected' : ''}>Viewer</option>
+                </select>
+            `;
+
             const actionsCell = row.querySelector('td:last-child');
-
-            const username = usernameCell.textContent.trim();
-            const password = passwordCell.textContent.trim();
-            const role = roleCell.textContent.trim();
-
-            usernameCell.innerHTML = `<input type="text" value="${username}" class="w-full bg-gray-800 text-green-500 border border-green-500 p-2 rounded">`;
-            passwordCell.innerHTML = `<input type="text" value="${password}" class="w-full bg-gray-800 text-green-500 border border-green-500 p-2 rounded">`;
-            
-            // Opcje do wyboru dla pola roli
-            const roles = ['editor', 'viewer', 'admin'];
-            let roleOptions = roles.map(r => `<option value="${r}" ${r === role ? 'selected' : ''}>${r}</option>`).join('');
-            roleCell.innerHTML = `<select class="w-full bg-gray-800 text-green-500 border border-green-500 p-2 rounded">${roleOptions}</select>`;
-
             actionsCell.innerHTML = `
-                <button onclick="saveRow(this)" class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600 mr-2">Zapisz</button>`;
+                <button onclick="saveRow(this)" 
+                        class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600">
+                    Zapisz
+                </button>
+                <button onclick="cancelEdit(this)" 
+                        class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">
+                    Anuluj
+                </button>
+            `;
         }
+
 
 
         // Funkcja do zapisywania zmian
