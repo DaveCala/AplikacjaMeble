@@ -29,7 +29,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <!-- Navbar -->
 <nav class="bg-gray-900 navbar w-full py-6 text-white flex justify-between items-center">
-  <div class="flex items-center ml-6">
+<div class="flex items-center ml-6">
       <img src="../img/logo_beautysofa_24_pionowe.png" class="w-10 h-10 mr-3" alt="Logo">
       <div class="text-xl">Witaj <?php echo htmlspecialchars($_SESSION['user']['username']); ?>!</div>
 
@@ -37,29 +37,26 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   
   <div class="flex items-center mr-6">
-    <!-- Przycisk Wyloguj się -->
-  <?php if (isset($_SESSION['user'])) : ?>
-            <a href="../login/logout.php" 
-            class="bg-gray-900 border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-600 hover:text-white text-sm mr-4">
-               Wyloguj się
-            </a>
-        <?php endif; ?>
-
-
     <!-- Przycisk Zarządzaj użytkownikami -->
-    <?php if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin') : ?>
+    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') : ?>
         <a href="../admin/users.php" 
           class="bg-gray-900 border border-white text-white py-2 px-4 rounded-lg hover:bg-gray-700 text-sm mr-4">
           Zarządzaj użytkownikami
         </a>
     <?php endif; ?>
 
-    
+    <!-- Przycisk Wyloguj się -->
+    <?php if (isset($_SESSION['user'])) : ?>
+            <a href="logout.php" 
+               class="bg-gray-900 border border-white text-white py-2 px-4 rounded-lg hover:bg-gray-700 text-sm mr-4">
+               Wyloguj się
+            </a>
+      <?php endif; ?>
 
     <!-- Ikona Powiadomień -->
     <div class="relative">
       <img src="../img/mailbox.png" alt="Ikona Powiadomień" 
-           class="w-10 h-10 cursor-pointer ml-8" onclick="toggleNotifications()">
+           class="w-10 h-10 cursor-pointer" onclick="toggleNotifications()">
     </div>
   </div>
 </nav>
@@ -98,7 +95,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
           <!-- Przycisk - 1/5 szerokości -->
           <div class="col-span-1 flex items-center justify-center">
-            <a href="editor_product.php?id=<?php echo $product['id']; ?>" class="bg-blue-500 text-white py-1 px-2 rounded-lg hover:bg-blue-600 text-sm">Obejrzyj</a>
+            <a href="viewer_product.php?id=<?php echo $product['id']; ?>" class="bg-blue-500 text-white py-1 px-2 rounded-lg hover:bg-blue-600 text-sm">Obejrzyj</a>
           </div>
 
         </div> 

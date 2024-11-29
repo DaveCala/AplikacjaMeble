@@ -40,7 +40,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Przycisk Wyloguj się -->
   <?php if (isset($_SESSION['user'])) : ?>
             <a href="../login/logout.php" 
-            class="bg-gray-900 border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-600 hover:text-white text-sm mr-4">
+            class="bg-gray-900 border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-gray-700 hover:text-red-300 text-sm mr-4">
                Wyloguj się
             </a>
         <?php endif; ?>
@@ -59,7 +59,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Ikona Powiadomień -->
     <div class="relative">
       <img src="../img/mailbox.png" alt="Ikona Powiadomień" 
-           class="w-10 h-10 cursor-pointer ml-8" onclick="toggleNotifications()">
+           class="w-10 h-10 cursor-pointer ml-10" onclick="toggleNotifications()">
     </div>
   </div>
 </nav>
