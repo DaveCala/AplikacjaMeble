@@ -15,10 +15,6 @@ session_start();
     <div class="bg-gray-900 p-6 rounded-lg w-full max-w-md">
         <h1 class="text-white text-2xl mb-4 text-center">Logowanie</h1>
 
-        <div class="flex justify-center items-center">
-            <img src="../img/logo_beautysofa_24_pionowe.png" style="width: 100px; height: 100px; object-fit: contain;" alt="Logo BeautySofa">
-        </div>
-
         <!-- Sprawdzamy, czy w sesji jest komunikat o błędzie -->
         <?php if (isset($_SESSION['error_message'])) : ?>
             <div class="bg-red-600 text-white py-2 px-4 rounded-lg mb-4">

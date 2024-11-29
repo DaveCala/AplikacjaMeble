@@ -2,6 +2,12 @@
 session_start();
 require_once '../db.php'; // Połączenie z bazą danych
 
+// Włączanie wyświetlania błędów
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+$errorMessage = ''; // Przechowujemy komunikat o błędzie
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
@@ -11,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([':username' => $username]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    // Sprawdzamy, czy dane są poprawne
     if ($user && password_verify($password, $user['password'])) {
         // Logowanie zakończone sukcesem - zapisujemy dane w sesji
         $_SESSION['user'] = [
@@ -19,22 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'role' => $user['role'],
         ];
 
-        // Przekierowanie w zależności od roli
-        if ($user['role'] === 'admin') {
-            header('Location: ../editor/editor_index.php'); // Przekierowanie dla admina
-            exit;
-        } else if ($user['role'] === 'editor') {
-            header('Location: ../editor/editor_index.php'); // Przekierowanie dla edytora
-            exit;
-        } else if ($user['role'] === 'viewer') {
-            header('Location: ../viewer/viewer_index.php'); // Przekierowanie dla widza
-            exit;
-        }
+        // Tutaj nie wykonujemy żadnych przekierowań, tylko po prostu odświeżamy stronę
     } else {
-        // Ustawiamy komunikat o błędzie w sesji, aby przekazać go na stronę logowania
+        // Ustawiamy komunikat o błędzie
         $_SESSION['error_message'] = 'Nieprawidłowy login lub hasło';
-        header('Location: login_form.php'); // Zostajemy na stronie login_form.php
-        exit;
     }
+
+    // Usuwamy dane z formularza po błędzie
+    unset($username);
+    unset($password);
 }
 ?>

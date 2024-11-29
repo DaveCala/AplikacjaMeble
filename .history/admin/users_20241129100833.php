@@ -27,6 +27,38 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </nav>
 
+    <!-- Tabela użytkowników -->
+    <div class="w-full bg-gray-900 p-4">
+        <table class="w-full text-white">
+            <thead>
+                <tr>
+                    <th class="border border-gray-700 p-2">ID</th>
+                    <th class="border border-gray-700 p-2">Username</th>
+                    <th class="border border-gray-700 p-2">Password</th>
+                    <th class="border border-gray-700 p-2">Role</th>
+                    <th class="border border-gray-700 p-2">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="usersTable">
+                <?php foreach ($users as $user): ?>
+                    <tr data-id="<?= htmlspecialchars($user['id']); ?>">
+                        <td class="border border-gray-700 p-2"><?= htmlspecialchars($user['id']); ?></td>
+                        <td class="border border-gray-700 p-2 username"><?= htmlspecialchars($user['username']); ?></td>
+                        <td class="border border-gray-700 p-2 password">********</td>
+                        <td class="border border-gray-700 p-2 role"><?= htmlspecialchars($user['role']); ?></td>
+                        <td class="border border-gray-700 p-2">
+                            <button onclick="editRow(this)" 
+                                    class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
+                                Edytuj
+                            </button>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+
+        </table>
+    </div>
+
     <button type="button" onclick="openAddUserModal()" 
     class="w-full py-3 bg-blue-600 rounded-lg text-white text-lg hover:bg-blue-500 mt-4">
     Dodaj użytkownika
@@ -67,40 +99,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 
-
-    <!-- Tabela użytkowników -->
-    <div class="w-full bg-gray-900 p-4">
-        <table class="w-full text-white">
-            <thead>
-                <tr>
-                    <th class="border border-gray-700 p-2">ID</th>
-                    <th class="border border-gray-700 p-2">Username</th>
-                    <th class="border border-gray-700 p-2">Password</th>
-                    <th class="border border-gray-700 p-2">Role</th>
-                    <th class="border border-gray-700 p-2">Actions</th>
-                </tr>
-            </thead>
-            <tbody id="usersTable">
-                <?php foreach ($users as $user): ?>
-                    <tr data-id="<?= htmlspecialchars($user['id']); ?>">
-                        <td class="border border-gray-700 p-2"><?= htmlspecialchars($user['id']); ?></td>
-                        <td class="border border-gray-700 p-2 username"><?= htmlspecialchars($user['username']); ?></td>
-                        <td class="border border-gray-700 p-2 password">********</td>
-                        <td class="border border-gray-700 p-2 role"><?= htmlspecialchars($user['role']); ?></td>
-                        <td class="border border-gray-700 p-2">
-                            <button onclick="editRow(this)" 
-                                    class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
-                                Edytuj
-                            </button>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-
-        </table>
-    </div>
-
-    
 
     <script>
         // Funkcja do edycji wiersza
@@ -179,38 +177,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 alert('Wystąpił błąd podczas zapisywania zmian.');
             });
         }
-
-        function openAddUserModal() {
-        document.getElementById('addUserModal').classList.remove('hidden');
-    }
-
-    function closeAddUserModal() {
-        document.getElementById('addUserModal').classList.add('hidden');
-    }
-
-    document.getElementById('addUserForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        const formData = new FormData(event.target);
-
-        fetch('add_user.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Użytkownik został dodany!');
-                closeAddUserModal();
-            } else {
-                alert('Błąd: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Błąd:', error);
-            alert('Wystąpił błąd przy dodawaniu użytkownika.');
-        });
-    });
 
 
     </script>

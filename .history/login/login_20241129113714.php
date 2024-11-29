@@ -1,5 +1,41 @@
 <?php
 session_start();
+require_once '../db.php'; // Połączenie z bazą danych
+
+// Włączanie wyświetlania błędów
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+$errorMessage = ''; // Przechowujemy komunikat o błędzie
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
+
+    // Pobieramy dane użytkownika z bazy danych
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :username");
+    $stmt->execute([':username' => $username]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Sprawdzamy, czy dane są poprawne
+    if ($user && password_verify($password, $user['password'])) {
+        // Logowanie zakończone sukcesem - zapisujemy dane w sesji
+        $_SESSION['user'] = [
+            'id' => $user['id'],
+            'username' => $user['username'],
+            'role' => $user['role'],
+        ];
+
+        // Tutaj nie wykonujemy żadnych przekierowań, tylko po prostu odświeżamy stronę
+    } else {
+        // Ustawiamy komunikat o błędzie
+        $_SESSION['error_message'] = 'Nieprawidłowy login lub hasło';
+    }
+
+    // Usuwamy dane z formularza po błędzie
+    unset($username);
+    unset($password);
+}
 ?>
 
 <!DOCTYPE html>
@@ -15,11 +51,7 @@ session_start();
     <div class="bg-gray-900 p-6 rounded-lg w-full max-w-md">
         <h1 class="text-white text-2xl mb-4 text-center">Logowanie</h1>
 
-        <div class="flex justify-center items-center">
-            <img src="../img/logo_beautysofa_24_pionowe.png" style="width: 100px; height: 100px; object-fit: contain;" alt="Logo BeautySofa">
-        </div>
-
-        <!-- Sprawdzamy, czy w sesji jest komunikat o błędzie -->
+        <!-- Wyświetlanie komunikatu o błędzie -->
         <?php if (isset($_SESSION['error_message'])) : ?>
             <div class="bg-red-600 text-white py-2 px-4 rounded-lg mb-4">
                 <?php echo htmlspecialchars($_SESSION['error_message']); ?>

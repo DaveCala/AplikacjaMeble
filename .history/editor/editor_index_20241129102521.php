@@ -29,7 +29,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <!-- Navbar -->
 <nav class="bg-gray-900 navbar w-full py-6 text-white flex justify-between items-center">
-<div class="flex items-center ml-6">
+  <div class="flex items-center ml-6">
       <img src="../img/logo_beautysofa_24_pionowe.png" class="w-10 h-10 mr-3" alt="Logo">
       <div class="text-xl">Witaj <?php echo htmlspecialchars($_SESSION['user']['username']); ?>!</div>
 
@@ -88,7 +88,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
           <!-- Przycisk - 1/5 szerokości -->
           <div class="col-span-1 flex items-center justify-center">
-            <a href="viewer_product.php?id=<?php echo $product['id']; ?>" class="bg-blue-500 text-white py-1 px-2 rounded-lg hover:bg-blue-600 text-sm">Obejrzyj</a>
+            <a href="editor_product.php?id=<?php echo $product['id']; ?>" class="bg-blue-500 text-white py-1 px-2 rounded-lg hover:bg-blue-600 text-sm">Obejrzyj</a>
           </div>
 
         </div> 

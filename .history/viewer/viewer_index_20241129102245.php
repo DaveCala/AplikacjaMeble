@@ -29,10 +29,9 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <!-- Navbar -->
 <nav class="bg-gray-900 navbar w-full py-6 text-white flex justify-between items-center">
-<div class="flex items-center ml-6">
+  <div class="flex items-center ml-6">
       <img src="../img/logo_beautysofa_24_pionowe.png" class="w-10 h-10 mr-3" alt="Logo">
-      <div class="text-xl">Witaj <?php echo htmlspecialchars($_SESSION['user']['username']); ?>!</div>
-
+      <div class="text-xl">Witaj <?php echo htmlspecialchars($_SESSION['username']); ?>!</div>
   </div>
 
   

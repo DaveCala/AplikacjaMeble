@@ -18,23 +18,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'username' => $user['username'],
             'role' => $user['role'],
         ];
-
-        // Przekierowanie w zależności od roli
-        if ($user['role'] === 'admin') {
-            header('Location: ../editor/editor_index.php'); // Przekierowanie dla admina
-            exit;
-        } else if ($user['role'] === 'editor') {
-            header('Location: ../editor/editor_index.php'); // Przekierowanie dla edytora
-            exit;
-        } else if ($user['role'] === 'viewer') {
-            header('Location: ../viewer/viewer_index.php'); // Przekierowanie dla widza
-            exit;
-        }
+        // Przekierowanie po zalogowaniu
+        header('Location: ../editor/editor_index.php');
+        exit;
     } else {
         // Ustawiamy komunikat o błędzie w sesji, aby przekazać go na stronę logowania
         $_SESSION['error_message'] = 'Nieprawidłowy login lub hasło';
-        header('Location: login_form.php'); // Zostajemy na stronie login_form.php
-        exit;
     }
 }
+?>
+
+<!-- Następnie w pliku login_form.php odwołujemy się do zmiennej sesyjnej -->
+<?php
+header('Location: login_form.php'); // Zostajemy na tej samej stronie
+exit;
 ?>
