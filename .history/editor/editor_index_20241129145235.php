@@ -68,7 +68,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <!-- Sekcja wyszukiwania -->
   <div class="mx-auto my-10 w-3/4 md:w-1/2">
   <input type="text" placeholder="Wyszukaj meble" 
-       class="w-full py-2 px-4 text-lg rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#B79962]">
+       class="w-full py-2 px-4 text-lg rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[rgb(183 153 89)]">
   </div>
 
   <div class="flex justify-between items-center mt-10 mb-4 mx-6">
