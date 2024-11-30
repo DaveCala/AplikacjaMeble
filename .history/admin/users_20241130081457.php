@@ -28,30 +28,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </nav>
 
-    <!-- Sekcja komunikatów -->
-    <div class="w-full text-center py-4">
-        <?php if (isset($_GET['success']) && $_GET['success'] === 'deleted'): ?>
-            <p class="text-green-500">Użytkownik został pomyślnie usunięty.</p>
-        <?php elseif (isset($_GET['error']) && $_GET['error'] === 'self_delete'): ?>
-            <p class="text-red-500">Nie możesz usunąć samego siebie!</p>
-        <?php elseif (isset($_GET['error']) && $_GET['error'] === 'invalid_request'): ?>
-            <p class="text-red-500">Nieprawidłowe żądanie usunięcia.</p>
-        <?php endif; ?>
-    </div>
-    <?php
-    // Wyświetlanie komunikatów z sesji (jeśli istnieją)
-    if (isset($_SESSION['message'])) {
-        echo '<div class="bg-green-500 text-white p-3 rounded mb-4">' . htmlspecialchars($_SESSION['message']) . '</div>';
-        unset($_SESSION['message']); // Usuń komunikat po jego wyświetleniu
-    }
-
-    if (isset($_SESSION['error'])) {
-        echo '<div class="bg-red-500 text-white p-3 rounded mb-4">' . htmlspecialchars($_SESSION['error']) . '</div>';
-        unset($_SESSION['error']); // Usuń komunikat po jego wyświetleniu
-    }
-    ?>
-
-
     <button type="button" onclick="openAddUserModal()" 
     class="w-full py-3 bg-blue-600 rounded-lg text-white text-lg hover:bg-blue-500 mt-4">
     Dodaj użytkownika
@@ -134,6 +110,14 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </table>
     </div>
 
+    <?php if (isset($_GET['success']) && $_GET['success'] === 'deleted'): ?>
+        <p class="text-green-500 text-center mb-4">Użytkownik został pomyślnie usunięty.</p>
+    <?php elseif (isset($_GET['error']) && $_GET['error'] === 'self_delete'): ?>
+        <p class="text-red-500 text-center mb-4">Nie możesz usunąć samego siebie!</p>
+    <?php elseif (isset($_GET['error']) && $_GET['error'] === 'invalid_request'): ?>
+        <p class="text-red-500 text-center mb-4">Nieprawidłowe żądanie usunięcia.</p>
+    <?php endif; ?>
+
     <script>
         // Funkcja do edycji wiersza
         function editRow(button) {
@@ -196,16 +180,12 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     row.querySelector('.role').textContent = roleSelect;
 
                     const actionsCell = row.querySelector('td:last-child');
-                        actionsCell.innerHTML = `
-                            <button onclick="editRow(this)" 
-                                    class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600 mr-2">
-                                Edytuj
-                            </button>
-                            <button onclick="deleteRow(${userId})" 
-                                    class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">
-                                Usuń
-                            </button>
-                        `;
+                    actionsCell.innerHTML = `
+                        <button onclick="editRow(this)" 
+                                class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
+                            Edytuj
+                        </button>
+                    `;
                 } else {
                     alert('Wystąpił błąd podczas zapisywania: ' + data.message);
                 }

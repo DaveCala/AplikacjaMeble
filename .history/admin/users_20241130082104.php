@@ -38,18 +38,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <p class="text-red-500">Nieprawidłowe żądanie usunięcia.</p>
         <?php endif; ?>
     </div>
-    <?php
-    // Wyświetlanie komunikatów z sesji (jeśli istnieją)
-    if (isset($_SESSION['message'])) {
-        echo '<div class="bg-green-500 text-white p-3 rounded mb-4">' . htmlspecialchars($_SESSION['message']) . '</div>';
-        unset($_SESSION['message']); // Usuń komunikat po jego wyświetleniu
-    }
-
-    if (isset($_SESSION['error'])) {
-        echo '<div class="bg-red-500 text-white p-3 rounded mb-4">' . htmlspecialchars($_SESSION['error']) . '</div>';
-        unset($_SESSION['error']); // Usuń komunikat po jego wyświetleniu
-    }
-    ?>
 
 
     <button type="button" onclick="openAddUserModal()" 

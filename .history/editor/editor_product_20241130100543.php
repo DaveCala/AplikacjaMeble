@@ -107,38 +107,48 @@ try {
 
   <script>
     document.getElementById('save-product-details').addEventListener('click', function () {
-    const title = document.getElementById('edit-product-title').value.trim();
-    const category = document.getElementById('edit-product-category').value.trim();
-    const imageInput = document.getElementById('edit-product-image');
-    const productId = document.getElementById('product-id').value;
+      const title = document.getElementById('edit-product-title').value.trim();
+      const category = document.getElementById('edit-product-category').value.trim();
+      const imageInput = document.getElementById('edit-product-image');
+      const formData = new FormData();
 
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('category', category);
-    formData.append('product_id', productId); // Dodajemy id produktu
-    if (imageInput.files.length > 0) {
+      formData.append('title', title);
+      formData.append('category', category);
+      if (imageInput.files.length > 0) {
         formData.append('image', imageInput.files[0]);
-    }
+      }
 
-    fetch('update_product.php', {
+      document.getElementById('save-product-details').addEventListener('click', function () {
+      const title = document.getElementById('edit-product-title').value.trim();
+      const category = document.getElementById('edit-product-category').value.trim();
+      const imageInput = document.getElementById('edit-product-image');
+      const productId = document.getElementById('product-id').value;
+
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('category', category);
+      if (imageInput.files.length > 0) {
+        formData.append('image', imageInput.files[0]);
+      }
+
+      fetch(`update_product.php?id=${productId}`, {
         method: 'POST',
-        body: formData, // Wysyłanie danych za pomocą POST
-    })
-    .then(response => response.json())
-    .then(data => {
+        body: formData,
+      })
+      .then(response => response.json())
+      .then(data => {
         if (data.success) {
-            alert('Produkt został zaktualizowany.');
-            location.reload();
+          alert('Produkt został zaktualizowany.');
+          location.reload();
         } else {
-            alert('Błąd: ' + data.message);
+          alert('Błąd: ' + data.message);
         }
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         console.error('Błąd:', error);
         alert('Wystąpił błąd podczas zapisywania.');
+      });
     });
-});
-
 
 
 
@@ -159,6 +169,7 @@ try {
         console.error('Błąd:', error);
         alert('Wystąpił błąd podczas zapisywania.');
       });
+    });
   </script>
 </body>
 </html>

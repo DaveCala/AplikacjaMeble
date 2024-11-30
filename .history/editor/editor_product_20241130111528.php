@@ -159,6 +159,7 @@ try {
         console.error('Błąd:', error);
         alert('Wystąpił błąd podczas zapisywania.');
       });
+    });
   </script>
 </body>
 </html>
