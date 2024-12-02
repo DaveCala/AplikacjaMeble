@@ -109,33 +109,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <script>
-  document.getElementById('add-product').addEventListener('submit', function (e) {
-  e.preventDefault(); // Zapobiega przeładowaniu strony
-
-  const form = e.target;
-  const formData = new FormData(form);
-
-  fetch('add_product.php', {
-    method: 'POST',
-    body: formData,
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      alert(data.message || 'Produkt został dodany pomyślnie.');
-      form.reset();
-      loadProductList(); // Odśwież listę produktów
-    } else {
-      alert('Błąd: ' + (data.message || 'Nie udało się dodać produktu.'));
-    }
-  })
-  .catch(error => {
-    console.error('Błąd:', error);
-    alert('Wystąpił błąd podczas dodawania produktu.');
-  });
-});
-
-
   // Funkcja toggle dla formularza
   document.getElementById('toggle-add-form').addEventListener('click', function () {
     document.getElementById('add-product-form').classList.toggle('hidden');

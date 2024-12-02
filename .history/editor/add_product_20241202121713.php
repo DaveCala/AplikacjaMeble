@@ -17,9 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Obsługa pliku obrazu
     if (!empty($_FILES['image']['name'])) {
-        $targetDir = "../img/";
-        $imageFileName = basename($_FILES['image']['name']);
-        $targetFilePath = $targetDir . $imageFileName;
+        $targetDir = "../img/";  // Katalog, w którym przechowywane będą zdjęcia
+        $imageFileName = basename($_FILES['image']['name']);  // Pobieramy nazwę pliku
+        $targetFilePath = $targetDir . $imageFileName;  // Pełna ścieżka do pliku na serwerze
 
         // Sprawdzamy typ pliku
         $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
@@ -30,14 +30,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        // Przesyłanie pliku
+        // Przesyłanie pliku na serwer
         if (!move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
-            $response['message'] = 'Błąd przesyłania pliku: ' . $_FILES['image']['error'];
+            $response['message'] = 'Błąd przesyłania pliku.';
             echo json_encode($response);
             exit;
         }
 
-        $imagePath = $imageFileName;
+        $imagePath = $imageFileName;  // Zapisujemy nazwę pliku
     }
 
     // Dodanie produktu do bazy danych
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute()) {
             $response['success'] = true;
         } else {
-            $response['message'] = 'Nie udało się dodać produktu. Błąd SQL: ' . implode(" ", $stmt->errorInfo());
+            $response['message'] = 'Nie udało się dodać produktu.';
         }
     } catch (Exception $e) {
         $response['message'] = 'Błąd: ' . $e->getMessage();

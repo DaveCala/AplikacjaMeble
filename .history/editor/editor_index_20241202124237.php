@@ -88,10 +88,10 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php foreach ($products as $product) : ?>
       <div class="bg-gray-900 w-full p-4 border border-gray-700 mb-4">
         <div class="grid grid-cols-5 gap-4 items-center">
-          <div class="col-span-2 text-white text-sm">
+          <div class="col-span-1 text-white text-sm">
             <h3><?php echo htmlspecialchars($product['title']); ?></h3>
           </div>
-          <div class="col-span-1">
+          <div class="col-span-2">
             <img src="../img/<?php echo htmlspecialchars($product['image']); ?>" alt="Produkt" class="h-16 w-auto object-contain">
           </div>
           <div class="col-span-1 text-white">
