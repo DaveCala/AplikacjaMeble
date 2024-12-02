@@ -71,25 +71,24 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </button>
 </div>
 
-<div id="add-product-form" class="hidden bg-gray-900 p-6 rounded-lg shadow-lg mb-6">
+<div id="add-product-form" class="hidden bg-gray-900 p-6 rounded-lg shadow-lg mb-6 transition-all duration-500 transform scale-95 opacity-0">
   <h2 class="text-2xl text-white mb-4">Dodaj nowy produkt</h2>
   <form id="add-product" method="POST" enctype="multipart/form-data" action="add_product.php">
+    <!-- Pola formularza -->
     <div class="mb-4 text-white">
       <label for="product-title" class="block mb-2 text-sm">Tytuł produktu:</label>
-      <input type="text" id="product-title" name="title" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+      <input type="text" id="product-title" name="title" class="w-full p-3 rounded-lg bg-gray-700 text-white" required>
     </div>
     <div class="mb-4 text-white">
       <label for="product-category" class="block mb-2 text-sm">Kategoria:</label>
-      <input type="text" id="product-category" name="category" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+      <input type="text" id="product-category" name="category" class="w-full p-3 rounded-lg bg-gray-700 text-white" required>
     </div>
     <div class="mb-4 text-white">
       <label for="product-image" class="block mb-2 text-sm">Zdjęcie:</label>
-      <input type="file" id="product-image" name="image" class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+      <input type="file" id="product-image" name="image" class="w-full text-sm text-gray-300 bg-gray-700 rounded-lg">
     </div>
     <div class="flex justify-center mb-6">
-      <button type="submit" class="py-2 px-4 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
-        Dodaj
-      </button>
+      <button type="submit" class="py-2 px-4 bg-green-600 rounded-lg text-white hover:bg-green-500">Dodaj</button>
     </div>
   </form>
 </div>
@@ -97,7 +96,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!-- Lista produktów -->
 <!-- Grid z kafelkami -->
 <?php if (!empty($products)) : ?>
-  <div class="grid grid-cols-1 gap-2 w-full">
+  <div class="grid grid-cols-1 gap-2 mx-auto w-full max-w-6xl">
     <?php foreach ($products as $product) : ?>
       <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
         
@@ -173,6 +172,24 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
       })
       .catch(error => console.error('Błąd podczas ładowania listy produktów:', error));
   }
+
+  document.getElementById('toggle-add-form').addEventListener('click', function () {
+    const form = document.getElementById('add-product-form');
+    
+    if (form.classList.contains('hidden')) {
+      form.classList.remove('hidden');
+      setTimeout(() => {
+        form.classList.remove('scale-95', 'opacity-0');
+        form.classList.add('scale-100', 'opacity-100');
+      }, 10);
+    } else {
+      form.classList.add('scale-95', 'opacity-0');
+      form.classList.remove('scale-100', 'opacity-100');
+      setTimeout(() => {
+        form.classList.add('hidden');
+      }, 500); // Czas trwania animacji
+    }
+  });
 </script>
 
 </body>

@@ -97,7 +97,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!-- Lista produktów -->
 <!-- Grid z kafelkami -->
 <?php if (!empty($products)) : ?>
-  <div class="grid grid-cols-1 gap-2 w-full">
+  <div class="grid grid-cols-1 gap-2 mx-auto w-full max-w-6xl">
     <?php foreach ($products as $product) : ?>
       <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
         
@@ -132,39 +132,60 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <script>
+  // Funkcja przesyłania formularza z dodawaniem produktu
   document.getElementById('add-product').addEventListener('submit', function (e) {
-  e.preventDefault(); // Zapobiega przeładowaniu strony
+    e.preventDefault(); // Zapobiega przeładowaniu strony
 
-  const form = e.target;
-  const formData = new FormData(form);
+    const form = e.target;
+    const formData = new FormData(form);
 
-  fetch('add_product.php', {
-    method: 'POST',
-    body: formData,
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      alert(data.message || 'Produkt został dodany pomyślnie.');
-      form.reset();
-      loadProductList(); // Odśwież listę produktów
-    } else {
-      alert('Błąd: ' + (data.message || 'Nie udało się dodać produktu.'));
-    }
-  })
-  .catch(error => {
-    console.error('Błąd:', error);
-    alert('Wystąpił błąd podczas dodawania produktu.');
+    fetch('add_product.php', {
+      method: 'POST',
+      body: formData,
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert(data.message || 'Produkt został dodany pomyślnie.');
+          form.reset();
+          toggleFormVisibility(false); // Zamknij formularz po dodaniu produktu
+          loadProductList(); // Odśwież listę produktów
+        } else {
+          alert('Błąd: ' + (data.message || 'Nie udało się dodać produktu.'));
+        }
+      })
+      .catch(error => {
+        console.error('Błąd:', error);
+        alert('Wystąpił błąd podczas dodawania produktu.');
+      });
   });
-});
 
-
-  // Funkcja toggle dla formularza
+  // Funkcja przełączania widoczności formularza z animacją
   document.getElementById('toggle-add-form').addEventListener('click', function () {
-    document.getElementById('add-product-form').classList.toggle('hidden');
+    const form = document.getElementById('add-product-form');
+    const isHidden = form.classList.contains('hidden');
+    toggleFormVisibility(isHidden);
   });
 
-  // Funkcja do załadowania listy produktów
+  function toggleFormVisibility(show) {
+    const form = document.getElementById('add-product-form');
+    
+    if (show) {
+      form.classList.remove('hidden');
+      setTimeout(() => {
+        form.classList.remove('scale-95', 'opacity-0');
+        form.classList.add('scale-100', 'opacity-100');
+      }, 10);
+    } else {
+      form.classList.add('scale-95', 'opacity-0');
+      form.classList.remove('scale-100', 'opacity-100');
+      setTimeout(() => {
+        form.classList.add('hidden');
+      }, 500); // Czas trwania animacji
+    }
+  }
+
+  // Funkcja ładowania listy produktów
   function loadProductList() {
     fetch('fetch_products.php')
       .then(response => response.text())
@@ -174,6 +195,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
       .catch(error => console.error('Błąd podczas ładowania listy produktów:', error));
   }
 </script>
+
 
 </body>
 </html>

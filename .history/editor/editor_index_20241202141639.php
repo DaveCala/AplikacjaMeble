@@ -97,7 +97,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!-- Lista produktów -->
 <!-- Grid z kafelkami -->
 <?php if (!empty($products)) : ?>
-  <div class="grid grid-cols-1 gap-2 w-full">
+  <div class="grid grid-cols-1 gap-2 mx-auto w-full max-w-6xl">
     <?php foreach ($products as $product) : ?>
       <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
         

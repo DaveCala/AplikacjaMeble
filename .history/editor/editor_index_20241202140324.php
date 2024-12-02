@@ -35,7 +35,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <div class="flex items-center space-x-4 mr-6">
     <!-- Przycisk Wyloguj się -->
     <a href="../login/logout.php" 
-       class="bg-gray-900 border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-800 hover:text-white text-sm">
+       class="bg-gray-900 border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-00 hover:text-white text-sm">
       Wyloguj się
     </a>
 
@@ -97,7 +97,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!-- Lista produktów -->
 <!-- Grid z kafelkami -->
 <?php if (!empty($products)) : ?>
-  <div class="grid grid-cols-1 gap-2 w-full">
+  <div class="grid grid-cols-1 gap-2 mx-auto w-full max-w-6xl">
     <?php foreach ($products as $product) : ?>
       <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
         

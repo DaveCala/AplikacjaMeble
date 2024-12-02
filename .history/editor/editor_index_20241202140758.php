@@ -97,32 +97,35 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!-- Lista produktów -->
 <!-- Grid z kafelkami -->
 <?php if (!empty($products)) : ?>
-  <div class="grid grid-cols-1 gap-2 w-full">
+  <div class="grid grid-cols-1 gap-2 mx-auto w-full max-w-6xl">
     <?php foreach ($products as $product) : ?>
-      <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
-        
-        <!-- Główne zdjęcie - 1/6 szerokości -->
-        <div class="w-1/6 flex justify-center">
-          <img src="../img/<?php echo htmlspecialchars($product['image']); ?>" 
-               alt="Główne zdjęcie" 
-               class="h-16 w-16 object-contain rounded-lg">
-        </div>
+      <div class="bg-gray-900 w-full p-4 border border-gray-700 mb-4">
+  <!-- Kontener produktu -->
+  <div class="flex justify-between items-center w-full h-24 p-4 rounded-lg overflow-hidden">
+    
+    <!-- Tytuł produktu -->
+    <div class="flex-1 flex items-center justify-center text-white text-sm overflow-hidden">
+      <h3 class="truncate text-center"><?php echo htmlspecialchars($product['title']); ?></h3>
+    </div>
 
-        <!-- Tytuł produktu - 3/6 szerokości -->
-        <div class="w-3/6 px-4">
-          <h3 class="text-white text-lg truncate"><?php echo htmlspecialchars($product['title']); ?></h3>
-          <p class="text-gray-400 text-sm truncate"><?php echo htmlspecialchars($product['category']); ?></p>
-        </div>
+    <!-- Główne zdjęcie produktu -->
+    <div class="flex-1 flex items-center justify-center">
+      <img src="../img/<?php echo htmlspecialchars($product['image']); ?>" alt="Główne zdjęcie" class="h-full max-h-16 w-auto object-contain rounded-lg">
+    </div>
 
-        <!-- Przycisk - 2/6 szerokości -->
-        <div class="w-2/6 flex justify-end">
-          <a href="editor_product.php?id=<?php echo $product['id']; ?>" 
-             class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm">
-            Obejrzyj
-          </a>
-        </div>
+    <!-- Kategoria produktu -->
+    <div class="flex-1 flex items-center justify-center text-white overflow-hidden">
+      <p class="truncate text-sm"><?php echo htmlspecialchars($product['category']); ?></p>
+    </div>
 
-      </div>
+    <!-- Przycisk do edycji -->
+    <div class="flex-1 flex items-center justify-center">
+      <a href="editor_product.php?id=<?php echo $product['id']; ?>" class="bg-blue-500 text-white py-1 px-2 rounded-lg hover:bg-blue-600 text-sm">Obejrzyj</a>
+    </div>
+
+  </div> 
+</div>
+
     <?php endforeach; ?>
   </div>
 <?php else : ?>
