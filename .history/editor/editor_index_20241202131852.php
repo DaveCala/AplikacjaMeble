@@ -35,7 +35,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <div class="flex items-center space-x-4 mr-6">
     <!-- Przycisk Wyloguj się -->
     <a href="../login/logout.php" 
-       class="bg-gray-900 border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-800 hover:text-white text-sm">
+       class="bg-gray-900 border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-600 hover:text-white text-sm">
       Wyloguj się
     </a>
 
@@ -51,7 +51,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="relative flex items-center">
       <img src="../img/mailbox.png" alt="Ikona Powiadomień" 
            class="ml-5 w-10 h-10 cursor-pointer hover:scale-110 transition-transform duration-200">
-      <span class="absolute top-0 left-14 bg-red-700 text-white text-xs font-bold px-2 py-1 rounded-full">
+      <span class="absolute top-0 left-14 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
         3
       </span>
     </div>

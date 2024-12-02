@@ -25,37 +25,33 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body class="bg-gray-800">
 
-  <!-- Navbar -->
+<!-- Navbar -->
 <nav class="bg-gray-900 navbar w-full py-6 text-white flex justify-between items-center">
   <div class="flex items-center ml-6">
     <img src="../img/logo_beautysofa_24_pionowe.png" class="w-10 h-10 mr-3" alt="Logo">
     <div class="text-xl">Witaj <?php echo htmlspecialchars($_SESSION['user']['username']); ?>!</div>
   </div>
-
-  <div class="flex items-center space-x-4 mr-6">
+  <div class="flex items-center mr-6">
     <!-- Przycisk Wyloguj się -->
-    <a href="../login/logout.php" 
-       class="bg-gray-900 border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-800 hover:text-white text-sm">
+    <a href="../login/logout.php" class="bg-gray-900 border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-600 hover:text-white text-sm mr-4">
       Wyloguj się
     </a>
 
     <!-- Przycisk Zarządzaj użytkownikami (tylko dla admina) -->
     <?php if ($_SESSION['user']['role'] === 'admin') : ?>
-      <a href="../admin/users.php" 
-         class="bg-gray-900 border border-white text-white py-2 px-4 rounded-lg hover:bg-gray-700 text-sm">
+      <a href="../admin/users.php" class="bg-gray-900 border border-white text-white py-2 px-4 rounded-lg hover:bg-gray-700 text-sm mr-4">
         Zarządzaj użytkownikami
       </a>
     <?php endif; ?>
+  </div>
 
-    <!-- Ikona Powiadomień -->
-    <div class="relative flex items-center">
+   <!-- Ikona Powiadomień -->
+   <div class="relative">
       <img src="../img/mailbox.png" alt="Ikona Powiadomień" 
-           class="ml-5 w-10 h-10 cursor-pointer hover:scale-110 transition-transform duration-200">
-      <span class="absolute top-0 left-14 bg-red-700 text-white text-xs font-bold px-2 py-1 rounded-full">
-        3
-      </span>
+           class="w-10 h-10 cursor-pointer ml-8" onclick="toggleNotifications()">
     </div>
   </div>
+
 </nav>
 
 <!-- Sekcja wyszukiwania -->
@@ -95,40 +91,29 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <!-- Lista produktów -->
-<!-- Grid z kafelkami -->
-<?php if (!empty($products)) : ?>
-  <div class="grid grid-cols-1 gap-2 mx-auto w-full max-w-6xl">
+<div class="container mx-auto">
+  <?php if (!empty($products)) : ?>
     <?php foreach ($products as $product) : ?>
-      <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
-        
-        <!-- Główne zdjęcie - 1/6 szerokości -->
-        <div class="w-1/6 flex justify-center">
-          <img src="../img/<?php echo htmlspecialchars($product['image']); ?>" 
-               alt="Główne zdjęcie" 
-               class="h-16 w-16 object-contain rounded-lg">
+      <div class="bg-gray-900 w-full p-4 border border-gray-700 mb-4">
+        <div class="grid grid-cols-5 gap-4 items-center">
+          <div class="col-span-2 text-white text-sm">
+            <h3><?php echo htmlspecialchars($product['title']); ?></h3>
+          </div>
+          <div class="col-span-1">
+            <img src="../img/<?php echo htmlspecialchars($product['image']); ?>" alt="Produkt" class="h-16 w-auto object-contain">
+          </div>
+          <div class="col-span-1 text-white">
+            <p><?php echo htmlspecialchars($product['category']); ?></p>
+          </div>
+          <div class="col-span-1">
+            <a href="editor_product.php?id=<?php echo $product['id']; ?>" class="bg-blue-500 text-white py-1 px-2 rounded-lg hover:bg-blue-600 text-sm">Obejrzyj</a>
+          </div>
         </div>
-
-        <!-- Tytuł produktu - 3/6 szerokości -->
-        <div class="w-3/6 px-4">
-          <h3 class="text-white text-lg truncate"><?php echo htmlspecialchars($product['title']); ?></h3>
-          <p class="text-gray-400 text-sm truncate"><?php echo htmlspecialchars($product['category']); ?></p>
-        </div>
-
-        <!-- Przycisk - 2/6 szerokości -->
-        <div class="w-2/6 flex justify-end">
-          <a href="editor_product.php?id=<?php echo $product['id']; ?>" 
-             class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm">
-            Obejrzyj
-          </a>
-        </div>
-
       </div>
     <?php endforeach; ?>
-  </div>
-<?php else : ?>
-  <p class="text-white text-center">Brak produktów w bazie danych.</p>
-<?php endif; ?>
-
+  <?php else : ?>
+    <p class="text-white text-center">Brak produktów w bazie danych.</p>
+  <?php endif; ?>
 </div>
 
 <script>

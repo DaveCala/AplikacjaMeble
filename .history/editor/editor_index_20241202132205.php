@@ -35,7 +35,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <div class="flex items-center space-x-4 mr-6">
     <!-- Przycisk Wyloguj się -->
     <a href="../login/logout.php" 
-       class="bg-gray-900 border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-800 hover:text-white text-sm">
+       class="bg-gray-900 border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-600 hover:text-white text-sm">
       Wyloguj się
     </a>
 
