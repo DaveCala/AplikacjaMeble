@@ -81,7 +81,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
     <!-- Formularz dodawania produktu -->
-    <!-- Formularz dodawania produktu -->
 <div id="add-product-form" class="hidden bg-gray-900 p-6 rounded-lg shadow-lg mb-6">
   <h2 class="text-2xl text-white mb-4">Dodaj nowy produkt</h2>
   <form id="add-product" method="POST" enctype="multipart/form-data"> <!-- Dodany atrybut enctype -->
@@ -111,36 +110,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </form>
 </div>
 
-
-  <!-- Grid z kafelkami -->
-  <?php if (!empty($products)) : ?>
-    <?php foreach ($products as $product) : ?>
-      <div class="bg-gray-900 w-full p-4 border border-gray-700">
-        <!-- Kontener produktu -->
-        <div class="grid grid-cols-5 gap-4 w-full h-12 items-center rounded-lg p-2 overflow-hidden">
-          
-          <!-- Tytuł - 2/5 szerokości -->
-          <div class="col-span-2 flex items-center justify-center text-white text-sm overflow-hidden">
-            <h3 class="truncate text-center"><?php echo htmlspecialchars($product['title']); ?></h3>
-          </div>
-
-          <!-- Główne zdjęcie - 1/5 szerokości -->
-          <div class="col-span-1 flex items-center justify-center">
-            <img src="../img/<?php echo htmlspecialchars($product['image']); ?>" alt="Główne zdjęcie" class="h-full max-h-8 w-auto object-contain rounded-lg">
-          </div>
-
-          <!-- Kategoria - 1/5 szerokości -->
-          <div class="col-span-1 flex items-center justify-center text-white overflow-hidden">
-            <p class="truncate text-sm"><?php echo htmlspecialchars($product['category']); ?></p>
-          </div>
-
-          <!-- Przycisk - 1/5 szerokości -->
-          <div class="col-span-1 flex items-center justify-center">
-            <a href="editor_product.php?id=<?php echo $product['id']; ?>" class="bg-blue-500 text-white py-1 px-2 rounded-lg hover:bg-blue-600 text-sm">Obejrzyj</a>
-          </div>
-
-        </div> 
-      </div>
     <?php endforeach; ?>
   <?php else : ?>
     <p class="text-white text-center">Brak produktów w bazie danych.</p>

@@ -81,36 +81,35 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
     <!-- Formularz dodawania produktu -->
-    <!-- Formularz dodawania produktu -->
-<div id="add-product-form" class="hidden bg-gray-900 p-6 rounded-lg shadow-lg mb-6">
-  <h2 class="text-2xl text-white mb-4">Dodaj nowy produkt</h2>
-  <form id="add-product" method="POST" enctype="multipart/form-data"> <!-- Dodany atrybut enctype -->
-    <div class="mb-4 text-white ">
-      <label for="product-title" class="block mb-2 text-sm">Tytuł produktu:</label>
-      <input type="text" id="product-title" name="title" 
-             class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-             required>
-    </div>
-    <div class="mb-4 text-white ">
-      <label for="product-category" class="block mb-2 text-sm">Kategoria:</label>
-      <input type="text" id="product-category" name="category" 
-             class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-             required>
-    </div>
-    <div class="mb-4 text-white ">
-      <label for="product-image" class="block mb-2 text-sm">Zdjęcie:</label>
-      <input type="file" id="product-image" name="image" 
-             class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-    </div>
-    <div class="flex justify-center mb-6">
-      <button id="toggle-add-form" 
-              class="py-2 px-4 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
-        Dodaj
-      </button>
-    </div>
-  </form>
+    <div id="add-product-form" class="hidden bg-gray-900 p-6 rounded-lg shadow-lg mb-6">
+      <h2 class="text-2xl text-white mb-4">Dodaj nowy produkt</h2>
+      <form id="add-product">
+        <div class="mb-4 text-white ">
+          <label for="product-title" class="block mb-2 text-sm">Tytuł produktu:</label>
+          <input type="text" id="product-title" name="title" 
+                 class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                 required>
+        </div>
+        <div class="mb-4 text-white ">
+          <label for="product-category" class="block mb-2 text-sm">Kategoria:</label>
+          <input type="text" id="product-category" name="category" 
+                 class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                 required>
+        </div>
+        <div class="mb-4 text-white ">
+          <label for="product-image" class="block mb-2 text-sm">Zdjęcie:</label>
+          <input type="file" id="product-image" name="image" 
+                 class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div class="flex justify-center mb-6">
+        <button id="toggle-add-form" 
+                class="py-2 px-4 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
+          Dodaj
+        </button>
 </div>
 
+      </form>
+    </div>
 
   <!-- Grid z kafelkami -->
   <?php if (!empty($products)) : ?>

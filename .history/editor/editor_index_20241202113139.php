@@ -79,9 +79,8 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </button>
   </div>
 
-
     <!-- Formularz dodawania produktu -->
-    <!-- Formularz dodawania produktu -->
+<!-- Formularz dodawania produktu -->
 <div id="add-product-form" class="hidden bg-gray-900 p-6 rounded-lg shadow-lg mb-6">
   <h2 class="text-2xl text-white mb-4">Dodaj nowy produkt</h2>
   <form id="add-product" method="POST" enctype="multipart/form-data"> <!-- Dodany atrybut enctype -->
@@ -158,42 +157,40 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     });
 
     // Obsługa formularza dodawania produktu
-    document.getElementById('submit-product').addEventListener('click', function () {
-      const form = document.getElementById('add-product');
-      const formData = new FormData(form);
+    document.getElementById('toggle-add-form').addEventListener('click', function () {
+  const form = document.getElementById('add-product');
+  const formData = new FormData(form);  // Tworzymy obiekt FormData z formularza
 
-      fetch('add_product.php', {
-        method: 'POST',
-        body: formData,
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          alert('Produkt został dodany.');
-          form.reset(); // Resetuj formularz
-          loadProductList(); // Odśwież listę produktów
-        } else {
-          alert('Błąd: ' + data.message);
-        }
-      })
-      .catch(error => {
-        console.error('Błąd:', error);
-        alert('Wystąpił błąd podczas dodawania produktu.');
-      });
-    });
-
-    // Funkcja do załadowania listy produktów
-    function loadProductList() {
-      fetch('fetch_products.php')
-        .then(response => response.text())
-        .then(html => {
-          document.getElementById('product-list').innerHTML = html;
-        })
-        .catch(error => console.error('Błąd podczas ładowania listy produktów:', error));
+  fetch('add_product.php', {
+    method: 'POST',
+    body: formData,  // Wyślijmy dane formularza, w tym plik
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('Produkt został dodany.');
+      form.reset();  // Resetujemy formularz po sukcesie
+      loadProductList();  // Odświeżamy listę produktów
+    } else {
+      alert('Błąd: ' + data.message);
     }
+  })
+  .catch(error => {
+    console.error('Błąd:', error);
+    alert('Wystąpił błąd podczas dodawania produktu.');
+  });
+});
 
-    // Załaduj listę produktów po załadowaniu strony
-    document.addEventListener('DOMContentLoaded', loadProductList);
+// Funkcja do załadowania listy produktów (można ją rozwinąć, jeśli chcesz)
+function loadProductList() {
+  fetch('fetch_products.php')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('product-list').innerHTML = html;
+    })
+    .catch(error => console.error('Błąd podczas ładowania listy produktów:', error));
+}
+
   </script>
 
 </body>

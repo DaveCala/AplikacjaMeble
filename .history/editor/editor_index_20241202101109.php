@@ -73,44 +73,11 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <div class="flex justify-between items-center mt-10 mb-4 mx-6">
     <h2 class="text-2xl text-white">Baza mebli:</h2>
-    <button id="toggle-add-form" 
-              class="py-2 px-4 bg-gray-800 rounded-lg border border-green-500 text-green-500 text-lg hover:bg-green-500 hover:text-white">
+    <a href="add_product.php" 
+         class="py-2 px-4 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
         Dodaj
-    </button>
+      </a>
   </div>
-
-
-    <!-- Formularz dodawania produktu -->
-    <!-- Formularz dodawania produktu -->
-<div id="add-product-form" class="hidden bg-gray-900 p-6 rounded-lg shadow-lg mb-6">
-  <h2 class="text-2xl text-white mb-4">Dodaj nowy produkt</h2>
-  <form id="add-product" method="POST" enctype="multipart/form-data"> <!-- Dodany atrybut enctype -->
-    <div class="mb-4 text-white ">
-      <label for="product-title" class="block mb-2 text-sm">Tytuł produktu:</label>
-      <input type="text" id="product-title" name="title" 
-             class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-             required>
-    </div>
-    <div class="mb-4 text-white ">
-      <label for="product-category" class="block mb-2 text-sm">Kategoria:</label>
-      <input type="text" id="product-category" name="category" 
-             class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-             required>
-    </div>
-    <div class="mb-4 text-white ">
-      <label for="product-image" class="block mb-2 text-sm">Zdjęcie:</label>
-      <input type="file" id="product-image" name="image" 
-             class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-    </div>
-    <div class="flex justify-center mb-6">
-      <button id="toggle-add-form" 
-              class="py-2 px-4 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
-        Dodaj
-      </button>
-    </div>
-  </form>
-</div>
-
 
   <!-- Grid z kafelkami -->
   <?php if (!empty($products)) : ?>
@@ -150,51 +117,5 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Miejsce na treść strony -->
   </div>
   
-  <script>
-    // Toggle formularza
-    document.getElementById('toggle-add-form').addEventListener('click', function () {
-      const form = document.getElementById('add-product-form');
-      form.classList.toggle('hidden');
-    });
-
-    // Obsługa formularza dodawania produktu
-    document.getElementById('submit-product').addEventListener('click', function () {
-      const form = document.getElementById('add-product');
-      const formData = new FormData(form);
-
-      fetch('add_product.php', {
-        method: 'POST',
-        body: formData,
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          alert('Produkt został dodany.');
-          form.reset(); // Resetuj formularz
-          loadProductList(); // Odśwież listę produktów
-        } else {
-          alert('Błąd: ' + data.message);
-        }
-      })
-      .catch(error => {
-        console.error('Błąd:', error);
-        alert('Wystąpił błąd podczas dodawania produktu.');
-      });
-    });
-
-    // Funkcja do załadowania listy produktów
-    function loadProductList() {
-      fetch('fetch_products.php')
-        .then(response => response.text())
-        .then(html => {
-          document.getElementById('product-list').innerHTML = html;
-        })
-        .catch(error => console.error('Błąd podczas ładowania listy produktów:', error));
-    }
-
-    // Załaduj listę produktów po załadowaniu strony
-    document.addEventListener('DOMContentLoaded', loadProductList);
-  </script>
-
 </body>
 </html>

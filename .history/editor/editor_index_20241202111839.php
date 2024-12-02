@@ -158,42 +158,40 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     });
 
     // Obsługa formularza dodawania produktu
-    document.getElementById('submit-product').addEventListener('click', function () {
-      const form = document.getElementById('add-product');
-      const formData = new FormData(form);
+    document.getElementById('toggle-add-form').addEventListener('click', function () {
+  const form = document.getElementById('add-product');
+  const formData = new FormData(form);  // Tworzymy obiekt FormData z formularza
 
-      fetch('add_product.php', {
-        method: 'POST',
-        body: formData,
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          alert('Produkt został dodany.');
-          form.reset(); // Resetuj formularz
-          loadProductList(); // Odśwież listę produktów
-        } else {
-          alert('Błąd: ' + data.message);
-        }
-      })
-      .catch(error => {
-        console.error('Błąd:', error);
-        alert('Wystąpił błąd podczas dodawania produktu.');
-      });
-    });
-
-    // Funkcja do załadowania listy produktów
-    function loadProductList() {
-      fetch('fetch_products.php')
-        .then(response => response.text())
-        .then(html => {
-          document.getElementById('product-list').innerHTML = html;
-        })
-        .catch(error => console.error('Błąd podczas ładowania listy produktów:', error));
+  fetch('add_product.php', {
+    method: 'POST',
+    body: formData,  // Wyślijmy dane formularza, w tym plik
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('Produkt został dodany.');
+      form.reset();  // Resetujemy formularz po sukcesie
+      loadProductList();  // Odświeżamy listę produktów
+    } else {
+      alert('Błąd: ' + data.message);
     }
+  })
+  .catch(error => {
+    console.error('Błąd:', error);
+    alert('Wystąpił błąd podczas dodawania produktu.');
+  });
+});
 
-    // Załaduj listę produktów po załadowaniu strony
-    document.addEventListener('DOMContentLoaded', loadProductList);
+// Funkcja do załadowania listy produktów (można ją rozwinąć, jeśli chcesz)
+function loadProductList() {
+  fetch('fetch_products.php')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('product-list').innerHTML = html;
+    })
+    .catch(error => console.error('Błąd podczas ładowania listy produktów:', error));
+}
+
   </script>
 
 </body>
