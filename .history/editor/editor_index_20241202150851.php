@@ -66,18 +66,10 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!-- Sekcja dodawania produktu -->
 <div class="flex justify-between items-center mt-10 mb-4 mx-6">
   <h2 class="text-2xl text-white">Baza mebli:</h2>
-  <div class="flex items-center space-x-4">
-    <div id="delete-button-container" class="hidden">
-      <button id="delete-selected" class="bg-gray-800 text-red-500 border border-red-500 py-2 px-4 rounded-lg hover:bg-red-700 hover:text-white">
-        Usuń zaznaczone
-      </button>
-    </div>
-    <button id="toggle-add-form" class="py-2 px-4 bg-gray-800 rounded-lg border border-green-500 text-green-500 text-lg hover:bg-green-500 hover:text-white">
-      Dodaj
-    </button>
-  </div>
+  <button id="toggle-add-form" class="py-2 px-4 bg-gray-800 rounded-lg border border-green-500 text-green-500 text-lg hover:bg-green-500 hover:text-white">
+    Dodaj
+  </button>
 </div>
-
 
 <div id="add-product-form" class="hidden bg-gray-900 p-6 rounded-lg shadow-lg mb-6">
   <h2 class="text-2xl text-white mb-4">Dodaj nowy produkt</h2>
@@ -94,7 +86,10 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <label for="product-image" class="block mb-2 text-sm">Zdjęcie:</label>
       <input type="file" id="product-image" name="image" class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500">
     </div>
-
+    <!-- Przycisk Usuń, widoczny tylko gdy zaznaczone produkty -->
+    <div id="delete-button-container" class="flex justify-center mt-4 hidden">
+      <button id="delete-selected" class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600">Usuń zaznaczone</button>
+    </div>
     <div class="flex justify-center mb-6">
       <button type="submit" class="py-2 px-4 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
         Dodaj

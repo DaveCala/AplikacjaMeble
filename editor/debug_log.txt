@@ -1,6 +1,0 @@
-{"product_id":"1","title":"Biurko m\u0142odzie\u017cowe JOVI 14","category":"Biurka"}
-{"image":{"name":"biurko-art.jpg","full_path":"biurko-art.jpg","type":"image\/jpeg","tmp_name":"C:\\xampp\\tmp\\phpB5D0.tmp","error":0,"size":73213}}
-{"product_id":"1","title":"Biurko m\u0142odzie\u017cowe JOVI 14","category":"Biurka"}
-{"image":{"name":"biurko-art.jpg","full_path":"biurko-art.jpg","type":"image\/jpeg","tmp_name":"C:\\xampp\\tmp\\phpD3E8.tmp","error":0,"size":73213}}
-{"product_id":"1","title":"Biurko m\u0142odzie\u017cowe JOVI 14","category":"Biurkaaa"}
-{"image":{"name":"biurko-art.jpg","full_path":"biurko-art.jpg","type":"image\/jpeg","tmp_name":"C:\\xampp\\tmp\\phpE00E.tmp","error":0,"size":73213}}

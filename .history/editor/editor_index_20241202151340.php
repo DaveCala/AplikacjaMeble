@@ -68,7 +68,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <h2 class="text-2xl text-white">Baza mebli:</h2>
   <div class="flex items-center space-x-4">
     <div id="delete-button-container" class="hidden">
-      <button id="delete-selected" class="bg-gray-800 text-red-500 border border-red-500 py-2 px-4 rounded-lg hover:bg-red-700 hover:text-white">
+      <button id="delete-selected" class="bg-gray-800 text-red-500 border border-red-500 py-2 px-4 rounded-lg hover:bg-red-600 hover:text-white">
         Usuń zaznaczone
       </button>
     </div>
