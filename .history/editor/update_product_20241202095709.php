@@ -1,9 +1,14 @@
 <?php
 require_once '../db.php';
 
-$response = ['success' => false, 'message' => ''];
+file_put_contents('debug_log.txt', json_encode($_POST) . PHP_EOL . json_encode($_FILES) . PHP_EOL, FILE_APPEND);
+header('Content-Type: application/json');
+echo json_encode(['received_data' => $_POST, 'files' => $_FILES]);
+exit;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $response = ['success' => false, 'message' => ''];
+
     $title = $_POST['title'] ?? '';
     $category = $_POST['category'] ?? '';
     $productId = $_POST['product_id'] ?? 0;
@@ -17,6 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $imagePath = null;
     if (!empty($_FILES['image']['name'])) {
         $targetDir = "../img/";
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0755, true);
+        }
+
         $imageFileName = basename($_FILES['image']['name']);
         $targetFilePath = $targetDir . $imageFileName;
 
@@ -47,20 +56,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare($query);
         $stmt->bindParam(':title', $title);
         $stmt->bindParam(':category', $category);
-        $stmt->bindParam(':id', $productId, PDO::PARAM_INT);
         if ($imagePath) {
             $stmt->bindParam(':image', $imagePath);
         }
+        $stmt->bindParam(':id', $productId, PDO::PARAM_INT);
 
         if ($stmt->execute()) {
             $response['success'] = true;
             $response['message'] = 'Produkt został zaktualizowany.';
         } else {
-            $response['message'] = 'Wystąpił problem podczas aktualizacji produktu.';
+            $response['message'] = 'Nie udało się zaktualizować produktu.';
         }
     } catch (Exception $e) {
         $response['message'] = 'Błąd: ' . $e->getMessage();
     }
+
+    echo json_encode($response);
 }
 
-echo json_encode($response);
+header('Content-Type: application/json');
+echo json_encode(['status' => 'success', 'message' => 'Dane dotarły!', 'received' => $_POST, 'files' => $_FILES]);
+exit;
+
+
+?>
