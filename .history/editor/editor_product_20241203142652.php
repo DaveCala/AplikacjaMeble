@@ -1,36 +1,3 @@
-<?php
-// Połączenie z bazą danych
-require_once '../db.php'; // Wczytuje konfigurację z db.php
-
-try {
-    // Użycie odpowiednich zmiennych z db.php
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Błąd połączenia z bazą danych: " . $e->getMessage());
-}
-
-// Pobieranie danych produktu
-$productId = $_GET['id'] ?? 0;
-
-if ($productId) {
-    $queryProduct = $pdo->prepare("SELECT * FROM products WHERE id = :productId");
-    $queryProduct->execute(['productId' => $productId]);
-    $product = $queryProduct->fetch(PDO::FETCH_ASSOC);
-
-    if ($product) {
-        $queryVariations = $pdo->prepare("SELECT * FROM variations WHERE product_id = :productId");
-        $queryVariations->execute(['productId' => $productId]);
-        $variations = $queryVariations->fetchAll(PDO::FETCH_ASSOC);
-    } else {
-        die("Produkt nie został znaleziony.");
-    }
-} else {
-    die("Nie podano ID produktu.");
-}
-?>
-
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -68,48 +35,29 @@ if ($productId) {
       </button>
     </form>
 
-  <!-- Lista wariacji -->
-<div class="mt-8">
-  <h2 class="text-2xl text-white mb-4">Wariacje</h2>
-  <div class="grid grid-cols-1 gap-2 w-full">
-    <?php foreach ($variations as $variation) : ?>
-      <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
-        
-        <!-- Checkbox do zaznaczenia wariacji -->
-        <div class="flex items-center">
-          <input type="checkbox" class="variation-checkbox" data-variation-id="<?php echo $variation['id']; ?>">
-        </div>
-
-        <!-- Zdjęcie wariacji - 1/6 szerokości -->
-        <div class="w-1/6 flex justify-center">
-          <img src="../img/<?php echo htmlspecialchars($variation['main_image']); ?>" 
-               alt="Zdjęcie wariacji" 
-               class="h-16 w-16 object-contain rounded-lg">
-        </div>
-
-        <!-- Tytuł wariacji - 3/6 szerokości -->
-        <div class="w-3/6 px-4">
-          <h3 class="text-white text-lg truncate"><?php echo htmlspecialchars($variation['title']); ?></h3>
-          <p class="text-gray-400 text-sm truncate">EAN: <?php echo htmlspecialchars($variation['ean']); ?></p>
-        </div>
-
-        <!-- Przycisk "Obejrzyj" - 2/6 szerokości -->
-        <div class="w-2/6 flex justify-end">
-          <button class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm toggle-details" 
-                  data-variation-id="<?php echo $variation['id']; ?>">
-            Obejrzyj
-          </button>
-        </div>
-      </div>
-
-      <!-- Miejsce na szczegóły wariacji -->
-      <div id="details-<?php echo $variation['id']; ?>" class="hidden mt-4 p-4 bg-gray-800 rounded-lg">
-        <p class="text-white">Opis: Szczegółowy opis wariacji <?php echo $variation['title']; ?>.</p>
-        <p class="text-gray-400">Cena: 100 PLN</p>
-        <p class="text-gray-400">Dostępność: 10 sztuk</p>
-      </div>
-    <?php endforeach; ?>
+    <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
+  <div class="w-1/6 flex justify-center">
+    <img src="../img/<?php echo htmlspecialchars($variation['image']); ?>" 
+         alt="Zdjęcie wariacji" 
+         class="h-16 w-16 object-contain rounded-lg">
   </div>
+  <div class="w-3/6 px-4">
+    <h3 class="text-white text-lg truncate"><?php echo htmlspecialchars($variation['title']); ?></h3>
+    <p class="text-gray-400 text-sm truncate">EAN: <?php echo htmlspecialchars($variation['ean']); ?></p>
+  </div>
+  <div class="w-2/6 flex justify-end">
+    <button class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm toggle-details" 
+            data-variation-id="<?php echo $variation['id']; ?>">
+      Obejrzyj
+    </button>
+  </div>
+</div>
+
+<!-- Miejsce na rozwinięte szczegóły wariacji -->
+<div id="details-<?php echo $variation['id']; ?>" class="hidden mt-4 p-4 bg-gray-800 rounded-lg">
+  <p class="text-white"><?php echo htmlspecialchars($variationDetails[$variation['id']]['description']); ?></p>
+  <p class="text-gray-400">Cena: <?php echo htmlspecialchars($variationDetails[$variation['id']]['price']); ?></p>
+  <p class="text-gray-400"><?php echo htmlspecialchars($variationDetails[$variation['id']]['stock']); ?></p>
 </div>
 
 
@@ -138,13 +86,12 @@ if ($productId) {
       });
     });
 
-   // Obsługa rozwijania szczegółów po kliknięciu przycisku "Obejrzyj"
+    // Obsługa przycisku "Obejrzyj"
 document.querySelectorAll('.toggle-details').forEach(button => {
   button.addEventListener('click', () => {
     const variationId = button.getAttribute('data-variation-id');
     const detailsDiv = document.getElementById(`details-${variationId}`);
     
-    // Przełączanie widoczności szczegółów
     if (detailsDiv.classList.contains('hidden')) {
       detailsDiv.classList.remove('hidden');
     } else {

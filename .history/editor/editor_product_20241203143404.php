@@ -1,33 +1,27 @@
 <?php
 // Połączenie z bazą danych
-require_once '../db.php'; // Wczytuje konfigurację z db.php
+require_once '../db.php';
+
+$response = ['success' => false, 'message' => ''];
 
 try {
-    // Użycie odpowiednich zmiennych z db.php
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
 } catch (PDOException $e) {
     die("Błąd połączenia z bazą danych: " . $e->getMessage());
 }
 
 // Pobieranie danych produktu
-$productId = $_GET['id'] ?? 0;
+$productId = $_GET['id'] ?? 0; // Zakładam, że ID produktu jest przekazywane przez GET
+$queryProduct = $pdo->prepare("SELECT * FROM products WHERE id = :productId");
+$queryProduct->execute(['productId' => $productId]);
+$product = $queryProduct->fetch(PDO::FETCH_ASSOC);
 
-if ($productId) {
-    $queryProduct = $pdo->prepare("SELECT * FROM products WHERE id = :productId");
-    $queryProduct->execute(['productId' => $productId]);
-    $product = $queryProduct->fetch(PDO::FETCH_ASSOC);
-
-    if ($product) {
-        $queryVariations = $pdo->prepare("SELECT * FROM variations WHERE product_id = :productId");
-        $queryVariations->execute(['productId' => $productId]);
-        $variations = $queryVariations->fetchAll(PDO::FETCH_ASSOC);
-    } else {
-        die("Produkt nie został znaleziony.");
-    }
-} else {
-    die("Nie podano ID produktu.");
-}
+// Pobieranie wariacji powiązanych z produktem
+$queryVariations = $pdo->prepare("SELECT * FROM variations WHERE product_id = :productId");
+$queryVariations->execute(['productId' => $productId]);
+$variations = $queryVariations->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 

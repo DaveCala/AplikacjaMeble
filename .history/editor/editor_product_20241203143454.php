@@ -1,13 +1,16 @@
 <?php
 // Połączenie z bazą danych
-require_once '../db.php'; // Wczytuje konfigurację z db.php
+require_once '../db.php';
+
+$response = ['success' => false, 'message' => ''];
 
 try {
-    // Użycie odpowiednich zmiennych z db.php
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
+    ]);
 } catch (PDOException $e) {
-    die("Błąd połączenia z bazą danych: " . $e->getMessage());
+    die(json_encode(['success' => false, 'message' => 'Błąd połączenia z bazą danych: ' . $e->getMessage()]));
 }
 
 // Pobieranie danych produktu
@@ -18,15 +21,17 @@ if ($productId) {
     $queryProduct->execute(['productId' => $productId]);
     $product = $queryProduct->fetch(PDO::FETCH_ASSOC);
 
+    // Sprawdzenie, czy produkt istnieje
     if ($product) {
+        // Pobieranie wariacji powiązanych z produktem
         $queryVariations = $pdo->prepare("SELECT * FROM variations WHERE product_id = :productId");
         $queryVariations->execute(['productId' => $productId]);
         $variations = $queryVariations->fetchAll(PDO::FETCH_ASSOC);
     } else {
-        die("Produkt nie został znaleziony.");
+        die(json_encode(['success' => false, 'message' => 'Produkt nie został znaleziony.']));
     }
 } else {
-    die("Nie podano ID produktu.");
+    die(json_encode(['success' => false, 'message' => 'Nie podano ID produktu.']));
 }
 ?>
 
