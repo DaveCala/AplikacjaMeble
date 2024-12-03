@@ -214,18 +214,19 @@ document.getElementById('delete-selected').addEventListener('click', function() 
                             .map(cb => cb.getAttribute('data-product-id'));
 
   if (selectedIds.length > 0) {
+    // Wysłanie zaznaczonych ID do skryptu PHP
     fetch('delete_products.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ids: selectedIds }),
+      body: JSON.stringify(selectedIds),
     })
     .then(response => response.json())
     .then(data => {
       if (data.success) {
         alert(data.message || 'Produkty zostały usunięte pomyślnie.');
-        loadProductList(); // Odśwież listę produktów
+        loadProductList(); // Odświeżenie listy produktów po usunięciu
       } else {
         alert('Błąd: ' + (data.message || 'Nie udało się usunąć produktów.'));
       }
@@ -235,12 +236,12 @@ document.getElementById('delete-selected').addEventListener('click', function() 
       alert('Wystąpił błąd podczas usuwania produktów.');
     });
 
+    // Ukrycie przycisku po usunięciu
     document.getElementById('delete-button-container').classList.add('hidden');
   } else {
     alert('Nie zaznaczono żadnych produktów!');
   }
 });
-
 
 
 </script>
