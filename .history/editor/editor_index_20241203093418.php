@@ -147,101 +147,77 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <script>
-  document.getElementById('add-product').addEventListener('submit', function (e) {
-  e.preventDefault(); // Zapobiega przeładowaniu strony
-
-  const form = e.target;
-  const formData = new FormData(form);
-
-  fetch('add_product.php', {
-    method: 'POST',
-    body: formData,
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      alert(data.message || 'Produkt został dodany pomyślnie.');
-      form.reset();
-      location.reload();
-    } else {
-      alert('Błąd: ' + (data.message || 'Nie udało się dodać produktu.'));
-    }
-  })
-  .catch(error => {
-    console.error('Błąd:', error);
-    alert('Wystąpił błąd podczas dodawania produktu.');
-  });
-});
-
-
-  // Funkcja toggle dla formularza
-  document.getElementById('toggle-add-form').addEventListener('click', function () {
-    document.getElementById('add-product-form').classList.toggle('hidden');
+  document.addEventListener('DOMContentLoaded', function () {
+    loadProductList(); // Załaduj produkty po starcie strony
+    attachToggleFormListener();
   });
 
-  // Funkcja do załadowania listy produktów
   function loadProductList() {
     fetch('fetch_products.php')
       .then(response => response.text())
       .then(html => {
-        document.getElementById('product-list').innerHTML = html;
+        document.querySelector('.grid').innerHTML = html;
+        attachCheckboxListeners(); // Nasłuchuj checkboxów po załadowaniu produktów
       })
       .catch(error => console.error('Błąd podczas ładowania listy produktów:', error));
   }
 
-  // Funkcja do monitorowania zaznaczenia checkboxów
-document.querySelectorAll('.product-checkbox').forEach(checkbox => {
-  checkbox.addEventListener('change', function() {
-    // Sprawdzenie, czy przynajmniej jeden checkbox jest zaznaczony
+  function attachToggleFormListener() {
+    document.getElementById('toggle-add-form').addEventListener('click', function () {
+      document.getElementById('add-product-form').classList.toggle('hidden');
+    });
+  }
+
+  function attachCheckboxListeners() {
+    document.querySelectorAll('.product-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('change', handleCheckboxChange);
+    });
+  }
+
+  function handleCheckboxChange() {
     const anyChecked = Array.from(document.querySelectorAll('.product-checkbox')).some(cb => cb.checked);
-    
-    // Pokazanie lub ukrycie przycisku "Usuń"
     const deleteButtonContainer = document.getElementById('delete-button-container');
+
     if (anyChecked) {
       deleteButtonContainer.classList.remove('hidden');
     } else {
       deleteButtonContainer.classList.add('hidden');
     }
-  });
-});
-
-
-document.getElementById('delete-selected').addEventListener('click', function() {
-  const selectedIds = Array.from(document.querySelectorAll('.product-checkbox:checked'))
-                            .map(cb => cb.getAttribute('data-product-id'));
-
-  if (selectedIds.length > 0) {
-    // Wysłanie zaznaczonych ID do skryptu PHP
-    fetch('delete_products.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(selectedIds),
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        alert(data.message || 'Produkty zostały usunięte pomyślnie.');
-        location.reload();
-      } else {
-        alert('Błąd: ' + (data.message || 'Nie udało się usunąć produktów.'));
-      }
-    })
-    .catch(error => {
-      console.error('Błąd podczas usuwania produktów:', error);
-      alert('Wystąpił błąd podczas usuwania produktów.');
-    });
-
-    // Ukrycie przycisku po usunięciu
-    document.getElementById('delete-button-container').classList.add('hidden');
-  } else {
-    alert('Nie zaznaczono żadnych produktów!');
   }
-});
 
+  document.getElementById('delete-selected').addEventListener('click', function () {
+    const selectedIds = Array.from(document.querySelectorAll('.product-checkbox:checked'))
+      .map(cb => cb.getAttribute('data-product-id'));
 
+    if (selectedIds.length > 0) {
+      fetch('delete_products.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids: selectedIds }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert(data.message || 'Produkty zostały usunięte pomyślnie.');
+            loadProductList(); // Odśwież listę produktów
+          } else {
+            alert('Błąd: ' + (data.message || 'Nie udało się usunąć produktów.'));
+          }
+        })
+        .catch(error => {
+          console.error('Błąd podczas usuwania produktów:', error);
+          alert('Wystąpił błąd podczas usuwania produktów.');
+        });
+
+      document.getElementById('delete-button-container').classList.add('hidden');
+    } else {
+      alert('Nie zaznaczono żadnych produktów!');
+    }
+  });
 </script>
+
 
 </body>
 </html>

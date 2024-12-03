@@ -162,7 +162,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (data.success) {
       alert(data.message || 'Produkt został dodany pomyślnie.');
       form.reset();
-      location.reload();
+      loadProductList(); // Odśwież listę produktów
     } else {
       alert('Błąd: ' + (data.message || 'Nie udało się dodać produktu.'));
     }
@@ -223,7 +223,7 @@ document.getElementById('delete-selected').addEventListener('click', function() 
     .then(data => {
       if (data.success) {
         alert(data.message || 'Produkty zostały usunięte pomyślnie.');
-        location.reload();
+        loadProductList(); // Odświeżenie listy produktów po usunięciu
       } else {
         alert('Błąd: ' + (data.message || 'Nie udało się usunąć produktów.'));
       }

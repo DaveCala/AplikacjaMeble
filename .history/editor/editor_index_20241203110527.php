@@ -105,46 +105,36 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!-- Lista produktów -->
 <!-- Grid z kafelkami -->
-<?php if (!empty($products)) : ?>
-  <div class="grid grid-cols-1 gap-2 w-full">
-    <?php foreach ($products as $product) : ?>
-      <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
-        
-       <!-- Checkbox do zaznaczenia produktu -->
-       <div class="flex items-center">
-          <input type="checkbox" class="product-checkbox" data-product-id="<?php echo $product['id']; ?>">
+<div id="product-list">
+  <?php if (!empty($products)) : ?>
+    <div class="grid grid-cols-1 gap-2 w-full">
+      <?php foreach ($products as $product) : ?>
+        <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
+          <!-- Checkbox do zaznaczenia produktu -->
+          <div class="flex items-center">
+            <input type="checkbox" class="product-checkbox" data-product-id="<?php echo $product['id']; ?>">
+          </div>
+          <!-- Główne zdjęcie - 1/6 szerokości -->
+          <div class="w-1/6 flex justify-center">
+            <img src="../img/<?php echo htmlspecialchars($product['image']); ?>" alt="Główne zdjęcie" class="h-16 w-16 object-contain rounded-lg">
+          </div>
+          <!-- Tytuł produktu - 3/6 szerokości -->
+          <div class="w-3/6 px-4">
+            <h3 class="text-white text-lg truncate"><?php echo htmlspecialchars($product['title']); ?></h3>
+            <p class="text-gray-400 text-sm truncate"><?php echo htmlspecialchars($product['category']); ?></p>
+          </div>
+          <!-- Przycisk - 2/6 szerokości -->
+          <div class="w-2/6 flex justify-end">
+            <a href="editor_product.php?id=<?php echo $product['id']; ?>" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm">Obejrzyj</a>
+          </div>
         </div>
-
-        <!-- Główne zdjęcie - 1/6 szerokości -->
-        <div class="w-1/6 flex justify-center">
-          <img src="../img/<?php echo htmlspecialchars($product['image']); ?>" 
-               alt="Główne zdjęcie" 
-               class="h-16 w-16 object-contain rounded-lg">
-        </div>
-
-        <!-- Tytuł produktu - 3/6 szerokości -->
-        <div class="w-3/6 px-4">
-          <h3 class="text-white text-lg truncate"><?php echo htmlspecialchars($product['title']); ?></h3>
-          <p class="text-gray-400 text-sm truncate"><?php echo htmlspecialchars($product['category']); ?></p>
-        </div>
-
-        <!-- Przycisk - 2/6 szerokości -->
-        <div class="w-2/6 flex justify-end">
-          <a href="editor_product.php?id=<?php echo $product['id']; ?>" 
-             class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm">
-            Obejrzyj
-          </a>
-        </div>
-
-      </div>
-    <?php endforeach; ?>
-  </div>
-<?php else : ?>
-  <p class="text-white text-center">Brak produktów w bazie danych.</p>
-<?php endif; ?>
-
-
+      <?php endforeach; ?>
+    </div>
+  <?php else : ?>
+    <p class="text-white text-center">Brak produktów w bazie danych.</p>
+  <?php endif; ?>
 </div>
+
 
 <script>
   document.getElementById('add-product').addEventListener('submit', function (e) {
@@ -162,7 +152,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (data.success) {
       alert(data.message || 'Produkt został dodany pomyślnie.');
       form.reset();
-      location.reload();
+      loadProductList(); // Odśwież listę produktów
     } else {
       alert('Błąd: ' + (data.message || 'Nie udało się dodać produktu.'));
     }
@@ -190,21 +180,20 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
   // Funkcja do monitorowania zaznaczenia checkboxów
-document.querySelectorAll('.product-checkbox').forEach(checkbox => {
-  checkbox.addEventListener('change', function() {
-    // Sprawdzenie, czy przynajmniej jeden checkbox jest zaznaczony
-    const anyChecked = Array.from(document.querySelectorAll('.product-checkbox')).some(cb => cb.checked);
-    
-    // Pokazanie lub ukrycie przycisku "Usuń"
-    const deleteButtonContainer = document.getElementById('delete-button-container');
-    if (anyChecked) {
-      deleteButtonContainer.classList.remove('hidden');
-    } else {
-      deleteButtonContainer.classList.add('hidden');
-    }
+  document.querySelectorAll('.product-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      // Sprawdzenie, czy przynajmniej jeden checkbox jest zaznaczony
+      const anyChecked = Array.from(document.querySelectorAll('.product-checkbox')).some(cb => cb.checked);
+      
+      // Pokazanie lub ukrycie przycisku "Usuń"
+      const deleteButtonContainer = document.getElementById('delete-button-container');
+      if (anyChecked) {
+        deleteButtonContainer.classList.remove('hidden');
+      } else {
+        deleteButtonContainer.classList.add('hidden');
+      }
+    });
   });
-});
-
 
 document.getElementById('delete-selected').addEventListener('click', function() {
   const selectedIds = Array.from(document.querySelectorAll('.product-checkbox:checked'))
@@ -223,7 +212,7 @@ document.getElementById('delete-selected').addEventListener('click', function() 
     .then(data => {
       if (data.success) {
         alert(data.message || 'Produkty zostały usunięte pomyślnie.');
-        location.reload();
+        loadProductList(); // Odświeżenie listy produktów po usunięciu
       } else {
         alert('Błąd: ' + (data.message || 'Nie udało się usunąć produktów.'));
       }

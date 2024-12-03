@@ -162,7 +162,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (data.success) {
       alert(data.message || 'Produkt został dodany pomyślnie.');
       form.reset();
-      location.reload();
+      loadProductList(); // Odśwież listę produktów
     } else {
       alert('Błąd: ' + (data.message || 'Nie udało się dodać produktu.'));
     }
@@ -181,13 +181,17 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   // Funkcja do załadowania listy produktów
   function loadProductList() {
-    fetch('fetch_products.php')
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('product-list').innerHTML = html;
-      })
-      .catch(error => console.error('Błąd podczas ładowania listy produktów:', error));
-  }
+  fetch('fetch_products.php')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('product-list').innerHTML = html;
+
+      // Dodanie ponownego dodania event listenerów dla checkboxów po odświeżeniu
+      attachCheckboxListeners();
+    })
+    .catch(error => console.error('Błąd podczas ładowania listy produktów:', error));
+}
+
 
   // Funkcja do monitorowania zaznaczenia checkboxów
 document.querySelectorAll('.product-checkbox').forEach(checkbox => {
@@ -204,7 +208,6 @@ document.querySelectorAll('.product-checkbox').forEach(checkbox => {
     }
   });
 });
-
 
 document.getElementById('delete-selected').addEventListener('click', function() {
   const selectedIds = Array.from(document.querySelectorAll('.product-checkbox:checked'))
@@ -223,7 +226,7 @@ document.getElementById('delete-selected').addEventListener('click', function() 
     .then(data => {
       if (data.success) {
         alert(data.message || 'Produkty zostały usunięte pomyślnie.');
-        location.reload();
+        loadProductList(); // Odświeżenie listy produktów po usunięciu
       } else {
         alert('Błąd: ' + (data.message || 'Nie udało się usunąć produktów.'));
       }

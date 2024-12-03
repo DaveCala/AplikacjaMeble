@@ -1,3 +1,41 @@
+<?php
+require_once '../db.php';
+
+// Sprawdzenie ID produktu
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    die('Nieprawidłowe ID produktu.');
+}
+
+$productId = (int)$_GET['id'];
+
+// Pobranie danych produktu
+try {
+    $stmt = $pdo->prepare("SELECT * FROM products WHERE id = :id");
+    $stmt->bindParam(':id', $productId, PDO::PARAM_INT);
+    $stmt->execute();
+    $product = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$product) {
+        die('Produkt nie został znaleziony.');
+    }
+} catch (PDOException $e) {
+    die('Błąd bazy danych: ' . $e->getMessage());
+}
+
+// Pobranie wariacji
+// $variations = [];
+// try {
+//     $stmt = $pdo->prepare("SELECT * FROM variations WHERE product_id = :product_id");
+//     $stmt->bindParam(':product_id', $productId, PDO::PARAM_INT);
+//     $stmt->execute();
+//     $variations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// } catch (PDOException $e) {
+//     die('Błąd bazy danych: ' . $e->getMessage());
+// }
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -10,82 +48,55 @@
   <div class="container mx-auto p-6">
     <h1 class="text-3xl mb-6">Edytuj Produkt</h1>
     <form id="edit-product-form" enctype="multipart/form-data">
-      <!-- Formularz głównego produktu -->
+      <!-- Ukryte pole przechowujące ID produktu -->
       <input type="hidden" id="product-id" name="product_id" value="<?php echo htmlspecialchars($product['id'] ?? 0); ?>">
+
+      <!-- Tytuł produktu -->
       <div class="mb-4">
         <label for="edit-product-title" class="block mb-2 text-sm">Tytuł produktu:</label>
         <input type="text" id="edit-product-title" name="title"
                value="<?php echo htmlspecialchars($product['title'] ?? ''); ?>"
                class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
+
+      <!-- Kategoria produktu -->
       <div class="mb-4">
         <label for="edit-product-category" class="block mb-2 text-sm">Kategoria:</label>
         <input type="text" id="edit-product-category" name="category"
                value="<?php echo htmlspecialchars($product['category'] ?? ''); ?>"
                class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
+
+      <!-- Zdjęcie produktu -->
+      <div class="mb-4">
+        <label for="edit-product-image" class="block mb-2 text-sm">Zdjęcie produktu:</label>
+        <input type="file" id="edit-product-image" name="image"
+               class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+      </div>
+
+      <!-- Opis produktu -->
       <div class="mb-4">
         <label for="edit-product-description" class="block mb-2 text-sm">Opis produktu:</label>
         <textarea id="edit-product-description" name="description" rows="5"
                   class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"><?php echo htmlspecialchars($product['description'] ?? ''); ?></textarea>
       </div>
+
       <button type="button" id="save-product-details"
               class="py-3 px-6 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
         Zapisz zmiany
       </button>
-    </form>
-
-   <!-- Lista wariacji -->
-<div class="mt-8">
-  <h2 class="text-2xl text-white mb-4">Wariacje</h2>
-  <!-- Grid z kafelkami -->
-  <div class="grid grid-cols-1 gap-2 w-full">
-    <?php 
-    // Przykładowe dane wariacji (na sztywno)
-    $variations = [
-        ['id' => 1, 'title' => 'Wariacja 1', 'ean' => '1234567890123', 'image' => 'variation1.jpg'],
-        ['id' => 2, 'title' => 'Wariacja 2', 'ean' => '2345678901234', 'image' => 'variation2.jpg'],
-        ['id' => 3, 'title' => 'Wariacja 3', 'ean' => '3456789012345', 'image' => 'variation3.jpg'],
-    ];
-    ?>
-
-    <?php foreach ($variations as $variation) : ?>
-      <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
-        
-        <!-- Checkbox do zaznaczenia wariacji -->
-        <div class="flex items-center">
-          <input type="checkbox" class="variation-checkbox" data-variation-id="<?php echo $variation['id']; ?>">
-        </div>
-
-        <!-- Zdjęcie wariacji - 1/6 szerokości -->
-        <div class="w-1/6 flex justify-center">
-          <img src="../img/<?php echo htmlspecialchars($variation['image']); ?>" 
-               alt="Zdjęcie wariacji" 
-               class="h-16 w-16 object-contain rounded-lg">
-        </div>
-
-        <!-- Tytuł wariacji - 3/6 szerokości -->
-        <div class="w-3/6 px-4">
-          <h3 class="text-white text-lg truncate"><?php echo htmlspecialchars($variation['title']); ?></h3>
-          <p class="text-gray-400 text-sm truncate">EAN: <?php echo htmlspecialchars($variation['ean']); ?></p>
-        </div>
-
-        <!-- Przycisk - 2/6 szerokości -->
-        <div class="w-2/6 flex justify-end">
-          <a href="editor_variation.php?id=<?php echo $variation['id']; ?>" 
-             class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm">
-            Edytuj
-          </a>
-        </div>
-
+      
+      <!-- Przyciski zaraz po opisie -->
+      <div class="mt-4">
+        <button type="button" id="edit-description"
+                class="py-3 px-6 bg-blue-600 rounded-lg text-white text-lg hover:bg-blue-500">
+          Edytuj opis
+        </button>
       </div>
-    <?php endforeach; ?>
+    </form>
   </div>
-</div>
-
 
   <script>
-    // Obsługa zapisania danych produktu
     document.getElementById('save-product-details').addEventListener('click', () => {
       const form = document.getElementById('edit-product-form');
       const formData = new FormData(form);
@@ -111,3 +122,5 @@
   </script>
 </body>
 </html>
+
+

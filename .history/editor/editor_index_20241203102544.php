@@ -147,101 +147,109 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <script>
-  document.getElementById('add-product').addEventListener('submit', function (e) {
-  e.preventDefault(); // Zapobiega przeładowaniu strony
-
-  const form = e.target;
-  const formData = new FormData(form);
-
-  fetch('add_product.php', {
-    method: 'POST',
-    body: formData,
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      alert(data.message || 'Produkt został dodany pomyślnie.');
-      form.reset();
-      location.reload();
-    } else {
-      alert('Błąd: ' + (data.message || 'Nie udało się dodać produktu.'));
-    }
-  })
-  .catch(error => {
-    console.error('Błąd:', error);
-    alert('Wystąpił błąd podczas dodawania produktu.');
-  });
+// Inicjalizacja funkcji po załadowaniu dokumentu
+document.addEventListener('DOMContentLoaded', function () {
+  setupAddProductForm();
+  setupDeleteButton();
+  loadProductList(); // Wstępne załadowanie listy produktów
+  setupToggleAddForm();
 });
 
+// Funkcja obsługująca dodawanie produktów
+function setupAddProductForm() {
+  const form = document.getElementById('add-product');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const formData = new FormData(form);
 
-  // Funkcja toggle dla formularza
-  document.getElementById('toggle-add-form').addEventListener('click', function () {
-    document.getElementById('add-product-form').classList.toggle('hidden');
-  });
-
-  // Funkcja do załadowania listy produktów
-  function loadProductList() {
-    fetch('fetch_products.php')
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('product-list').innerHTML = html;
-      })
-      .catch(error => console.error('Błąd podczas ładowania listy produktów:', error));
-  }
-
-  // Funkcja do monitorowania zaznaczenia checkboxów
-document.querySelectorAll('.product-checkbox').forEach(checkbox => {
-  checkbox.addEventListener('change', function() {
-    // Sprawdzenie, czy przynajmniej jeden checkbox jest zaznaczony
-    const anyChecked = Array.from(document.querySelectorAll('.product-checkbox')).some(cb => cb.checked);
-    
-    // Pokazanie lub ukrycie przycisku "Usuń"
-    const deleteButtonContainer = document.getElementById('delete-button-container');
-    if (anyChecked) {
-      deleteButtonContainer.classList.remove('hidden');
-    } else {
-      deleteButtonContainer.classList.add('hidden');
-    }
-  });
-});
-
-
-document.getElementById('delete-selected').addEventListener('click', function() {
-  const selectedIds = Array.from(document.querySelectorAll('.product-checkbox:checked'))
-                            .map(cb => cb.getAttribute('data-product-id'));
-
-  if (selectedIds.length > 0) {
-    // Wysłanie zaznaczonych ID do skryptu PHP
-    fetch('delete_products.php', {
+    fetch('add_product.php', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(selectedIds),
+      body: formData,
     })
     .then(response => response.json())
     .then(data => {
       if (data.success) {
-        alert(data.message || 'Produkty zostały usunięte pomyślnie.');
-        location.reload();
+        alert(data.message || 'Produkt został dodany pomyślnie.');
+        form.reset();
+        loadProductList();
       } else {
-        alert('Błąd: ' + (data.message || 'Nie udało się usunąć produktów.'));
+        alert('Błąd: ' + (data.message || 'Nie udało się dodać produktu.'));
       }
     })
     .catch(error => {
-      console.error('Błąd podczas usuwania produktów:', error);
-      alert('Wystąpił błąd podczas usuwania produktów.');
+      console.error('Błąd:', error);
+      alert('Wystąpił błąd podczas dodawania produktu.');
     });
+  });
+}
 
-    // Ukrycie przycisku po usunięciu
-    document.getElementById('delete-button-container').classList.add('hidden');
-  } else {
-    alert('Nie zaznaczono żadnych produktów!');
-  }
-});
+// Funkcja obsługująca przełączanie widoczności formularza dodawania
+function setupToggleAddForm() {
+  document.getElementById('toggle-add-form').addEventListener('click', function () {
+    document.getElementById('add-product-form').classList.toggle('hidden');
+  });
+}
 
+// Funkcja ładująca listę produktów dynamicznie
+function loadProductList() {
+  fetch('fetch_products.php')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('product-list').innerHTML = html;
+      setupProductCheckboxes(); // Dodanie obsługi checkboxów po załadowaniu listy
+    })
+    .catch(error => console.error('Błąd podczas ładowania listy produktów:', error));
+}
 
+// Funkcja monitorująca zaznaczenie checkboxów
+function setupProductCheckboxes() {
+  const checkboxes = document.querySelectorAll('.product-checkbox');
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', toggleDeleteButtonVisibility);
+  });
+}
+
+// Funkcja kontrolująca widoczność przycisku "Usuń"
+function toggleDeleteButtonVisibility() {
+  const anyChecked = Array.from(document.querySelectorAll('.product-checkbox')).some(cb => cb.checked);
+  const deleteButtonContainer = document.getElementById('delete-button-container');
+  deleteButtonContainer.classList.toggle('hidden', !anyChecked);
+}
+
+// Funkcja obsługująca usuwanie zaznaczonych produktów
+function setupDeleteButton() {
+  document.getElementById('delete-selected').addEventListener('click', function () {
+    const selectedIds = Array.from(document.querySelectorAll('.product-checkbox:checked'))
+                              .map(cb => cb.getAttribute('data-product-id'));
+
+    if (selectedIds.length > 0) {
+      fetch('delete_products.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids: selectedIds }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert(data.message || 'Produkty zostały usunięte pomyślnie.');
+          loadProductList();
+        } else {
+          alert('Błąd: ' + (data.message || 'Nie udało się usunąć produktów.'));
+        }
+      })
+      .catch(error => {
+        console.error('Błąd podczas usuwania produktów:', error);
+        alert('Wystąpił błąd podczas usuwania produktów.');
+      });
+    } else {
+      alert('Nie zaznaczono żadnych produktów!');
+    }
+  });
+}
 </script>
+
 
 </body>
 </html>

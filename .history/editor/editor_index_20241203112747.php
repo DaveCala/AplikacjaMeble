@@ -162,7 +162,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (data.success) {
       alert(data.message || 'Produkt został dodany pomyślnie.');
       form.reset();
-      location.reload();
+      loadProductList(); // Odśwież listę produktów
     } else {
       alert('Błąd: ' + (data.message || 'Nie udało się dodać produktu.'));
     }

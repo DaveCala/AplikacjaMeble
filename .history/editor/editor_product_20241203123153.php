@@ -35,54 +35,29 @@
       </button>
     </form>
 
-   <!-- Lista wariacji -->
-<div class="mt-8">
-  <h2 class="text-2xl text-white mb-4">Wariacje</h2>
-  <!-- Grid z kafelkami -->
-  <div class="grid grid-cols-1 gap-2 w-full">
-    <?php 
-    // Przykładowe dane wariacji (na sztywno)
-    $variations = [
-        ['id' => 1, 'title' => 'Wariacja 1', 'ean' => '1234567890123', 'image' => 'variation1.jpg'],
-        ['id' => 2, 'title' => 'Wariacja 2', 'ean' => '2345678901234', 'image' => 'variation2.jpg'],
-        ['id' => 3, 'title' => 'Wariacja 3', 'ean' => '3456789012345', 'image' => 'variation3.jpg'],
-    ];
-    ?>
-
-    <?php foreach ($variations as $variation) : ?>
-      <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
-        
-        <!-- Checkbox do zaznaczenia wariacji -->
-        <div class="flex items-center">
-          <input type="checkbox" class="variation-checkbox" data-variation-id="<?php echo $variation['id']; ?>">
-        </div>
-
-        <!-- Zdjęcie wariacji - 1/6 szerokości -->
-        <div class="w-1/6 flex justify-center">
-          <img src="../img/<?php echo htmlspecialchars($variation['image']); ?>" 
-               alt="Zdjęcie wariacji" 
-               class="h-16 w-16 object-contain rounded-lg">
-        </div>
-
-        <!-- Tytuł wariacji - 3/6 szerokości -->
-        <div class="w-3/6 px-4">
-          <h3 class="text-white text-lg truncate"><?php echo htmlspecialchars($variation['title']); ?></h3>
-          <p class="text-gray-400 text-sm truncate">EAN: <?php echo htmlspecialchars($variation['ean']); ?></p>
-        </div>
-
-        <!-- Przycisk - 2/6 szerokości -->
-        <div class="w-2/6 flex justify-end">
-          <a href="editor_variation.php?id=<?php echo $variation['id']; ?>" 
-             class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm">
-            Edytuj
-          </a>
-        </div>
-
+    <!-- Grid kafelków wariacji -->
+    <h2 class="text-2xl mt-10 mb-4">Wariacje</h2>
+    <div class="grid grid-cols-3 gap-4">
+      <!-- Wariacja 1 -->
+      <div class="bg-gray-700 p-4 rounded-lg">
+        <h3 class="text-lg font-semibold">Wariacja 1</h3>
+        <p>Kod EAN: 1234567890123</p>
+        <button class="mt-2 py-2 px-4 bg-blue-600 rounded-lg text-white hover:bg-blue-500">Edytuj</button>
       </div>
-    <?php endforeach; ?>
+      <!-- Wariacja 2 -->
+      <div class="bg-gray-700 p-4 rounded-lg">
+        <h3 class="text-lg font-semibold">Wariacja 2</h3>
+        <p>Kod EAN: 9876543210987</p>
+        <button class="mt-2 py-2 px-4 bg-blue-600 rounded-lg text-white hover:bg-blue-500">Edytuj</button>
+      </div>
+      <!-- Wariacja 3 -->
+      <div class="bg-gray-700 p-4 rounded-lg">
+        <h3 class="text-lg font-semibold">Wariacja 3</h3>
+        <p>Kod EAN: 1122334455667</p>
+        <button class="mt-2 py-2 px-4 bg-blue-600 rounded-lg text-white hover:bg-blue-500">Edytuj</button>
+      </div>
+    </div>
   </div>
-</div>
-
 
   <script>
     // Obsługa zapisania danych produktu

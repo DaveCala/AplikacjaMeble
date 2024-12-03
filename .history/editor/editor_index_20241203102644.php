@@ -162,7 +162,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (data.success) {
       alert(data.message || 'Produkt został dodany pomyślnie.');
       form.reset();
-      location.reload();
+      loadProductList(); // Odśwież listę produktów
     } else {
       alert('Błąd: ' + (data.message || 'Nie udało się dodać produktu.'));
     }
@@ -190,21 +190,20 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
   // Funkcja do monitorowania zaznaczenia checkboxów
-document.querySelectorAll('.product-checkbox').forEach(checkbox => {
-  checkbox.addEventListener('change', function() {
-    // Sprawdzenie, czy przynajmniej jeden checkbox jest zaznaczony
-    const anyChecked = Array.from(document.querySelectorAll('.product-checkbox')).some(cb => cb.checked);
-    
-    // Pokazanie lub ukrycie przycisku "Usuń"
-    const deleteButtonContainer = document.getElementById('delete-button-container');
-    if (anyChecked) {
-      deleteButtonContainer.classList.remove('hidden');
-    } else {
-      deleteButtonContainer.classList.add('hidden');
-    }
+  document.querySelectorAll('.product-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      // Sprawdzenie, czy przynajmniej jeden checkbox jest zaznaczony
+      const anyChecked = Array.from(document.querySelectorAll('.product-checkbox')).some(cb => cb.checked);
+      
+      // Pokazanie lub ukrycie przycisku "Usuń"
+      const deleteButtonContainer = document.getElementById('delete-button-container');
+      if (anyChecked) {
+        deleteButtonContainer.classList.remove('hidden');
+      } else {
+        deleteButtonContainer.classList.add('hidden');
+      }
+    });
   });
-});
-
 
 document.getElementById('delete-selected').addEventListener('click', function() {
   const selectedIds = Array.from(document.querySelectorAll('.product-checkbox:checked'))
@@ -223,7 +222,7 @@ document.getElementById('delete-selected').addEventListener('click', function() 
     .then(data => {
       if (data.success) {
         alert(data.message || 'Produkty zostały usunięte pomyślnie.');
-        location.reload();
+        loadProductList(); // Odświeżenie listy produktów po usunięciu
       } else {
         alert('Błąd: ' + (data.message || 'Nie udało się usunąć produktów.'));
       }
