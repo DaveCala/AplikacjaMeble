@@ -94,37 +94,50 @@ if ($productId) {
       </button>
     </form>
 
+    <div class="mt-8">
+    <h2 class="text-2xl text-white mb-4">Wariacje</h2>
+
     <!-- Przycisk dodawania nowej wariacji -->
-    <div class="flex justify-between items-center mt-10 mb-4 mx-6">
-  <h2 class="text-2xl text-white">Dodaj nową wariację:</h2>
-  <button id="toggle-add-variation-form" class="py-2 px-4 bg-gray-800 rounded-lg border border-green-500 text-green-500 text-lg hover:bg-green-500 hover:text-white">
-    Dodaj wariację
-  </button>
-</div>
+    <button id="add-variation-button" class="py-3 px-6 bg-blue-600 rounded-lg text-white text-lg hover:bg-blue-500">
+        Dodaj Wariację
+    </button>
 
-<div id="add-variation-form" class="hidden bg-gray-900 p-6 rounded-lg shadow-lg mb-6">
-  <h2 class="text-2xl text-white mb-4">Dodaj nową wariację</h2>
-  <form id="add-variation" method="POST" enctype="multipart/form-data" action="add_variation.php">
-    <div class="mb-4 text-white">
-      <label for="variation-title" class="block mb-2 text-sm">Tytuł wariacji:</label>
-      <input type="text" id="variation-title" name="title" class="w-full p-3 rounded-lg bg-gray-700 text-white" required>
+    <!-- Formularz dodawania nowej wariacji (ukryty na start) -->
+    <div id="add-variation-form" class="hidden mt-6 p-6 bg-gray-900 rounded-lg">
+        <h3 class="text-xl mb-4 text-white">Nowa Wariacja</h3>
+        <form id="new-variation-form" enctype="multipart/form-data">
+            <div class="mb-4">
+                <label for="new-variation-title" class="block text-white">Tytuł:</label>
+                <input type="text" id="new-variation-title" name="title" 
+                       class="w-full p-3 rounded bg-gray-700 text-white">
+            </div>
+            <div class="mb-4">
+                <label for="new-variation-ean" class="block text-white">EAN:</label>
+                <input type="text" id="new-variation-ean" name="ean" 
+                       class="w-full p-3 rounded bg-gray-700 text-white">
+            </div>
+            <div class="mb-4">
+                <label for="new-variation-price" class="block text-white">Cena:</label>
+                <input type="number" step="0.01" id="new-variation-price" name="price" 
+                       class="w-full p-3 rounded bg-gray-700 text-white">
+            </div>
+            <div class="mb-4">
+                <label for="new-variation-stock" class="block text-white">Dostępność:</label>
+                <input type="number" id="new-variation-stock" name="stock_quantity" 
+                       class="w-full p-3 rounded bg-gray-700 text-white">
+            </div>
+            <div class="mb-4">
+                <label for="new-variation-image" class="block text-white">Główne zdjęcie:</label>
+                <input type="file" id="new-variation-image" name="main_image" 
+                       class="w-full p-3 rounded bg-gray-700 text-white">
+            </div>
+            <button type="button" id="save-new-variation" 
+                    class="py-3 px-6 bg-green-600 rounded-lg text-white hover:bg-green-500">
+                Dodaj Wariację
+            </button>
+        </form>
     </div>
-    <div class="mb-4 text-white">
-      <label for="variation-ean" class="block mb-2 text-sm">EAN:</label>
-      <input type="text" id="variation-ean" name="ean" class="w-full p-3 rounded-lg bg-gray-700 text-white" required>
-    </div>
-    <div class="mb-4 text-white">
-      <label for="variation-image" class="block mb-2 text-sm">Zdjęcie główne:</label>
-      <input type="file" id="variation-image" name="main_image" class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg">
-    </div>
-    <div class="flex justify-center mb-6">
-      <button type="submit" class="py-2 px-4 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
-        Dodaj
-      </button>
-    </div>
-  </form>
 </div>
-
 
 
     <!-- Lista wariacji -->
@@ -325,44 +338,35 @@ if ($productId) {
 });
 
 
-document.getElementById('toggle-add-variation-form').addEventListener('click', function () {
-  const form = document.getElementById('add-variation-form');
-  
-  // Przełączanie widoczności formularza
-  if (form.classList.contains('hidden')) {
-    form.classList.remove('hidden');
-    form.classList.add('block');
-  } else {
-    form.classList.add('hidden');
-    form.classList.remove('block');
-  }
+
+// Obsługa pokazania/ukrycia formularza dodawania wariacji
+document.getElementById('add-variation-button').addEventListener('click', () => {
+    const form = document.getElementById('add-variation-form');
+    form.classList.toggle('hidden');
 });
 
+// Obsługa zapisywania nowej wariacji
+document.getElementById('save-new-variation').addEventListener('click', () => {
+    const form = document.getElementById('new-variation-form');
+    const formData = new FormData(form);
 
-document.getElementById('add-variation').addEventListener('submit', function (e) {
-  e.preventDefault(); // Zapobiega przeładowaniu strony
-
-  const form = e.target;
-  const formData = new FormData(form);
-
-  fetch('add_variation.php', {
-    method: 'POST',
-    body: formData,
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      alert(data.message || 'Wariacja została dodana pomyślnie.');
-      form.reset();
-      location.reload(); // Odświeżenie strony
-    } else {
-      alert('Błąd: ' + (data.message || 'Nie udało się dodać wariacji.'));
-    }
-  })
-  .catch(error => {
-    console.error('Błąd:', error);
-    alert('Wystąpił błąd podczas dodawania wariacji.');
-  });
+    fetch('add_variation.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Wariacja została dodana.');
+            location.reload();
+        } else {
+            alert('Błąd: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Błąd:', error);
+        alert('Wystąpił błąd podczas dodawania wariacji.');
+    });
 });
 
 

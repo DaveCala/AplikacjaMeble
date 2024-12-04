@@ -94,37 +94,33 @@ if ($productId) {
       </button>
     </form>
 
+    <div class="mt-8">
+    <h2 class="text-2xl text-white mb-4">Wariacje</h2>
+
     <!-- Przycisk dodawania nowej wariacji -->
-    <div class="flex justify-between items-center mt-10 mb-4 mx-6">
-  <h2 class="text-2xl text-white">Dodaj nową wariację:</h2>
-  <button id="toggle-add-variation-form" class="py-2 px-4 bg-gray-800 rounded-lg border border-green-500 text-green-500 text-lg hover:bg-green-500 hover:text-white">
-    Dodaj wariację
-  </button>
-</div>
+    <button id="add-variation-button" class="py-3 px-6 bg-blue-600 rounded-lg text-white text-lg hover:bg-blue-500">
+        Dodaj Wariację
+    </button>
 
-<div id="add-variation-form" class="hidden bg-gray-900 p-6 rounded-lg shadow-lg mb-6">
-  <h2 class="text-2xl text-white mb-4">Dodaj nową wariację</h2>
-  <form id="add-variation" method="POST" enctype="multipart/form-data" action="add_variation.php">
-    <div class="mb-4 text-white">
-      <label for="variation-title" class="block mb-2 text-sm">Tytuł wariacji:</label>
-      <input type="text" id="variation-title" name="title" class="w-full p-3 rounded-lg bg-gray-700 text-white" required>
-    </div>
-    <div class="mb-4 text-white">
-      <label for="variation-ean" class="block mb-2 text-sm">EAN:</label>
-      <input type="text" id="variation-ean" name="ean" class="w-full p-3 rounded-lg bg-gray-700 text-white" required>
-    </div>
-    <div class="mb-4 text-white">
-      <label for="variation-image" class="block mb-2 text-sm">Zdjęcie główne:</label>
-      <input type="file" id="variation-image" name="main_image" class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg">
-    </div>
-    <div class="flex justify-center mb-6">
-      <button type="submit" class="py-2 px-4 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
-        Dodaj
-      </button>
-    </div>
-  </form>
-</div>
+    <div class="mt-8">
+    <button id="add-variation-btn" class="bg-green-500 py-2 px-4 rounded-lg text-white hover:bg-green-600">Dodaj Wariację</button>
 
+    <div id="add-variation-form" class="hidden mt-4 p-4 bg-gray-800 rounded-lg">
+        <form id="new-variation-form" enctype="multipart/form-data">
+            <label for="new-title" class="block text-white">Tytuł:</label>
+            <input type="text" id="new-title" name="title" class="w-full p-2 rounded bg-gray-700 text-white">
+
+            <label for="new-ean" class="block text-white mt-4">EAN:</label>
+            <input type="text" id="new-ean" name="ean" class="w-full p-2 rounded bg-gray-700 text-white">
+
+        
+            <label for="new-main-image" class="block text-white mt-4">Zdjęcie główne:</label>
+            <input type="file" id="new-main-image" name="main_image" class="w-full p-2 rounded bg-gray-700 text-white">
+
+            <button type="button" id="save-new-variation" class="mt-4 py-2 px-4 bg-green-600 rounded-lg text-white">Zapisz Wariację</button>
+        </form>
+    </div>
+</div>
 
 
     <!-- Lista wariacji -->
@@ -325,44 +321,38 @@ if ($productId) {
 });
 
 
-document.getElementById('toggle-add-variation-form').addEventListener('click', function () {
-  const form = document.getElementById('add-variation-form');
-  
-  // Przełączanie widoczności formularza
-  if (form.classList.contains('hidden')) {
-    form.classList.remove('hidden');
-    form.classList.add('block');
-  } else {
-    form.classList.add('hidden');
-    form.classList.remove('block');
-  }
-});
 
+// Obsługa pokazania/ukrycia formularza dodawania wariacji
+document.getElementById('save-new-variation').addEventListener('click', () => {
+    const title = document.getElementById('new-title').value.trim();
+    const ean = document.getElementById('new-ean').value.trim();
+    const fileInput = document.getElementById('new-main-image');
 
-document.getElementById('add-variation').addEventListener('submit', function (e) {
-  e.preventDefault(); // Zapobiega przeładowaniu strony
-
-  const form = e.target;
-  const formData = new FormData(form);
-
-  fetch('add_variation.php', {
-    method: 'POST',
-    body: formData,
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      alert(data.message || 'Wariacja została dodana pomyślnie.');
-      form.reset();
-      location.reload(); // Odświeżenie strony
-    } else {
-      alert('Błąd: ' + (data.message || 'Nie udało się dodać wariacji.'));
+    if (!title || !ean || !description || fileInput.files.length === 0) {
+        alert('Wszystkie pola są wymagane.');
+        return;
     }
-  })
-  .catch(error => {
-    console.error('Błąd:', error);
-    alert('Wystąpił błąd podczas dodawania wariacji.');
-  });
+
+    const form = document.getElementById('new-variation-form');
+    const formData = new FormData(form);
+
+    fetch('add_variation.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Wariacja została dodana.');
+            location.reload();
+        } else {
+            alert('Błąd: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Błąd:', error);
+        alert('Wystąpił błąd podczas dodawania wariacji.');
+    });
 });
 
 

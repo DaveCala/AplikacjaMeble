@@ -94,6 +94,9 @@ if ($productId) {
       </button>
     </form>
 
+    <div class="mt-8">
+    <h2 class="text-2xl text-white mb-4">Wariacje</h2>
+
     <!-- Przycisk dodawania nowej wariacji -->
     <div class="flex justify-between items-center mt-10 mb-4 mx-6">
   <h2 class="text-2xl text-white">Dodaj nową wariację:</h2>
@@ -325,46 +328,34 @@ if ($productId) {
 });
 
 
-document.getElementById('toggle-add-variation-form').addEventListener('click', function () {
-  const form = document.getElementById('add-variation-form');
-  
-  // Przełączanie widoczności formularza
-  if (form.classList.contains('hidden')) {
-    form.classList.remove('hidden');
-    form.classList.add('block');
-  } else {
-    form.classList.add('hidden');
-    form.classList.remove('block');
-  }
+
+document.getElementById('add-variation-btn').addEventListener('click', () => {
+    const form = document.getElementById('add-variation-form');
+    form.classList.toggle('hidden');
 });
 
+document.getElementById('save-new-variation').addEventListener('click', () => {
+    const form = document.getElementById('new-variation-form');
+    const formData = new FormData(form);
 
-document.getElementById('add-variation').addEventListener('submit', function (e) {
-  e.preventDefault(); // Zapobiega przeładowaniu strony
-
-  const form = e.target;
-  const formData = new FormData(form);
-
-  fetch('add_variation.php', {
-    method: 'POST',
-    body: formData,
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      alert(data.message || 'Wariacja została dodana pomyślnie.');
-      form.reset();
-      location.reload(); // Odświeżenie strony
-    } else {
-      alert('Błąd: ' + (data.message || 'Nie udało się dodać wariacji.'));
-    }
-  })
-  .catch(error => {
-    console.error('Błąd:', error);
-    alert('Wystąpił błąd podczas dodawania wariacji.');
-  });
+    fetch('add_variation.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Wariacja została dodana.');
+            location.reload();
+        } else {
+            alert('Błąd: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Błąd:', error);
+        alert('Wystąpił błąd podczas dodawania wariacji.');
+    });
 });
-
 
   </script>
 </body>

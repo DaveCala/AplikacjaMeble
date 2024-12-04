@@ -325,20 +325,6 @@ if ($productId) {
 });
 
 
-document.getElementById('toggle-add-variation-form').addEventListener('click', function () {
-  const form = document.getElementById('add-variation-form');
-  
-  // Przełączanie widoczności formularza
-  if (form.classList.contains('hidden')) {
-    form.classList.remove('hidden');
-    form.classList.add('block');
-  } else {
-    form.classList.add('hidden');
-    form.classList.remove('block');
-  }
-});
-
-
 document.getElementById('add-variation').addEventListener('submit', function (e) {
   e.preventDefault(); // Zapobiega przeładowaniu strony
 
