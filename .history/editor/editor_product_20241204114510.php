@@ -37,33 +37,6 @@ if ($productId) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edytuj Produkt</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-.file-upload-area {
-    position: relative;
-    cursor: pointer;
-    background-color: #1a202c;
-}
-
-.file-upload-area.dragover {
-    background-color: #2d3748;
-    border-color: #4a5568;
-}
-
-.file-upload-area p {
-    margin: 0;
-}
-
-.file-upload-area input[type="file"] {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-}
-</style>
-
 </head>
 <body class="bg-gray-800 text-white">
   <div class="container mx-auto p-6">
@@ -144,22 +117,12 @@ if ($productId) {
                class="w-full p-2 rounded bg-gray-700 text-white">
 
         <!-- Zdjęcie główne -->
-
-            <label for="main_image-<?php echo $variation['id']; ?>" class="block text-white mt-4">Główne zdjęcie:</label>
-            <div class="file-upload-area border-dashed border-2 border-gray-500 rounded-lg p-4 text-center mt-2">
-                <p class="text-gray-400 mb-2">Przeciągnij lub wybierz zdjęcie</p>
-                <div class="relative">
-                    <img id="preview-<?php echo $variation['id']; ?>" src="#" alt="Podgląd zdjęcia" class="hidden w-32 h-32 object-cover mx-auto mb-4 rounded-lg">
-                    <p class="text-gray-400 mb-2" id="file-name-<?php echo $variation['id']; ?>">Brak pliku</p>
-                    <input type="file" id="main_image-<?php echo $variation['id']; ?>" name="main_image"
-                          class="hidden file-input" accept="image/*" />
-                    <button type="button" class="py-2 px-4 bg-blue-600 text-white rounded-lg">
-                        Wybierz zdjęcie
-                    </button>
-                </div>
-            </div>
-
-
+        <!-- Kontener dla pola dodawania plików -->
+        <div class="file-upload-area border-dashed border-2 border-gray-500 rounded-lg p-4 text-center">
+            <p class="text-gray-400">Przeciągnij i upuść plik tutaj lub kliknij, aby wybrać</p>
+            <input type="file" id="main_image-<?php echo $variation['id']; ?>" name="main_image"
+                  class="hidden file-input" />
+        </div>
 
 
         <!-- Przycisk zapisania zmian -->
@@ -215,43 +178,6 @@ if ($productId) {
         }
       });
     });
-
-
-    document.querySelectorAll('.file-upload-area').forEach(area => {
-    const input = area.querySelector('.file-input');
-
-    // Kliknięcie na obszar
-    area.addEventListener('click', () => input.click());
-
-    // Zdarzenia drag & drop
-    area.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        area.classList.add('dragover');
-    });
-
-    area.addEventListener('dragleave', () => {
-        area.classList.remove('dragover');
-    });
-
-    area.addEventListener('drop', (e) => {
-        e.preventDefault();
-        area.classList.remove('dragover');
-
-        // Pobierz upuszczone pliki
-        if (e.dataTransfer.files.length > 0) {
-            input.files = e.dataTransfer.files;
-            alert(`Wybrano plik: ${input.files[0].name}`);
-        }
-    });
-
-    // Obsługa zmiany pliku po kliknięciu
-    input.addEventListener('change', () => {
-        if (input.files.length > 0) {
-            alert(`Wybrano plik: ${input.files[0].name}`);
-        }
-    });
-});
-
 
     document.querySelectorAll('.save-variation').forEach(button => {
     button.addEventListener('click', () => {

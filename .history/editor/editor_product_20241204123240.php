@@ -145,7 +145,7 @@ if ($productId) {
 
         <!-- Zdjęcie główne -->
 
-            <label for="main_image-<?php echo $variation['id']; ?>" class="block text-white mt-4">Główne zdjęcie:</label>
+            <label for="main_image-<?php echo $variation['id']; ?>" class="block text-white">Główne zdjęcie:</label>
             <div class="file-upload-area border-dashed border-2 border-gray-500 rounded-lg p-4 text-center mt-2">
                 <p class="text-gray-400 mb-2">Przeciągnij lub wybierz zdjęcie</p>
                 <div class="relative">
