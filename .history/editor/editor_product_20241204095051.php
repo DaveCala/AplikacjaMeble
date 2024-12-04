@@ -174,41 +174,6 @@ if ($productId) {
         }
       });
     });
-
-    document.querySelectorAll('.save-variation').forEach(button => {
-    button.addEventListener('click', () => {
-        const variationId = button.getAttribute('data-variation-id');
-        const form = document.querySelector(`#edit-variation-form-${variationId}`);
-        const formData = new FormData(form);
-
-        fetch('update_variation.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Wariacja została zaktualizowana.');
-
-                // Aktualizacja kafelka wariacji po zapisaniu zmian
-                const variationTile = document.querySelector(`.toggle-details[data-variation-id="${variationId}"]`).closest('.flex.items-center');
-                variationTile.querySelector('h3').textContent = data.updatedTitle;
-                variationTile.querySelector('p:nth-child(2)').textContent = `EAN: ${data.updatedEAN}`;
-                if (data.updatedImage) {
-                    variationTile.querySelector('img').src = `../img/${data.updatedImage}`;
-                }
-            } else {
-                alert('Błąd: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Błąd:', error);
-            alert('Wystąpił błąd podczas zapisywania.');
-        });
-    });
-});
-
-
   </script>
 </body>
 </html>

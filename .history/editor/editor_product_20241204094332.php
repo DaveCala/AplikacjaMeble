@@ -102,33 +102,24 @@ if ($productId) {
           </div>
 
           <!-- Miejsce na szczegóły wariacji z formularzem edycji -->
-          <div id="details-<?php echo $variation['id']; ?>" class="hidden mt-4 p-4 bg-gray-800 rounded-lg">
-    <form id="edit-variation-form-<?php echo $variation['id']; ?>" data-variation-id="<?php echo $variation['id']; ?>">
-        <!-- Tytuł -->
-        <label for="title-<?php echo $variation['id']; ?>" class="block text-white">Tytuł:</label>
-        <input type="text" id="title-<?php echo $variation['id']; ?>" name="title" 
-               value="<?php echo htmlspecialchars($variation['title']); ?>" 
-               class="w-full p-2 rounded bg-gray-700 text-white">
+          <div id="details-<?php echo htmlspecialchars($variation['id']); ?>" class="hidden mt-4 p-4 bg-gray-800 rounded-lg">
+              <form id="edit-variation-form-<?php echo htmlspecialchars($variation['id']); ?>" data-variation-id="<?php echo htmlspecialchars($variation['id']); ?>">
+                  <label for="price-<?php echo htmlspecialchars($variation['id']); ?>" class="block text-white">Cena:</label>
+                  <input type="number" step="0.01" id="price-<?php echo htmlspecialchars($variation['id']); ?>" name="price" 
+                        value="<?php echo htmlspecialchars($variation['price']); ?>" 
+                        class="w-full p-2 rounded bg-gray-700 text-white">
 
-        <!-- EAN -->
-        <label for="ean-<?php echo $variation['id']; ?>" class="block text-white mt-4">EAN:</label>
-        <input type="text" id="ean-<?php echo $variation['id']; ?>" name="ean" 
-               value="<?php echo htmlspecialchars($variation['ean']); ?>" 
-               class="w-full p-2 rounded bg-gray-700 text-white">
+                  <label for="stock-<?php echo htmlspecialchars($variation['id']); ?>" class="block text-white mt-4">Dostępność:</label>
+                  <input type="number" id="stock-<?php echo htmlspecialchars($variation['id']); ?>" name="stock_quantity" 
+                        value="<?php echo htmlspecialchars($variation['stock_quantity']); ?>" 
+                        class="w-full p-2 rounded bg-gray-700 text-white">
 
-        <!-- Zdjęcie główne -->
-        <label for="main-image-<?php echo $variation['id']; ?>" class="block text-white mt-4">Zdjęcie główne:</label>
-        <input type="file" id="main-image-<?php echo $variation['id']; ?>" name="main_image" 
-               class="w-full p-2 rounded bg-gray-700 text-white">
-
-        <!-- Przycisk zapisania zmian -->
-        <button type="button" class="mt-4 py-2 px-4 bg-green-600 rounded-lg text-white save-variation"
-                data-variation-id="<?php echo $variation['id']; ?>">
-            Zapisz zmiany
-        </button>
-    </form>
-</div>
-
+                  <button type="button" class="mt-4 py-2 px-4 bg-green-600 rounded-lg text-white save-variation"
+                          data-variation-id="<?php echo htmlspecialchars($variation['id']); ?>">
+                      Zapisz zmiany
+                  </button>
+              </form>
+          </div>
 
         <?php endforeach; ?>
       </div>
@@ -174,41 +165,6 @@ if ($productId) {
         }
       });
     });
-
-    document.querySelectorAll('.save-variation').forEach(button => {
-    button.addEventListener('click', () => {
-        const variationId = button.getAttribute('data-variation-id');
-        const form = document.querySelector(`#edit-variation-form-${variationId}`);
-        const formData = new FormData(form);
-
-        fetch('update_variation.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Wariacja została zaktualizowana.');
-
-                // Aktualizacja kafelka wariacji po zapisaniu zmian
-                const variationTile = document.querySelector(`.toggle-details[data-variation-id="${variationId}"]`).closest('.flex.items-center');
-                variationTile.querySelector('h3').textContent = data.updatedTitle;
-                variationTile.querySelector('p:nth-child(2)').textContent = `EAN: ${data.updatedEAN}`;
-                if (data.updatedImage) {
-                    variationTile.querySelector('img').src = `../img/${data.updatedImage}`;
-                }
-            } else {
-                alert('Błąd: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Błąd:', error);
-            alert('Wystąpił błąd podczas zapisywania.');
-        });
-    });
-});
-
-
   </script>
 </body>
 </html>

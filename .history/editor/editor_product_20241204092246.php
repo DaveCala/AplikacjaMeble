@@ -30,6 +30,7 @@ if ($productId) {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -67,61 +68,53 @@ if ($productId) {
       </button>
     </form>
 
-    <!-- Lista wariacji -->
-    <div class="mt-8">
-      <h2 class="text-2xl text-white mb-4">Wariacje</h2>
-      <div class="grid grid-cols-1 gap-2 w-full">
-        <?php foreach ($variations as $variation) : ?>
-          <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
-            
-            <!-- Checkbox do zaznaczenia wariacji -->
-            <div class="flex items-center">
-              <input type="checkbox" class="variation-checkbox" data-variation-id="<?php echo $variation['id']; ?>">
-            </div>
+  <!-- Lista wariacji -->
+<div class="mt-8">
+  <h2 class="text-2xl text-white mb-4">Wariacje</h2>
+  <div class="grid grid-cols-1 gap-2 w-full">
+    <?php foreach ($variations as $variation) : ?>
+      <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
+        
+        <!-- Checkbox do zaznaczenia wariacji -->
+        <div class="flex items-center">
+          <input type="checkbox" class="variation-checkbox" data-variation-id="<?php echo $variation['id']; ?>">
+        </div>
 
-            <!-- Zdjęcie wariacji - 1/6 szerokości -->
-            <div class="w-1/6 flex justify-center">
-              <img src="../img/<?php echo htmlspecialchars($variation['main_image']); ?>" 
-                   alt="Zdjęcie wariacji" 
-                   class="h-16 w-16 object-contain rounded-lg">
-            </div>
+        <!-- Zdjęcie wariacji - 1/6 szerokości -->
+        <div class="w-1/6 flex justify-center">
+          <img src="../img/<?php echo htmlspecialchars($variation['main_image']); ?>" 
+               alt="Zdjęcie wariacji" 
+               class="h-16 w-16 object-contain rounded-lg">
+        </div>
 
-            <!-- Tytuł wariacji - 3/6 szerokości -->
-            <div class="w-3/6 px-4">
-              <h3 class="text-white text-lg truncate"><?php echo htmlspecialchars($variation['title']); ?></h3>
-              <p class="text-gray-400 text-sm truncate">EAN: <?php echo htmlspecialchars($variation['ean']); ?></p>
-            </div>
+        <!-- Tytuł wariacji - 3/6 szerokości -->
+        <div class="w-3/6 px-4">
+          <h3 class="text-white text-lg truncate"><?php echo htmlspecialchars($variation['title']); ?></h3>
+          <p class="text-gray-400 text-sm truncate">EAN: <?php echo htmlspecialchars($variation['ean']); ?></p>
+        </div>
 
-            <!-- Przycisk "Obejrzyj" - 2/6 szerokości -->
-            <div class="w-2/6 flex justify-end">
-              <button class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm toggle-details" 
-                      data-variation-id="<?php echo $variation['id']; ?>">
-                Obejrzyj
-              </button>
-            </div>
-          </div>
+        <!-- Przycisk "Obejrzyj" - 2/6 szerokości -->
+        <div class="w-2/6 flex justify-end">
+          <button class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm toggle-details" 
+                  data-variation-id="<?php echo $variation['id']; ?>">
+            Obejrzyj
+          </button>
+        </div>
+      </div>
 
-          <!-- Miejsce na szczegóły wariacji z formularzem edycji -->
-          <div id="details-<?php echo $variation['id']; ?>" class="hidden mt-4 p-4 bg-gray-800 rounded-lg">
+      <!-- Miejsce na szczegóły wariacji z formularzem edycji -->
+<div id="details-<?php echo $variation['id']; ?>" class="hidden mt-4 p-4 bg-gray-800 rounded-lg">
     <form id="edit-variation-form-<?php echo $variation['id']; ?>" data-variation-id="<?php echo $variation['id']; ?>">
-        <!-- Tytuł -->
-        <label for="title-<?php echo $variation['id']; ?>" class="block text-white">Tytuł:</label>
-        <input type="text" id="title-<?php echo $variation['id']; ?>" name="title" 
-               value="<?php echo htmlspecialchars($variation['title']); ?>" 
+        <label for="price-<?php echo $variation['id']; ?>" class="block text-white">Cena:</label>
+        <input type="number" step="0.01" id="price-<?php echo $variation['id']; ?>" name="price" 
+               value="<?php echo htmlspecialchars($variation['price']); ?>" 
                class="w-full p-2 rounded bg-gray-700 text-white">
 
-        <!-- EAN -->
-        <label for="ean-<?php echo $variation['id']; ?>" class="block text-white mt-4">EAN:</label>
-        <input type="text" id="ean-<?php echo $variation['id']; ?>" name="ean" 
-               value="<?php echo htmlspecialchars($variation['ean']); ?>" 
+        <label for="stock-<?php echo $variation['id']; ?>" class="block text-white mt-4">Dostępność:</label>
+        <input type="number" id="stock-<?php echo $variation['id']; ?>" name="stock_quantity" 
+               value="<?php echo htmlspecialchars($variation['stock_quantity']); ?>" 
                class="w-full p-2 rounded bg-gray-700 text-white">
 
-        <!-- Zdjęcie główne -->
-        <label for="main-image-<?php echo $variation['id']; ?>" class="block text-white mt-4">Zdjęcie główne:</label>
-        <input type="file" id="main-image-<?php echo $variation['id']; ?>" name="main_image" 
-               class="w-full p-2 rounded bg-gray-700 text-white">
-
-        <!-- Przycisk zapisania zmian -->
         <button type="button" class="mt-4 py-2 px-4 bg-green-600 rounded-lg text-white save-variation"
                 data-variation-id="<?php echo $variation['id']; ?>">
             Zapisz zmiany
@@ -129,11 +122,6 @@ if ($productId) {
     </form>
 </div>
 
-
-        <?php endforeach; ?>
-      </div>
-    </div>
-  </div>
 
   <script>
     // Obsługa zapisania danych produktu
@@ -161,21 +149,21 @@ if ($productId) {
     });
 
    // Obsługa rozwijania szczegółów po kliknięciu przycisku "Obejrzyj"
-    document.querySelectorAll('.toggle-details').forEach(button => {
-      button.addEventListener('click', () => {
-        const variationId = button.getAttribute('data-variation-id');
-        const detailsDiv = document.getElementById(`details-${variationId}`);
-        
-        // Przełączanie widoczności szczegółów
-        if (detailsDiv.classList.contains('hidden')) {
-          detailsDiv.classList.remove('hidden');
-        } else {
-          detailsDiv.classList.add('hidden');
-        }
-      });
-    });
+document.querySelectorAll('.toggle-details').forEach(button => {
+  button.addEventListener('click', () => {
+    const variationId = button.getAttribute('data-variation-id');
+    const detailsDiv = document.getElementById(`details-${variationId}`);
+    
+    // Przełączanie widoczności szczegółów
+    if (detailsDiv.classList.contains('hidden')) {
+      detailsDiv.classList.remove('hidden');
+    } else {
+      detailsDiv.classList.add('hidden');
+    }
+  });
+});
 
-    document.querySelectorAll('.save-variation').forEach(button => {
+document.querySelectorAll('.save-variation').forEach(button => {
     button.addEventListener('click', () => {
         const variationId = button.getAttribute('data-variation-id');
         const form = document.querySelector(`#edit-variation-form-${variationId}`);
@@ -190,13 +178,10 @@ if ($productId) {
             if (data.success) {
                 alert('Wariacja została zaktualizowana.');
 
-                // Aktualizacja kafelka wariacji po zapisaniu zmian
+                // Aktualizacja kafelka wariacji
                 const variationTile = document.querySelector(`.toggle-details[data-variation-id="${variationId}"]`).closest('.flex.items-center');
                 variationTile.querySelector('h3').textContent = data.updatedTitle;
                 variationTile.querySelector('p:nth-child(2)').textContent = `EAN: ${data.updatedEAN}`;
-                if (data.updatedImage) {
-                    variationTile.querySelector('img').src = `../img/${data.updatedImage}`;
-                }
             } else {
                 alert('Błąd: ' + data.message);
             }
@@ -207,7 +192,6 @@ if ($productId) {
         });
     });
 });
-
 
   </script>
 </body>
