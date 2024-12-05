@@ -94,30 +94,24 @@ if ($productId) {
       </button>
     </form>
 
-    <div id="add-variation-form">
-  <h2 class="text-2xl text-white mb-4">Dodaj nową wariację</h2>
-  <form id="add-variation" method="POST" enctype="multipart/form-data">
+    <form id="add-variation" method="POST" enctype="multipart/form-data">
+    <input type="hidden" id="product-id" name="product_id">
     <div class="mb-4 text-white">
       <label for="variation-title" class="block mb-2 text-sm">Tytuł wariacji:</label>
       <input type="text" id="variation-title" name="title" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
     </div>
     <div class="mb-4 text-white">
-      <label for="variation-ean" class="block mb-2 text-sm">EAN:</label>
-      <input type="text" id="variation-ean" name="ean" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+      <label for="variation-image" class="block mb-2 text-sm">Zdjęcie wariacji:</label>
+      <input type="file" id="variation-image" name="image" class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
     </div>
     <div class="mb-4 text-white">
-      <label for="variation-image" class="block mb-2 text-sm">Zdjęcie:</label>
-      <input type="file" id="variation-image" name="image" class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+      <label for="variation-ean" class="block mb-2 text-sm">EAN wariacji:</label>
+      <input type="text" id="variation-ean" name="ean" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
     </div>
-
-    <div class="flex justify-center mb-6">
-      <button type="submit" class="py-2 px-4 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
-        Dodaj
-      </button>
-    </div>
-  </form>
-</div>
-
+    <button type="submit" class="py-2 px-4 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
+      Dodaj wariację
+    </button>
+</form>
 
     <!-- Lista wariacji -->
     <div class="mt-8">
@@ -313,134 +307,15 @@ if ($productId) {
     });
 });
 
-// Obsługa zapisania danych produktu
-document.getElementById('save-product-details').addEventListener('click', () => {
-  const form = document.getElementById('edit-product-form');
-  const formData = new FormData(form);
-
-  fetch('update_product.php', {
-    method: 'POST',
-    body: formData
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      alert('Produkt został zaktualizowany.');
-      location.reload(); // Odświeżenie strony, aby zaktualizować dane
-    } else {
-      alert('Błąd: ' + data.message);
-    }
-  })
-  .catch(error => {
-    console.error('Błąd:', error);
-    alert('Wystąpił błąd podczas zapisywania.');
-  });
-});
-
-// Obsługa rozwijania szczegółów po kliknięciu przycisku "Obejrzyj"
-document.querySelectorAll('.toggle-details').forEach(button => {
-  button.addEventListener('click', () => {
-    const variationId = button.getAttribute('data-variation-id');
-    const detailsDiv = document.getElementById(`details-${variationId}`);
-    
-    // Przełączanie widoczności szczegółów
-    if (detailsDiv.classList.contains('hidden')) {
-      detailsDiv.classList.remove('hidden');
-    } else {
-      detailsDiv.classList.add('hidden');
-    }
-  });
-});
-
-// Obsługa przeciągania i upuszczania plików dla zdjęcia wariacji
-document.querySelectorAll('.file-upload-area').forEach(area => {
-  const input = area.querySelector('.file-input');
-
-  // Kliknięcie na obszar
-  area.addEventListener('click', () => input.click());
-
-  // Zdarzenia drag & drop
-  area.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    area.classList.add('dragover');
-  });
-
-  area.addEventListener('dragleave', () => {
-    area.classList.remove('dragover');
-  });
-
-  area.addEventListener('drop', (e) => {
-    e.preventDefault();
-    area.classList.remove('dragover');
-
-    // Pobierz upuszczone pliki
-    if (e.dataTransfer.files.length > 0) {
-      input.files = e.dataTransfer.files;
-      alert(`Wybrano plik: ${input.files[0].name}`);
-    }
-  });
-
-  // Obsługa zmiany pliku po kliknięciu
-  input.addEventListener('change', () => {
-    if (input.files.length > 0) {
-      alert(`Wybrano plik: ${input.files[0].name}`);
-    }
-  });
-});
-
-// Obsługa zapisania zmian dla wariacji
-document.querySelectorAll('.save-variation').forEach(button => {
-  button.addEventListener('click', () => {
-    const variationId = button.getAttribute('data-variation-id');
-    const form = document.querySelector(`#edit-variation-form-${variationId}`);
-    const formData = new FormData(form);
-
-    // Dodanie ID wariacji do FormData
-    formData.append('variation_id', variationId);
-
-    fetch('update_variation.php', {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        alert('Wariacja została zaktualizowana.');
-
-        // Aktualizacja kafelka wariacji
-        const variationTile = document.querySelector(`.toggle-details[data-variation-id="${variationId}"]`).closest('.flex.items-center');
-        variationTile.querySelector('h3').textContent = data.updatedTitle;
-        variationTile.querySelector('p:nth-child(2)').textContent = `EAN: ${data.updatedEAN}`;
-
-        // Jeśli zdjęcie zostało zaktualizowane
-        if (data.updatedImage) {
-          variationTile.querySelector('img').src = `../img/${data.updatedImage}`;
-        }
-      } else {
-        alert('Błąd: ' + data.message);
-      }
-    })
-    .catch(error => {
-      console.error('Błąd:', error);
-      alert('Wystąpił błąd podczas zapisywania.');
-    });
-  });
-});
-
-// Obsługa dodawania nowej wariacji
-document.getElementById('add-variation').addEventListener('submit', function (e) {
-  e.preventDefault(); // Zapobiega przeładowaniu strony
+document.getElementById('add-variation').addEventListener('submit', function(e) {
+  e.preventDefault(); // Zapobiegamy przeładowaniu strony
 
   const form = e.target;
   const formData = new FormData(form);
-  
-  // Pobranie ID produktu z URL
-  const productId = new URLSearchParams(window.location.search).get('id');
-  
-  if (productId) {
-    formData.append('product_id', productId); // Dodajemy product_id do danych formularza
-  } else {
-    alert('Nie znaleziono ID produktu.');
+
+  // Sprawdzenie, czy wszystkie wymagane dane są w formularzu
+  if (!formData.get('title') || !formData.get('image') || !formData.get('ean')) {
+    alert('Wszystkie pola muszą być wypełnione.');
     return;
   }
 
@@ -453,7 +328,7 @@ document.getElementById('add-variation').addEventListener('submit', function (e)
     if (data.success) {
       alert(data.message || 'Wariacja została dodana pomyślnie.');
       form.reset();
-      loadVariationList(); // Zaktualizowanie listy wariacji po dodaniu
+      loadVariationList();  // Ładowanie zaktualizowanej listy wariacji
     } else {
       alert('Błąd: ' + (data.message || 'Nie udało się dodać wariacji.'));
     }
@@ -464,67 +339,10 @@ document.getElementById('add-variation').addEventListener('submit', function (e)
   });
 });
 
-// Funkcja do załadowania listy wariacji
-function loadVariationList() {
-  fetch('fetch_variations.php')
-    .then(response => response.text())
-    .then(html => {
-      document.getElementById('variation-list').innerHTML = html;
-    })
-    .catch(error => console.error('Błąd podczas ładowania listy wariacji:', error));
-}
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get('id');
+console.log(productId);  // Dodaj ten kod, aby sprawdzić, czy poprawnie pobieramy product_id
 
-
-// Funkcja monitorująca zaznaczenie checkboxów wariacji
-document.querySelectorAll('.variation-checkbox').forEach(checkbox => {
-  checkbox.addEventListener('change', function() {
-    // Sprawdzenie, czy przynajmniej jeden checkbox jest zaznaczony
-    const anyChecked = Array.from(document.querySelectorAll('.variation-checkbox')).some(cb => cb.checked);
-    
-    // Pokazanie lub ukrycie przycisku "Usuń"
-    const deleteButtonContainer = document.getElementById('delete-button-container');
-    if (anyChecked) {
-      deleteButtonContainer.classList.remove('hidden');
-    } else {
-      deleteButtonContainer.classList.add('hidden');
-    }
-  });
-});
-
-// Funkcja do usuwania zaznaczonych wariacji
-document.getElementById('delete-selected').addEventListener('click', function() {
-  const selectedIds = Array.from(document.querySelectorAll('.variation-checkbox:checked'))
-                            .map(cb => cb.getAttribute('data-variation-id'));
-
-  if (selectedIds.length > 0) {
-    // Wysłanie zaznaczonych ID do skryptu PHP
-    fetch('delete_variations.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(selectedIds),
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        alert(data.message || 'Wariacje zostały usunięte pomyślnie.');
-        location.reload(); // Przeładowanie strony po usunięciu
-      } else {
-        alert('Błąd: ' + (data.message || 'Nie udało się usunąć wariacji.'));
-      }
-    })
-    .catch(error => {
-      console.error('Błąd podczas usuwania wariacji:', error);
-      alert('Wystąpił błąd podczas usuwania wariacji.');
-    });
-
-    // Ukrycie przycisku po usunięciu
-    document.getElementById('delete-button-container').classList.add('hidden');
-  } else {
-    alert('Nie zaznaczono żadnych wariacji!');
-  }
-});
 
   </script>
 </body>

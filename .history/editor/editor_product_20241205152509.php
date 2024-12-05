@@ -120,29 +120,28 @@ if ($productId) {
 
 
     <!-- Lista wariacji -->
-    <div class="mt-8">
-      <h2 class="text-2xl text-white mb-4">Wariacje</h2>
-      <div class="grid grid-cols-1 gap-2 w-full">
-        <?php foreach ($variations as $variation) : ?>
-          <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
-            
-            <!-- Checkbox do zaznaczenia wariacji -->
-            <div class="flex items-center">
-              <input type="checkbox" class="variation-checkbox" data-variation-id="<?php echo $variation['id']; ?>">
-            </div>
+<?php if (!empty($variations)) : ?>
+  <div class="grid grid-cols-1 gap-2 w-full">
+    <?php foreach ($variations as $variation) : ?>
+      <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
+        
+        <!-- Checkbox do zaznaczenia wariacji -->
+        <div class="flex items-center">
+          <input type="checkbox" class="variation-checkbox" data-variation-id="<?php echo $variation['id']; ?>">
+        </div>
 
-            <!-- Zdjęcie wariacji - 1/6 szerokości -->
-            <div class="w-1/6 flex justify-center">
-              <img src="../img/<?php echo htmlspecialchars($variation['main_image']); ?>" 
-                   alt="Zdjęcie wariacji" 
-                   class="h-16 w-16 object-contain rounded-lg">
-            </div>
+        <!-- Główne zdjęcie - 1/6 szerokości -->
+        <div class="w-1/6 flex justify-center">
+          <img src="../img/<?php echo htmlspecialchars($variation['main_image']); ?>" 
+               alt="Główne zdjęcie" 
+               class="h-16 w-16 object-contain rounded-lg">
+        </div>
 
-            <!-- Tytuł wariacji - 3/6 szerokości -->
-            <div class="w-3/6 px-4">
-              <h3 class="text-white text-lg truncate"><?php echo htmlspecialchars($variation['title']); ?></h3>
-              <p class="text-gray-400 text-sm truncate">EAN: <?php echo htmlspecialchars($variation['ean']); ?></p>
-            </div>
+        <!-- Tytuł wariacji - 3/6 szerokości -->
+        <div class="w-3/6 px-4">
+          <h3 class="text-white text-lg truncate"><?php echo htmlspecialchars($variation['title']); ?></h3>
+          <p class="text-gray-400 text-sm truncate"><?php echo htmlspecialchars($variation['ean']); ?></p>
+        </div>
 
             <!-- Przycisk "Obejrzyj" - 2/6 szerokości -->
             <div class="w-2/6 flex justify-end">

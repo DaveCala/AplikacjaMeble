@@ -473,59 +473,6 @@ function loadVariationList() {
     })
     .catch(error => console.error('Błąd podczas ładowania listy wariacji:', error));
 }
-
-
-// Funkcja monitorująca zaznaczenie checkboxów wariacji
-document.querySelectorAll('.variation-checkbox').forEach(checkbox => {
-  checkbox.addEventListener('change', function() {
-    // Sprawdzenie, czy przynajmniej jeden checkbox jest zaznaczony
-    const anyChecked = Array.from(document.querySelectorAll('.variation-checkbox')).some(cb => cb.checked);
-    
-    // Pokazanie lub ukrycie przycisku "Usuń"
-    const deleteButtonContainer = document.getElementById('delete-button-container');
-    if (anyChecked) {
-      deleteButtonContainer.classList.remove('hidden');
-    } else {
-      deleteButtonContainer.classList.add('hidden');
-    }
-  });
-});
-
-// Funkcja do usuwania zaznaczonych wariacji
-document.getElementById('delete-selected').addEventListener('click', function() {
-  const selectedIds = Array.from(document.querySelectorAll('.variation-checkbox:checked'))
-                            .map(cb => cb.getAttribute('data-variation-id'));
-
-  if (selectedIds.length > 0) {
-    // Wysłanie zaznaczonych ID do skryptu PHP
-    fetch('delete_variations.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(selectedIds),
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        alert(data.message || 'Wariacje zostały usunięte pomyślnie.');
-        location.reload(); // Przeładowanie strony po usunięciu
-      } else {
-        alert('Błąd: ' + (data.message || 'Nie udało się usunąć wariacji.'));
-      }
-    })
-    .catch(error => {
-      console.error('Błąd podczas usuwania wariacji:', error);
-      alert('Wystąpił błąd podczas usuwania wariacji.');
-    });
-
-    // Ukrycie przycisku po usunięciu
-    document.getElementById('delete-button-container').classList.add('hidden');
-  } else {
-    alert('Nie zaznaczono żadnych wariacji!');
-  }
-});
-
   </script>
 </body>
 </html>
