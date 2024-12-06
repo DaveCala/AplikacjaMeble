@@ -380,63 +380,120 @@ if ($productId) {
       .catch(error => console.error('Błąd podczas ładowania listy wariacji:', error));
   }
 
-  //Usuwanie wariacji 
+  // Funkcja monitorująca zaznaczenie checkboxów wariacji
+  document.querySelectorAll('.variation-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      // Sprawdzenie, czy przynajmniej jeden checkbox jest zaznaczony
+      const anyChecked = Array.from(document.querySelectorAll('.variation-checkbox')).some(cb => cb.checked);
+      
+      // Pokazanie lub ukrycie przycisku "Usuń"
+      const deleteButtonContainer = document.getElementById('delete-button-container');
+      if (anyChecked) {
+        deleteButtonContainer.classList.remove('hidden');
+      } else {
+        deleteButtonContainer.classList.add('hidden');
+      }
+    });
+  });
+
   document.addEventListener("DOMContentLoaded", () => {
   const checkboxes = document.querySelectorAll(".variation-checkbox");
   const deleteButton = document.getElementById("delete-selected-variations");
 
-  // Funkcja sprawdzająca, czy jest zaznaczony przynajmniej jeden checkbox
+  // Funkcja do sprawdzania zaznaczonych checkboxów
   const toggleDeleteButton = () => {
     const anyChecked = Array.from(checkboxes).some((checkbox) => checkbox.checked);
     deleteButton.classList.toggle("hidden", !anyChecked);
   };
 
-  // Nasłuchiwanie zmian w checkboxach
+  // Nasłuchiwanie zmiany stanu każdego checkboxa
   checkboxes.forEach((checkbox) => {
     checkbox.addEventListener("change", toggleDeleteButton);
   });
 
-  // Obsługa kliknięcia w przycisk usuwania
+  // Dodaj obsługę kliknięcia przycisku "Usuń zaznaczone"
   deleteButton.addEventListener("click", () => {
     const selectedVariations = Array.from(checkboxes)
       .filter((checkbox) => checkbox.checked)
-      .map((checkbox) => checkbox.dataset.variationId);
+      .map((checkbox) => checkbox.dataset.variationId); // Zakładam, że każdy checkbox ma atrybut `data-variation-id`
 
     if (selectedVariations.length > 0) {
-      const confirmDelete = confirm("Czy na pewno chcesz usunąć zaznaczone wariacje?");
-      if (confirmDelete) {
-        // Wysłanie żądania do backendu
-        fetch("delete_variations.php", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ ids: selectedVariations }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              alert("Wariacje zostały usunięte.");
-              // Usunięcie zaznaczonych wariacji z DOM
-              selectedVariations.forEach((id) => {
-                const checkbox = document.querySelector(`.variation-checkbox[data-variation-id="${id}"]`);
-                if (checkbox) {
-                  checkbox.closest(".bg-gray-900").remove();
-                }
-              });
-              toggleDeleteButton(); // Ukryj przycisk, jeśli nic nie jest zaznaczone
-            } else {
-              alert("Nie udało się usunąć wariacji: " + data.error);
-            }
-          })
-          .catch((error) => {
-            console.error("Błąd:", error);
-            alert("Wystąpił błąd podczas usuwania wariacji.");
-          });
+      if (confirm("Czy na pewno chcesz usunąć zaznaczone wariacje?")) {
+        console.log("Usuwanie wariacji:", selectedVariations);
+
+        // Tutaj możesz dodać logikę wysyłania ID do serwera w celu ich usunięcia
+        // fetch('/delete-variations', { method: 'POST', body: JSON.stringify({ ids: selectedVariations }) });
       }
     }
   });
 });
+
+deleteButton.addEventListener("click", () => {
+  const selectedVariations = Array.from(checkboxes)
+    .filter((checkbox) => checkbox.checked)
+    .map((checkbox) => checkbox.dataset.variationId);
+
+  if (selectedVariations.length > 0) {
+    if (confirm("Czy na pewno chcesz usunąć zaznaczone wariacje?")) {
+      // Wyślij żądanie do backendu
+      fetch("delete_variations.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedVariations }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            alert("Wariacje zostały usunięte.");
+
+            // Usuń usunięte wariacje z interfejsu użytkownika
+            data.deleted_ids.forEach((id) => {
+              const checkbox = document.querySelector(`.variation-checkbox[data-variation-id="${id}"]`);
+              if (checkbox) {
+                checkbox.closest(".bg-gray-900").remove();
+              }
+            });
+
+            toggleDeleteButton(); // Zaktualizuj widoczność przycisku
+          } else {
+            alert("Wystąpił błąd podczas usuwania: " + data.error);
+          }
+        })
+        .catch((error) => {
+          console.error("Błąd:", error);
+          alert("Nie udało się usunąć wariacji. Spróbuj ponownie.");
+        });
+    }
+  }
+});
+
+fetch("delete_variations.php", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({ ids: selectedVariations }),
+})
+  .then((response) => response.json())
+  .then((data) => {
+    console.log("Odpowiedź serwera:", data); // Dodaj log
+    if (data.success) {
+      alert("Wariacje zostały usunięte.");
+      data.deleted_ids.forEach((id) => {
+        const checkbox = document.querySelector(`.variation-checkbox[data-variation-id="${id}"]`);
+        if (checkbox) {
+          checkbox.closest(".bg-gray-900").remove();
+        }
+      });
+    } else {
+      alert("Błąd: " + data.error);
+    }
+  })
+  .catch((error) => {
+    console.error("Błąd:", error);
+  });
 
 </script>
 

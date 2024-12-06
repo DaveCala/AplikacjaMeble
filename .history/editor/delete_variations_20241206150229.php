@@ -1,9 +1,5 @@
 <?php
 header('Content-Type: application/json');
-
-// Dołączenie pliku do łączenia z bazą danych
-require_once '../db.php';
-
 try {
     $input = json_decode(file_get_contents('php://input'), true);
     $ids = $input['ids'] ?? [];
@@ -13,7 +9,13 @@ try {
         exit;
     }
 
-    // Przygotowanie zapytania do usunięcia rekordów
+    $dsn = "mysql:host=localhost;dbname=twoja_baza;charset=utf8mb4";
+    $username = "root";
+    $password = "";
+    $pdo = new PDO($dsn, $username, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    ]);
+
     $placeholders = implode(',', array_fill(0, count($ids), '?'));
     $stmt = $pdo->prepare("DELETE FROM variations WHERE id IN ($placeholders)");
     $stmt->execute($ids);

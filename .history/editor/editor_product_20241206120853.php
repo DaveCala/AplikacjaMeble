@@ -66,84 +66,73 @@ if ($productId) {
 
 </head>
 <body class="bg-gray-800 text-white">
-<div class="container mx-auto p-6">
-
-<h1 class="text-3xl mb-6">Edytuj Produkt</h1>
+  <div class="container mx-auto p-6">
+    <h1 class="text-3xl mb-6">Edytuj Produkt</h1>
     <form id="edit-product-form" enctype="multipart/form-data">
-      <!-- Ukryte pole przechowujące ID produktu -->
+      <!-- Formularz głównego produktu -->
       <input type="hidden" id="product-id" name="product_id" value="<?php echo htmlspecialchars($product['id'] ?? 0); ?>">
-
-      <!-- Tytuł produktu -->
       <div class="mb-4">
         <label for="edit-product-title" class="block mb-2 text-sm">Tytuł produktu:</label>
         <input type="text" id="edit-product-title" name="title"
                value="<?php echo htmlspecialchars($product['title'] ?? ''); ?>"
                class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
-
-      <!-- Kategoria produktu -->
       <div class="mb-4">
         <label for="edit-product-category" class="block mb-2 text-sm">Kategoria:</label>
         <input type="text" id="edit-product-category" name="category"
                value="<?php echo htmlspecialchars($product['category'] ?? ''); ?>"
                class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
-
-      <!-- Zdjęcie produktu -->
       <div class="mb-4">
-        <label for="edit-product-image" class="block mb-2 text-sm">Zdjęcie produktu:</label>
-        <input type="file" id="edit-product-image" name="image"
-               class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+        <label for="edit-product-description" class="block mb-2 text-sm">Opis produktu:</label>
+        <textarea id="edit-product-description" name="description" rows="5"
+                  class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"><?php echo htmlspecialchars($product['description'] ?? ''); ?></textarea>
       </div>
-
       <button type="button" id="save-product-details"
               class="py-3 px-6 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
         Zapisz zmiany
       </button>
     </form>
+
+    <!-- Przycisk do pokazania/ukrycia formularza -->
+<div class="flex justify-between items-center mt-10 mb-4 mx-6">
+  <h2 class="text-2xl text-white">Dodaj wariację:</h2>
+  <div class="flex items-center space-x-4">
+    <button id="toggle-add-variation-form" class="py-2 px-4 bg-gray-800 rounded-lg border border-green-500 text-green-500 text-lg hover:bg-green-500 hover:text-white">
+      Dodaj wariację
+    </button>
   </div>
+</div>
+
+<!-- Formularz do dodawania wariacji -->
+<div id="add-variation-form" class="hidden bg-gray-900 p-6 rounded-lg shadow-lg mb-6">
+  <h2 class="text-2xl text-white mb-4">Dodaj nową wariację</h2>
+  <form id="add-variation" method="POST" enctype="multipart/form-data">
+    <div class="mb-4 text-white">
+      <label for="variation-title" class="block mb-2 text-sm">Tytuł wariacji:</label>
+      <input type="text" id="variation-title" name="title" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+    </div>
+    <div class="mb-4 text-white">
+      <label for="variation-ean" class="block mb-2 text-sm">EAN:</label>
+      <input type="text" id="variation-ean" name="ean" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+    </div>
+    <div class="mb-4 text-white">
+      <label for="variation-image" class="block mb-2 text-sm">Zdjęcie:</label>
+      <input type="file" id="variation-image" name="image" class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+    </div>
+
+    <div class="flex justify-center mb-6">
+      <button type="submit" class="py-2 px-4 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
+        Dodaj
+      </button>
+    </div>
+  </form>
+</div>
+
 
     <!-- Lista wariacji -->
     <div class="mt-8">
-      <!-- Przycisk do pokazania/ukrycia formularza -->
-      <div class="flex justify-between items-center mt-10 mb-4 mx-6">
-        <h2 class="text-2xl text-white">Wariacje:</h2>
-        <div class="flex items-center space-x-4">
-        <button id="delete-selected-variations" class="py-2 px-4 bg-red-600 text-white text-lg rounded-lg hidden hover:bg-red-500">
-          Usuń zaznaczone
-        </button>
-          <button id="toggle-add-variation-form" class="py-2 px-4 bg-gray-800 rounded-lg border border-green-500 text-green-500 text-lg hover:bg-green-500 hover:text-white">
-            Dodaj wariacje
-          </button>
-        </div>
-      </div>
-
-      <!-- Formularz do dodawania wariacji -->
-      <div id="add-variation-form" class="hidden bg-gray-900 p-6 rounded-lg shadow-lg mb-6">
-        <h2 class="text-2xl text-white mb-4">Dodaj nową wariację</h2>
-        <form id="add-variation" method="POST" enctype="multipart/form-data">
-          <div class="mb-4 text-white">
-            <label for="variation-title" class="block mb-2 text-sm">Tytuł wariacji:</label>
-            <input type="text" id="variation-title" name="title" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-          </div>
-          <div class="mb-4 text-white">
-            <label for="variation-ean" class="block mb-2 text-sm">EAN:</label>
-            <input type="text" id="variation-ean" name="ean" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-          </div>
-          <div class="mb-4 text-white">
-            <label for="variation-image" class="block mb-2 text-sm">Zdjęcie:</label>
-            <input type="file" id="variation-image" name="image" class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-          </div>
-
-          <div class="flex justify-center mb-6">
-            <button type="submit" class="py-2 px-4 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
-              Dodaj
-            </button>
-          </div>
-        </form>
-      </div>
-
-
+      <h2 class="text-2xl text-white mb-4">Wariacje</h2>
       <div class="grid grid-cols-1 gap-2 w-full">
         <?php foreach ($variations as $variation) : ?>
           <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
@@ -221,28 +210,29 @@ if ($productId) {
   </div>
 
   <script>
+  // Obsługa zapisania danych produktu
   document.getElementById('save-product-details').addEventListener('click', () => {
-      const form = document.getElementById('edit-product-form');
-      const formData = new FormData(form);
+    const form = document.getElementById('edit-product-form');
+    const formData = new FormData(form);
 
-      fetch('update_product.php', {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          alert('Produkt został zaktualizowany.');
-          location.reload();
-        } else {
-          alert('Błąd: ' + data.message);
-        }
-      })
-      .catch(error => {
-        console.error('Błąd:', error);
-        alert('Wystąpił błąd podczas zapisywania.');
-      });
+    fetch('update_product.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Produkt został zaktualizowany.');
+        location.reload(); // Odświeżenie strony, aby zaktualizować dane
+      } else {
+        alert('Błąd: ' + data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Błąd:', error);
+      alert('Wystąpił błąd podczas zapisywania.');
     });
+  });
 
   // Obsługa rozwijania szczegółów po kliknięciu przycisku "Obejrzyj"
   document.body.addEventListener('click', (event) => {
@@ -380,64 +370,56 @@ if ($productId) {
       .catch(error => console.error('Błąd podczas ładowania listy wariacji:', error));
   }
 
-  //Usuwanie wariacji 
-  document.addEventListener("DOMContentLoaded", () => {
-  const checkboxes = document.querySelectorAll(".variation-checkbox");
-  const deleteButton = document.getElementById("delete-selected-variations");
-
-  // Funkcja sprawdzająca, czy jest zaznaczony przynajmniej jeden checkbox
-  const toggleDeleteButton = () => {
-    const anyChecked = Array.from(checkboxes).some((checkbox) => checkbox.checked);
-    deleteButton.classList.toggle("hidden", !anyChecked);
-  };
-
-  // Nasłuchiwanie zmian w checkboxach
-  checkboxes.forEach((checkbox) => {
-    checkbox.addEventListener("change", toggleDeleteButton);
+  // Funkcja monitorująca zaznaczenie checkboxów wariacji
+  document.querySelectorAll('.variation-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      // Sprawdzenie, czy przynajmniej jeden checkbox jest zaznaczony
+      const anyChecked = Array.from(document.querySelectorAll('.variation-checkbox')).some(cb => cb.checked);
+      
+      // Pokazanie lub ukrycie przycisku "Usuń"
+      const deleteButtonContainer = document.getElementById('delete-button-container');
+      if (anyChecked) {
+        deleteButtonContainer.classList.remove('hidden');
+      } else {
+        deleteButtonContainer.classList.add('hidden');
+      }
+    });
   });
 
-  // Obsługa kliknięcia w przycisk usuwania
-  deleteButton.addEventListener("click", () => {
-    const selectedVariations = Array.from(checkboxes)
-      .filter((checkbox) => checkbox.checked)
-      .map((checkbox) => checkbox.dataset.variationId);
+  // Funkcja do usuwania zaznaczonych wariacji
+  document.getElementById('delete-selected').addEventListener('click', function() {
+    const selectedIds = Array.from(document.querySelectorAll('.variation-checkbox:checked'))
+                              .map(cb => cb.getAttribute('data-variation-id'));
 
-    if (selectedVariations.length > 0) {
-      const confirmDelete = confirm("Czy na pewno chcesz usunąć zaznaczone wariacje?");
-      if (confirmDelete) {
-        // Wysłanie żądania do backendu
-        fetch("delete_variations.php", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ ids: selectedVariations }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              alert("Wariacje zostały usunięte.");
-              // Usunięcie zaznaczonych wariacji z DOM
-              selectedVariations.forEach((id) => {
-                const checkbox = document.querySelector(`.variation-checkbox[data-variation-id="${id}"]`);
-                if (checkbox) {
-                  checkbox.closest(".bg-gray-900").remove();
-                }
-              });
-              toggleDeleteButton(); // Ukryj przycisk, jeśli nic nie jest zaznaczone
-            } else {
-              alert("Nie udało się usunąć wariacji: " + data.error);
-            }
-          })
-          .catch((error) => {
-            console.error("Błąd:", error);
-            alert("Wystąpił błąd podczas usuwania wariacji.");
-          });
-      }
+    if (selectedIds.length > 0) {
+      // Wysłanie zaznaczonych ID do skryptu PHP
+      fetch('delete_variations.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(selectedIds),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert(data.message || 'Wariacje zostały usunięte pomyślnie.');
+          location.reload(); // Przeładowanie strony po usunięciu
+        } else {
+          alert('Błąd: ' + (data.message || 'Nie udało się usunąć wariacji.'));
+        }
+      })
+      .catch(error => {
+        console.error('Błąd podczas usuwania wariacji:', error);
+        alert('Wystąpił błąd podczas usuwania wariacji.');
+      });
+
+      // Ukrycie przycisku po usunięciu
+      document.getElementById('delete-button-container').classList.add('hidden');
+    } else {
+      alert('Nie zaznaczono żadnych wariacji!');
     }
   });
-});
-
 </script>
 
 </body>
