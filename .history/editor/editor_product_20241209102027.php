@@ -114,53 +114,28 @@ if ($productId) {
   </button>
 </div>
 
-<div class="p-6 bg-gray-800 text-white rounded-lg">
-  <form id="add-variation-form" enctype="multipart/form-data">
-    <input type="hidden" name="product_id" value="12345" id="product-id" /> <!-- Ustaw właściwe ID produktu -->
-
-    <div class="mb-4">
-      <label for="title" class="block mb-1">Tytuł</label>
-      <input
-        type="text"
-        id="title"
-        name="title"
-        class="w-full p-2 text-gray-900 rounded-lg"
-        required
-      />
+<div id="add-variation-form" class="hidden bg-gray-900 p-6 rounded-lg shadow-lg mb-6">
+  <h2 class="text-2xl text-white mb-4">Dodaj nową wariację</h2>
+  <form id="add-variation" method="POST" enctype="multipart/form-data" action="add_variation.php">
+    <div class="mb-4 text-white">
+      <label for="variation-title" class="block mb-2 text-sm">Tytuł wariacji:</label>
+      <input type="text" id="variation-title" name="title" class="w-full p-3 rounded-lg bg-gray-700 text-white" required>
     </div>
-
-    <div class="mb-4">
-      <label for="ean" class="block mb-1">EAN</label>
-      <input
-        type="text"
-        id="ean"
-        name="ean"
-        class="w-full p-2 text-gray-900 rounded-lg"
-        required
-      />
+    <div class="mb-4 text-white">
+      <label for="variation-ean" class="block mb-2 text-sm">EAN:</label>
+      <input type="text" id="variation-ean" name="ean" class="w-full p-3 rounded-lg bg-gray-700 text-white" required>
     </div>
-
-    <div class="mb-4">
-      <label for="main-image" class="block mb-1">Zdjęcie</label>
-      <input
-        type="file"
-        id="main-image"
-        name="main_image"
-        class="w-full p-2 text-gray-900 rounded-lg"
-        accept="image/*"
-      />
+    <div class="mb-4 text-white">
+      <label for="variation-image" class="block mb-2 text-sm">Zdjęcie główne:</label>
+      <input type="file" id="variation-image" name="main_image" class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg">
     </div>
-
-    <button
-      type="submit"
-      class="py-2 px-4 bg-blue-600 text-white text-lg rounded-lg hover:bg-blue-500"
-    >
-      Dodaj Wariację
-    </button>
+    <div class="flex justify-center mb-6">
+      <button type="submit" class="py-2 px-4 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
+        Dodaj
+      </button>
+    </div>
   </form>
 </div>
-
-
 
 
   <!-- Lista wariacji -->
@@ -444,9 +419,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          alert(data.message || 'Wariacja została dodany pomyślnie.');
-          form.reset();
-          location.reload();
+          alert(data.message);
           // Aktualizuj listę wariacji
           addVariationToList({
             title: formData.get("title"),
@@ -458,6 +431,10 @@ document.addEventListener("DOMContentLoaded", () => {
           alert("Błąd: " + data.message);
         }
       })
+      .catch((error) => {
+        console.error("Błąd:", error);
+        alert("Wystąpił błąd podczas dodawania wariacji.");
+      });
   });
 
   const addVariationToList = (variation) => {

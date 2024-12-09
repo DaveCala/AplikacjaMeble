@@ -444,9 +444,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          alert(data.message || 'Wariacja została dodany pomyślnie.');
-          form.reset();
-          location.reload();
+          alert(data.message);
           // Aktualizuj listę wariacji
           addVariationToList({
             title: formData.get("title"),

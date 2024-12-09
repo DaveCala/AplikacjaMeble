@@ -1,7 +1,6 @@
 <?php
 require_once '../db.php'; // Połączenie do bazy danych
 
-
 header('Content-Type: application/json');
 
 try {
@@ -52,8 +51,4 @@ if (isset($_POST['title'], $_POST['ean'], $_POST['product_id'])) {
 } else {
     echo json_encode(['success' => false, 'message' => 'Brak wymaganych danych.']);
 }
-
-var_dump($_POST);
-var_dump($_FILES);
-exit;
 ?>

@@ -160,7 +160,9 @@ if ($productId) {
   </form>
 </div>
 
-
+<div id="variations-list" class="mt-6">
+  <!-- Lista wariacji zostanie zaktualizowana dynamicznie -->
+</div>
 
 
   <!-- Lista wariacji -->
@@ -444,9 +446,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          alert(data.message || 'Wariacja została dodany pomyślnie.');
-          form.reset();
-          location.reload();
+          alert(data.message);
           // Aktualizuj listę wariacji
           addVariationToList({
             title: formData.get("title"),
@@ -458,6 +458,10 @@ document.addEventListener("DOMContentLoaded", () => {
           alert("Błąd: " + data.message);
         }
       })
+      .catch((error) => {
+        console.error("Błąd:", error);
+        alert("Wystąpił błąd podczas dodawania wariacji.");
+      });
   });
 
   const addVariationToList = (variation) => {

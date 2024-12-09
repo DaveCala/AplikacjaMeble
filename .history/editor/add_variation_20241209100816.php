@@ -1,7 +1,7 @@
 <?php
 require_once '../db.php'; // Połączenie do bazy danych
 
-
+ob_clean();
 header('Content-Type: application/json');
 
 try {
