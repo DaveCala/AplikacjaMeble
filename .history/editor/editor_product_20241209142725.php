@@ -124,7 +124,7 @@ if ($productId) {
         type="text"
         id="title"
         name="title"
-        class="w-full p-2 text-white bg-gray-600 rounded-lg"
+        class="w-full p-2 text-gray-900 rounded-lg"
         required
       />
     </div>
@@ -135,7 +135,7 @@ if ($productId) {
         type="text"
         id="ean"
         name="ean"
-        class="w-full p-2 text-white bg-gray-600 rounded-lg"
+        class="w-full p-2 text-gray-900 rounded-lg"
         required
       />
     </div>
@@ -261,102 +261,108 @@ if ($productId) {
     });
 
   // Obsługa rozwijania szczegółów po kliknięciu przycisku "Obejrzyj"
-document.body.addEventListener('click', (event) => {
-  if (event.target.classList.contains('toggle-details')) {
-    const button = event.target;
-    const variationId = button.getAttribute('data-variation-id');
-    const detailsDiv = document.getElementById(`details-${variationId}`);
+  document.body.addEventListener('click', (event) => {
+    if (event.target.classList.contains('toggle-details')) {
+      const button = event.target;
+      const variationId = button.getAttribute('data-variation-id');
+      const detailsDiv = document.getElementById(`details-${variationId}`);
 
-    // Przełączanie widoczności szczegółów
-    if (detailsDiv) {
-      detailsDiv.classList.toggle('hidden');
-    }
-  }
-});
-
-// Obsługa przeciągania i upuszczania plików dla zdjęcia wariacji
-document.querySelectorAll('.file-upload-area').forEach(area => {
-  const input = area.querySelector('.file-input');
-
-  // Kliknięcie na obszar
-  area.addEventListener('click', () => input.click());
-
-  // Zdarzenia drag & drop
-  area.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    area.classList.add('dragover');
-  });
-
-  area.addEventListener('dragleave', () => {
-    area.classList.remove('dragover');
-  });
-
-  area.addEventListener('drop', (e) => {
-    e.preventDefault();
-    area.classList.remove('dragover');
-
-    // Pobierz upuszczone pliki
-    if (e.dataTransfer.files.length > 0) {
-      input.files = e.dataTransfer.files;
-      alert(`Wybrano plik: ${input.files[0].name}`);
-    }
-  });
-
-  // Obsługa zmiany pliku po kliknięciu
-  input.addEventListener('change', () => {
-    if (input.files.length > 0) {
-      alert(`Wybrano plik: ${input.files[0].name}`);
-    }
-  });
-});
-
-// Obsługa zapisania danych wariacji
-document.querySelectorAll('.save-variation').forEach(button => {
-  button.addEventListener('click', () => {
-    const variationId = button.getAttribute('data-variation-id');
-    const form = document.querySelector(`#edit-variation-form-${variationId}`);
-    const formData = new FormData(form);
-
-    // Dodanie ID wariacji do FormData
-    formData.append('variation_id', variationId);
-
-    fetch('update_variation.php', {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        alert('Wariacja została zaktualizowana.');
-
-        // Aktualizacja kafelka wariacji
-        const variationTile = document.querySelector(`.toggle-details[data-variation-id="${variationId}"]`).closest('.flex.items-center');
-        variationTile.querySelector('h3').textContent = data.updatedTitle;
-        variationTile.querySelector('p:nth-child(2)').textContent = `EAN: ${data.updatedEAN}`;
-
-        // Jeśli zdjęcie zostało zaktualizowane
-        if (data.updatedImage) {
-          variationTile.querySelector('img').src = `../img/${data.updatedImage}`;
-        }
-      } else {
-        alert('Błąd: ' + data.message);
+      // Przełączanie widoczności szczegółów
+      if (detailsDiv) {
+        detailsDiv.classList.toggle('hidden');
       }
-    })
-    .catch(error => {
-      console.error('Błąd:', error);
-      alert('Wystąpił błąd podczas zapisywania.');
+    }
+  });
+
+  // Obsługa przeciągania i upuszczania plików dla zdjęcia wariacji
+  document.querySelectorAll('.file-upload-area').forEach(area => {
+    const input = area.querySelector('.file-input');
+
+    // Kliknięcie na obszar
+    area.addEventListener('click', () => input.click());
+
+    // Zdarzenia drag & drop
+    area.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      area.classList.add('dragover');
+    });
+
+    area.addEventListener('dragleave', () => {
+      area.classList.remove('dragover');
+    });
+
+    area.addEventListener('drop', (e) => {
+      e.preventDefault();
+      area.classList.remove('dragover');
+
+      // Pobierz upuszczone pliki
+      if (e.dataTransfer.files.length > 0) {
+        input.files = e.dataTransfer.files;
+        alert(`Wybrano plik: ${input.files[0].name}`);
+      }
+    });
+
+    // Obsługa zmiany pliku po kliknięciu
+    input.addEventListener('change', () => {
+      if (input.files.length > 0) {
+        alert(`Wybrano plik: ${input.files[0].name}`);
+      }
     });
   });
-});
+
+  // Obsługa zapisania danych wariacji
+  document.querySelectorAll('.save-variation').forEach(button => {
+    button.addEventListener('click', () => {
+      const variationId = button.getAttribute('data-variation-id');
+      const form = document.querySelector(`#edit-variation-form-${variationId}`);
+      const formData = new FormData(form);
+
+      // Dodanie ID wariacji do FormData
+      formData.append('variation_id', variationId);
+
+      fetch('update_variation.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Wariacja została zaktualizowana.');
+
+          // Aktualizacja kafelka wariacji
+          const variationTile = document.querySelector(`.toggle-details[data-variation-id="${variationId}"]`).closest('.flex.items-center');
+          variationTile.querySelector('h3').textContent = data.updatedTitle;
+          variationTile.querySelector('p:nth-child(2)').textContent = `EAN: ${data.updatedEAN}`;
+
+          // Jeśli zdjęcie zostało zaktualizowane
+          if (data.updatedImage) {
+            variationTile.querySelector('img').src = `../img/${data.updatedImage}`;
+          }
+        } else {
+          alert('Błąd: ' + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Błąd:', error);
+        alert('Wystąpił błąd podczas zapisywania.');
+      });
+    });
+  });
+
+
+  const variationsContainer = document.getElementById('variationsContainer');
+        const addVariationBtn = document.getElementById('addVariationBtn');
+
+        let variationCount = 0;
 
 // Funkcja do załadowania listy wariacji
 function loadVariationList(productId) {
-  fetch('fetch_variations.php?product_id=' + productId)
-    .then(response => response.text())
-    .then(html => {
-      document.getElementById('variation-list').innerHTML = html;
-    })
-    .catch(error => console.error('Błąd podczas ładowania listy wariacji:', error));
+    fetch('fetch_variations.php?product_id=' + productId)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('variation-list').innerHTML = html;
+        })
+        .catch(error => console.error('Błąd podczas ładowania listy wariacji:', error));
 }
 
 
@@ -473,6 +479,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     variationsList.appendChild(variationItem);
   };
+});
+
+document.body.addEventListener("click", (event) => {
+  // Sprawdź, czy kliknięto przycisk "Obejrzyj"
+  if (event.target.classList.contains("toggle-details")) {
+    const button = event.target;
+    const variationId = button.getAttribute("data-variation-id");
+
+    // Znajdź formularz szczegółów dla klikniętej wariacji
+    const detailsDiv = document.getElementById(`details-${variationId}`);
+
+    if (detailsDiv) {
+      // Ukryj inne otwarte szczegóły
+      document.querySelectorAll("[id^='details-']").forEach((div) => {
+        if (div.id !== `details-${variationId}`) {
+          div.classList.add("hidden");
+        }
+      });
+
+      // Przełącz widoczność szczegółów dla tej konkretnej wariacji
+      detailsDiv.classList.toggle("hidden");
+    } else {
+      console.error(`Nie znaleziono formularza szczegółów o ID: details-${variationId}`);
+    }
+  }
 });
 
 

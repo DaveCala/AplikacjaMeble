@@ -25,6 +25,14 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <style> 
 
+
+    #notificationPanel {
+      border: 1px solid #2d3748;
+      max-height: 400px;
+      display: flex;
+      flex-direction: column;
+    }
+
     #notificationPanel ul {
       padding: 0;
       flex-grow: 1;
@@ -33,13 +41,13 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     #notificationPanel li {
       padding: 12px;
-      border: 1px solid #2d3748;
+      border-top: 1px solid #2d3748;
       transition: background-color 0.3s, border-color 0.3s;
     }
 
     #notificationPanel li:hover {
-      background-color: #b49659;
-      border-color: white;
+      background-color: #2b6cb0;
+      border-color: #3182ce;
       cursor: pointer;
     }
 
@@ -54,7 +62,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     #notificationPanel > div {
       border-top: 2px solid #2d3748;
       border-radius: 0 0 8px 8px;
-
+      background-color: #1a202c;
     }
   </style>
 
@@ -125,6 +133,13 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
           Zmieniona cena dla produktu **Produkt H** na **320 zł** przez **Jan Kowalski**.
         </li>
       </ul>
+
+      <!-- Pseudo zakończenie listy - widoczne zawsze na dole -->
+      <div class="border-t-2 border-gray-900 rounded-b-md p-4 bg-gray-900">
+        &nbsp; <!-- Puste miejsce, które stanowi subtelną dekorację -->
+      </div>
+    </div>
+  </div>
 
 </nav>
 

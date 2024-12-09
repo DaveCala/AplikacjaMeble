@@ -25,6 +25,12 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <style> 
 
+    /* .hidden {
+      display: none;
+    } */
+
+
+
     #notificationPanel ul {
       padding: 0;
       flex-grow: 1;

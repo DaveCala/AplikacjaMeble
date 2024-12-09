@@ -25,6 +25,21 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <style> 
 
+.hidden {
+      display: none;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #notificationPanel {
+      border: 1px solid #2d3748;
+      max-height: 400px;
+      display: flex;
+      flex-direction: column;
+    }
+
     #notificationPanel ul {
       padding: 0;
       flex-grow: 1;
@@ -33,13 +48,13 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     #notificationPanel li {
       padding: 12px;
-      border: 1px solid #2d3748;
+      border-top: 1px solid #2d3748;
       transition: background-color 0.3s, border-color 0.3s;
     }
 
     #notificationPanel li:hover {
-      background-color: #b49659;
-      border-color: white;
+      background-color: #2b6cb0;
+      border-color: #3182ce;
       cursor: pointer;
     }
 
@@ -54,7 +69,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     #notificationPanel > div {
       border-top: 2px solid #2d3748;
       border-radius: 0 0 8px 8px;
-
+      background-color: #1a202c;
     }
   </style>
 
@@ -83,13 +98,14 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </a>
     <?php endif; ?>
 
+    <!-- Ikona Powiadomień -->
     <div class="relative flex items-center">
-    <img src="../img/mailbox.png" alt="Ikona Powiadomień" 
-         class="ml-5 w-10 h-10 cursor-pointer hover:scale-110 transition-transform duration-200"
-         onclick="toggleNotifications()">
-    <span class="absolute top-0 left-14 bg-red-700 text-white text-xs font-bold px-2 py-1 rounded-full">
-      3
-    </span>
+  <img src="../img/mailbox.png" alt="Ikona Powiadomień" 
+       class="ml-5 w-10 h-10 cursor-pointer hover:scale-110 transition-transform duration-200"
+       onclick="toggleNotifications()">
+  <span class="absolute top-0 left-14 bg-red-700 text-white text-xs font-bold px-2 py-1 rounded-full">
+    3
+  </span>
     
     <!-- Lista powiadomień -->
     <div id="notificationPanel" class="hidden absolute top-14 right-0 bg-gray-900 shadow-lg rounded-md w-80 max-h-96 overflow-y-auto z-50">
@@ -125,6 +141,13 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
           Zmieniona cena dla produktu **Produkt H** na **320 zł** przez **Jan Kowalski**.
         </li>
       </ul>
+
+      <!-- Pseudo zakończenie listy - widoczne zawsze na dole -->
+      <div class="border-t-2 border-gray-900 rounded-b-md p-4 bg-gray-900">
+        &nbsp; <!-- Puste miejsce, które stanowi subtelną dekorację -->
+      </div>
+    </div>
+  </div>
 
 </nav>
 
@@ -311,8 +334,17 @@ document.getElementById('delete-selected').addEventListener('click', function() 
 });
 
 function toggleNotifications() {
+      // Pobierz panel powiadomień
       const notificationPanel = document.getElementById('notificationPanel');
-      notificationPanel.classList.toggle('hidden');
+      
+      // Sprawdź, czy panel ma klasę 'hidden'
+      if (notificationPanel.classList.contains('hidden')) {
+        // Jeśli ma, usuń ją, by wyświetlić panel
+        notificationPanel.classList.remove('hidden');
+      } else {
+        // Jeśli nie ma, dodaj ją, by ukryć panel
+        notificationPanel.classList.add('hidden');
+      }
     }
 
 </script>

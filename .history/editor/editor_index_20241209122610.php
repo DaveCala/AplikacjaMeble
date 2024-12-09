@@ -25,37 +25,51 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <style> 
 
-    #notificationPanel ul {
-      padding: 0;
-      flex-grow: 1;
-      overflow-y: auto;
-    }
+.hidden {
+  display: none;
+}
 
-    #notificationPanel li {
-      padding: 12px;
-      border: 1px solid #2d3748;
-      transition: background-color 0.3s, border-color 0.3s;
-    }
+#notificationPanel {
+  animation: slide-down 0.3s ease-out;
+  border: 1px solid #2d3748; /* Dodanie granicy wokół panelu */
+}
 
-    #notificationPanel li:hover {
-      background-color: #b49659;
-      border-color: white;
-      cursor: pointer;
-    }
+#notificationPanel ul {
+  padding: 0;
+}
 
-    #notificationPanel .p-4 {
-      border-bottom: 1px solid #2d3748;
-    }
+#notificationPanel li {
+  padding: 12px;
+  border-top: 1px solid #2d3748; /* Granica między elementami */
+  transition: background-color 0.3s, border-color 0.3s; /* Dodanie efektu przejścia */
+}
 
-    #notificationPanel h3 {
-      color: #e2e8f0;
-    }
+#notificationPanel li:hover {
+  background-color: #b49659; /* Niebieski kolor tła na hover */
+  border-color: white; /* Niebieska granica na hover */
+  cursor: pointer;
+}
 
-    #notificationPanel > div {
-      border-top: 2px solid #2d3748;
-      border-radius: 0 0 8px 8px;
+#notificationPanel .p-4 {
+  border-bottom: 1px solid #2d3748; /* Granica pomiędzy nagłówkiem a listą */
+}
 
-    }
+#notificationPanel h3 {
+  color: #e2e8f0; /* Jasny kolor tekstu dla nagłówka */
+}
+
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
   </style>
 
 </head>
@@ -83,48 +97,34 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </a>
     <?php endif; ?>
 
-    <div class="relative flex items-center">
-    <img src="../img/mailbox.png" alt="Ikona Powiadomień" 
-         class="ml-5 w-10 h-10 cursor-pointer hover:scale-110 transition-transform duration-200"
-         onclick="toggleNotifications()">
-    <span class="absolute top-0 left-14 bg-red-700 text-white text-xs font-bold px-2 py-1 rounded-full">
-      3
-    </span>
-    
-    <!-- Lista powiadomień -->
-    <div id="notificationPanel" class="hidden absolute top-14 right-0 bg-gray-900 shadow-lg rounded-md w-80 max-h-96 overflow-y-auto z-50">
-      <div class="p-4 border-b">
-        <h3 class="text-lg font-bold text-gray-200">Powiadomienia</h3>
-      </div>
-      <ul class="divide-y">
-        <li class="p-4 hover:bg-blue-600 hover:border-blue-500">
-          Zmieniona cena dla produktu **Produkt A** na **300 zł** przez **Jan Kowalski**.
-        </li>
-        <li class="p-4 hover:bg-blue-600 hover:border-blue-500">
-          Zmieniona cena dla produktu **Produkt B** na **450 zł** przez **Anna Nowak**.
-        </li>
-        <li class="p-4 hover:bg-blue-600 hover:border-blue-500">
-          Dodano nowy produkt **Produkt C** przez **Piotr Zieliński**.
-        </li>
-        <li class="p-4 hover:bg-blue-600 hover:border-blue-500">
-          Nowa aktualizacja dla **Produkt D** przez **Marta Kowalska**.
-        </li>
-        <li class="p-4 hover:bg-blue-600 hover:border-blue-500">
-          Zmieniona cena dla produktu **Produkt E** na **100 zł** przez **Kamil Nowak**.
-        </li>
-        <li class="p-4 hover:bg-blue-600 hover:border-blue-500">
-          Nowy użytkownik zarejestrowany: **Łukasz Wiśniewski**.
-        </li>
-        <li class="p-4 hover:bg-blue-600 hover:border-blue-500">
-          Produkt **Produkt F** został wycofany z oferty.
-        </li>
-        <li class="p-4 hover:bg-blue-600 hover:border-blue-500">
-          Nowa recenzja dla **Produkt G** od **Paweł Zieliński**.
-        </li>
-        <li class="p-4 hover:bg-blue-600 hover:border-blue-500">
-          Zmieniona cena dla produktu **Produkt H** na **320 zł** przez **Jan Kowalski**.
-        </li>
-      </ul>
+    <!-- Ikona Powiadomień -->
+
+<div class="relative flex items-center">
+  <img src="../img/mailbox.png" alt="Ikona Powiadomień" 
+       class="ml-5 w-10 h-10 cursor-pointer hover:scale-110 transition-transform duration-200"
+       onclick="toggleNotifications()">
+  <span class="absolute top-0 left-14 bg-red-700 text-white text-xs font-bold px-2 py-1 rounded-full">
+    3
+  </span>
+  
+ <!-- Lista powiadomień -->
+<div id="notificationPanel" class="hidden absolute top-14 right-0 bg-gray-900 shadow-lg rounded-md w-80 max-h-96 overflow-y-auto z-50">
+  <div class="p-4 border-b">
+    <h3 class="text-lg font-bold text-gray-200">Powiadomienia</h3>
+  </div>
+  <ul class="divide-y">
+    <li class="p-4 hover:bg-blue-600 hover:border-blue-500">
+      Zmieniona cena dla produktu **Produkt A** na **300 zł** przez **Jan Kowalski**.
+    </li>
+    <li class="p-4 hover:bg-blue-600 hover:border-blue-500">
+      Zmieniona cena dla produktu **Produkt B** na **450 zł** przez **Anna Nowak**.
+    </li>
+    <li class="p-4 hover:bg-blue-600 hover:border-blue-500">
+      Dodano nowy produkt **Produkt C** przez **Piotr Zieliński**.
+    </li>
+  </ul>
+</div>
+
 
 </nav>
 
@@ -311,9 +311,10 @@ document.getElementById('delete-selected').addEventListener('click', function() 
 });
 
 function toggleNotifications() {
-      const notificationPanel = document.getElementById('notificationPanel');
-      notificationPanel.classList.toggle('hidden');
-    }
+  const panel = document.getElementById('notificationPanel');
+  panel.classList.toggle('hidden');
+}
+
 
 </script>
 

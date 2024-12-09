@@ -135,7 +135,7 @@ if ($productId) {
         type="text"
         id="ean"
         name="ean"
-        class="w-full p-2 text-white bg-gray-600 rounded-lg"
+        class="w-full p-2 text-gray-900 bg-gray-600 rounded-lg"
         required
       />
     </div>

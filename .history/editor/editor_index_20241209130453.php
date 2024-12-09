@@ -25,6 +25,12 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <style> 
 
+    /* .hidden {
+      display: none;
+    } */
+
+
+
     #notificationPanel ul {
       padding: 0;
       flex-grow: 1;
@@ -33,13 +39,13 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     #notificationPanel li {
       padding: 12px;
-      border: 1px solid #2d3748;
+      border-top: 1px solid #2d3748;
       transition: background-color 0.3s, border-color 0.3s;
     }
 
     #notificationPanel li:hover {
-      background-color: #b49659;
-      border-color: white;
+      background-color: #2b6cb0;
+      border-color: #3182ce;
       cursor: pointer;
     }
 
