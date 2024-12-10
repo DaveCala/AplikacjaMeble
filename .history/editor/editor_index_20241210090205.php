@@ -128,14 +128,12 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </nav>
 
-<!-- Pole wyszukiwania -->
-<div class="mx-auto my-10 w-3/4 md:w-1/2">
-  <input 
-    type="text" 
-    id="search-bar" 
-    placeholder="Wyszukaj meble" 
-    class="w-full py-2 px-4 text-lg rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#B79962]">
-</div>
+<!-- Sekcja wyszukiwania -->
+<form method="GET" action="../search.php" class="mx-auto my-10 w-3/4 md:w-1/2">
+  <input type="text" name="query" placeholder="Wyszukaj meble" class="w-full py-2 px-4 text-lg rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#B79962]">
+  <button type="submit" class="hidden">Szukaj</button>
+</form>
+
 
 <!-- Sekcja dodawania produktu -->
 <div class="flex justify-between items-center mt-10 mb-4 mx-6">
@@ -318,31 +316,6 @@ function toggleNotifications() {
       const notificationPanel = document.getElementById('notificationPanel');
       notificationPanel.classList.toggle('hidden');
     }
-
-//WYSZUKIWARKA
-document.querySelector('input[placeholder="Wyszukaj meble"]').addEventListener('input', function () {
-    const query = this.value;
-
-    // Wyślij zapytanie AJAX do search_products.php
-    fetch(`../search_products.php?query=${encodeURIComponent(query)}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Błąd sieci');
-            }
-            return response.text();
-        })
-        .then(data => {
-            // Zaktualizuj listę produktów
-            const productList = document.querySelector('.grid');
-            if (productList) {
-                productList.innerHTML = data;
-            }
-        })
-        .catch(error => {
-            console.error('Błąd podczas wyszukiwania:', error);
-        });
-});
-
 
 </script>
 

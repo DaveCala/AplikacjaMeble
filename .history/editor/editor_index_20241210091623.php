@@ -320,27 +320,47 @@ function toggleNotifications() {
     }
 
 //WYSZUKIWARKA
-document.querySelector('input[placeholder="Wyszukaj meble"]').addEventListener('input', function () {
-    const query = this.value;
+document.getElementById('search-bar').addEventListener('input', function () {
+  const query = this.value; // Pobieranie frazy z pola wyszukiwania
 
-    // Wyślij zapytanie AJAX do search_products.php
-    fetch(`../search_products.php?query=${encodeURIComponent(query)}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Błąd sieci');
-            }
-            return response.text();
-        })
-        .then(data => {
-            // Zaktualizuj listę produktów
-            const productList = document.querySelector('.grid');
-            if (productList) {
-                productList.innerHTML = data;
-            }
-        })
-        .catch(error => {
-            console.error('Błąd podczas wyszukiwania:', error);
+  // Wyślij zapytanie do backendu
+  fetch('../backend.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ search: query })
+  })
+    .then(response => response.json())
+    .then(data => {
+      // Wyczyść poprzednie wyniki
+      const productList = document.getElementById('product-list');
+      productList.innerHTML = '';
+
+      // Dodaj nowe wyniki
+      if (data.products && data.products.length > 0) {
+        data.products.forEach(product => {
+          const productItem = `
+            <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
+              <div class="w-1/6 flex justify-center">
+                <img src="../img/${product.image}" alt="${product.title}" class="h-16 w-16 object-contain rounded-lg">
+              </div>
+              <div class="w-3/6 px-4">
+                <h3 class="text-white text-lg truncate">${product.title}</h3>
+                <p class="text-gray-400 text-sm truncate">${product.category}</p>
+              </div>
+              <div class="w-2/6 flex justify-end">
+                <a href="editor_product.php?id=${product.id}" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm">
+                  Obejrzyj
+                </a>
+              </div>
+            </div>
+          `;
+          productList.insertAdjacentHTML('beforeend', productItem);
         });
+      } else {
+        productList.innerHTML = '<p class="text-white text-center">Brak wyników.</p>';
+      }
+    })
+    .catch(error => console.error('Błąd:', error));
 });
 
 

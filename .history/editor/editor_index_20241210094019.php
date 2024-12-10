@@ -320,27 +320,64 @@ function toggleNotifications() {
     }
 
 //WYSZUKIWARKA
-document.querySelector('input[placeholder="Wyszukaj meble"]').addEventListener('input', function () {
-    const query = this.value;
+const searchBar = document.getElementById('search-bar');
+const productList = document.getElementById('product-list');
 
-    // Wyślij zapytanie AJAX do search_products.php
-    fetch(`../search_products.php?query=${encodeURIComponent(query)}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Błąd sieci');
+searchBar.addEventListener('input', async function () {
+    const query = searchBar.value.trim();
+
+    // Wysyłaj zapytanie do backendu tylko, jeśli fraza jest dłuższa niż 2 znaki
+    if (query.length > 2 || query === '') {
+        try {
+            const response = await fetch(`search_products.php?query=${encodeURIComponent(query)}`);
+            const products = await response.json();
+
+            // Wyczyszczenie listy produktów
+            productList.innerHTML = '';
+
+            if (products.error) {
+                productList.innerHTML = `<p class="text-white text-center">${products.error}</p>`;
+                return;
             }
-            return response.text();
-        })
-        .then(data => {
-            // Zaktualizuj listę produktów
-            const productList = document.querySelector('.grid');
-            if (productList) {
-                productList.innerHTML = data;
+
+            // Renderowanie produktów
+            if (products.length > 0) {
+                products.forEach(product => {
+                    productList.innerHTML += `
+                        <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
+                            <div class="flex items-center">
+                                <input type="checkbox" class="product-checkbox" data-product-id="${product.id}">
+                            </div>
+                            <div class="w-1/6 flex justify-center">
+                                <img src="../img/${product.image}" alt="Zdjęcie produktu" class="h-16 w-16 object-contain rounded-lg">
+                            </div>
+                            <div class="w-3/6 px-4">
+                                <h3 class="text-white text-lg truncate">${product.title}</h3>
+                                <p class="text-gray-400 text-sm truncate">${product.category}</p>
+                            </div>
+                            <div class="w-2/6 flex justify-end">
+                                <a href="editor_product.php?id=${product.id}" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm">Obejrzyj</a>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                productList.innerHTML = `<p class="text-white text-center">Nie znaleziono produktów</p>`;
             }
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Błąd podczas wyszukiwania:', error);
-        });
+            productList.innerHTML = `<p class="text-white text-center">Wystąpił błąd podczas wyszukiwania</p>`;
+        }
+    }
+});
+
+let debounceTimer;
+searchBar.addEventListener('input', function () {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+        // Wywołaj funkcję wyszukiwania
+        fetchProducts();
+    }, 300); // 300ms opóźnienia
 });
 
 

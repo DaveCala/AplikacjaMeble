@@ -324,7 +324,7 @@ document.querySelector('input[placeholder="Wyszukaj meble"]').addEventListener('
     const query = this.value;
 
     // Wyślij zapytanie AJAX do search_products.php
-    fetch(`../search_products.php?query=${encodeURIComponent(query)}`)
+    fetch(`search_products.php?query=${encodeURIComponent(query)}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Błąd sieci');
