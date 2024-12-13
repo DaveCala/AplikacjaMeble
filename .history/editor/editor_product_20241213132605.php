@@ -151,6 +151,14 @@ if ($productId) {
       />
     </div>
 
+    <!-- Formularz z dodatkowymi polami, który będzie wysuwany tylko jeśli wariacja jest wybrana -->
+    <div id="variationFields" style="display:none;">
+        <label for="price">Cena:</label>
+        <input type="text" id="price" name="price">
+        
+        <label for="description">Opis:</label>
+        <textarea id="description" name="description"></textarea>
+    </div>
 
     <button
       type="submit"
@@ -477,8 +485,6 @@ document.addEventListener("DOMContentLoaded", () => {
     variationsList.appendChild(variationItem);
   };
 });
-
-
 
 
 </script>

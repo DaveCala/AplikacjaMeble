@@ -16,8 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $is_variation = $_POST['is_variation'] === 'true' ? 1 : 0;
-    $price = $_POST['price']; 
-    $description = $_POST['description'];  
 
     // Walidacja danych
     if (empty($title) || empty($category)) {
@@ -68,16 +66,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':image', $imagePath);
         $stmt->bindValue(':isVariation', $is_variation, PDO::PARAM_INT);
 
-        if ($stmt->execute()) {
-            $response['success'] = true;
-            $response['message'] = 'Produkt został pomyślnie dodany.';
-        } else {
-            $response['message'] = 'Nie udało się dodać produktu. Błąd SQL: ' . implode(" ", $stmt->errorInfo());
-        }
-    } catch (Exception $e) {
-        $response['message'] = 'Błąd: ' . $e->getMessage();
-    }
-}
-
-echo json_encode($response);
-?>
+        if ($stmt

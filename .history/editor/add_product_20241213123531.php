@@ -4,20 +4,10 @@ require_once '../db.php';
 $response = ['success' => false, 'message' => ''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $title = trim($_POST['title'] ?? '');
-    $category = trim($_POST['category'] ?? '');
+    $title = $_POST['title'] ?? '';
+    $category = $_POST['category'] ?? '';
     $imagePath = null;
-
-    // Sprawdzenie obecności pola "is_variation"
-    if (!isset($_POST['is_variation'])) {
-        $response['message'] = 'Pole "Produkt z wariacjami" jest wymagane.';
-        echo json_encode($response);
-        exit;
-    }
-
-    $is_variation = $_POST['is_variation'] === 'true' ? 1 : 0;
-    $price = $_POST['price']; 
-    $description = $_POST['description'];  
+    $is_variation = $_POST['is_variation'];
 
     // Walidacja danych
     if (empty($title) || empty($category)) {
@@ -29,20 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Obsługa pliku obrazu
     if (!empty($_FILES['image']['name'])) {
         $targetDir = "../img/";
-        if (!is_dir($targetDir) || !is_writable($targetDir)) {
-            $response['message'] = 'Folder do przesyłania obrazów nie istnieje lub brak uprawnień.';
-            echo json_encode($response);
-            exit;
-        }
-
-        $imageFileName = time() . '_' . basename($_FILES['image']['name']);
+        $imageFileName = basename($_FILES['image']['name']);
         $targetFilePath = $targetDir . $imageFileName;
 
         // Sprawdzamy typ pliku
         $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
         $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
         if (!in_array($fileType, $allowedTypes)) {
-            $response['message'] = 'Nieprawidłowy format pliku. Dozwolone: JPG, JPEG, PNG, GIF.';
+            $response['message'] = 'Nieprawidłowy format pliku.';
             echo json_encode($response);
             exit;
         }
@@ -59,18 +43,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Dodanie produktu do bazy danych
     try {
-        $stmt = $pdo->prepare("
-            INSERT INTO products (title, category, image, isVariation) 
-            VALUES (:title, :category, :image, :isVariation)
-        ");
+        $stmt = $pdo->prepare("INSERT INTO products (title, category, image, isVariation) VALUES (:title, :category, :image, :isVariation)");
         $stmt->bindParam(':title', $title);
         $stmt->bindParam(':category', $category);
         $stmt->bindParam(':image', $imagePath);
-        $stmt->bindValue(':isVariation', $is_variation, PDO::PARAM_INT);
 
         if ($stmt->execute()) {
             $response['success'] = true;
-            $response['message'] = 'Produkt został pomyślnie dodany.';
         } else {
             $response['message'] = 'Nie udało się dodać produktu. Błąd SQL: ' . implode(" ", $stmt->errorInfo());
         }

@@ -6,22 +6,18 @@ $response = ['success' => false, 'message' => ''];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['title'] ?? '');
     $category = trim($_POST['category'] ?? '');
+    $is_variation = $_POST['is_variation'] ?? null;
     $imagePath = null;
-
-    // Sprawdzenie obecności pola "is_variation"
-    if (!isset($_POST['is_variation'])) {
-        $response['message'] = 'Pole "Produkt z wariacjami" jest wymagane.';
-        echo json_encode($response);
-        exit;
-    }
-
-    $is_variation = $_POST['is_variation'] === 'true' ? 1 : 0;
-    $price = $_POST['price']; 
-    $description = $_POST['description'];  
 
     // Walidacja danych
     if (empty($title) || empty($category)) {
         $response['message'] = 'Wszystkie pola muszą być wypełnione.';
+        echo json_encode($response);
+        exit;
+    }
+
+    if (!in_array($is_variation, ['true', 'false'], true)) {
+        $response['message'] = 'Nieprawidłowa wartość dla pola "Produkt z wariacjami".';
         echo json_encode($response);
         exit;
     }
@@ -66,7 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':title', $title);
         $stmt->bindParam(':category', $category);
         $stmt->bindParam(':image', $imagePath);
-        $stmt->bindValue(':isVariation', $is_variation, PDO::PARAM_INT);
+        $is_variation = $_POST['is_variation'] === 'true' ? 1 : 0; // true = 1, false = 0
+
 
         if ($stmt->execute()) {
             $response['success'] = true;

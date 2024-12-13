@@ -151,7 +151,6 @@ if ($productId) {
       />
     </div>
 
-
     <button
       type="submit"
       class="py-2 px-4 bg-blue-600 text-white text-lg rounded-lg hover:bg-blue-500"
@@ -477,8 +476,6 @@ document.addEventListener("DOMContentLoaded", () => {
     variationsList.appendChild(variationItem);
   };
 });
-
-
 
 
 </script>

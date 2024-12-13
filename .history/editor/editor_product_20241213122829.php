@@ -151,6 +151,34 @@ if ($productId) {
       />
     </div>
 
+    <!-- Dodane pole radio dla "Produkt z wariacjami" -->
+    <div class="mb-4">
+      <label class="block mb-1">Produkt z wariacjami:</label>
+      <div>
+        <label class="inline-flex items-center">
+          <input
+            type="radio"
+            name="is_variation"
+            value="false"
+            class="form-radio text-green-500"
+            required
+          />
+          <span class="ml-2">Tak</span>
+        </label>
+      </div>
+      <div>
+        <label class="inline-flex items-center">
+          <input
+            type="radio"
+            name="is_variation"
+            value="true"
+            class="form-radio text-green-500"
+            required
+          />
+          <span class="ml-2">Nie</span>
+        </label>
+      </div>
+    </div>
 
     <button
       type="submit"
@@ -159,7 +187,6 @@ if ($productId) {
       Dodaj Wariację
     </button>
   </form>
-
 </div>
 
 
@@ -477,8 +504,6 @@ document.addEventListener("DOMContentLoaded", () => {
     variationsList.appendChild(variationItem);
   };
 });
-
-
 
 
 </script>

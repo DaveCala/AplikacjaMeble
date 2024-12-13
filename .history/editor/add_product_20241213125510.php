@@ -16,8 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $is_variation = $_POST['is_variation'] === 'true' ? 1 : 0;
-    $price = $_POST['price']; 
-    $description = $_POST['description'];  
 
     // Walidacja danych
     if (empty($title) || empty($category)) {

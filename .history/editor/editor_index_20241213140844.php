@@ -171,7 +171,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Dodane pole radio dla "Produkt z wariacjami" -->
     <div class="mb-4">
-      <label class="block mb-1 text-white">Produkt z wariacjami:</label>
+      <label class="block mb-1">Produkt z wariacjami:</label>
       <div>
         <label class="inline-flex items-center">
           <input
@@ -182,7 +182,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             required
             onclick="toggleVariationForm()"
           />
-          <span class="ml-2 text-white">Tak</span>
+          <span class="ml-2">Tak</span>
         </label>
       </div>
       <div>
@@ -195,7 +195,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             required
             onclick="toggleVariationForm()"
           />
-          <span class="ml-2 text-white">Nie</span>
+          <span class="ml-2">Nie</span>
         </label>
       </div>
 

@@ -171,18 +171,18 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Dodane pole radio dla "Produkt z wariacjami" -->
     <div class="mb-4">
-      <label class="block mb-1 text-white">Produkt z wariacjami:</label>
+      <label class="block mb-1">Produkt z wariacjami:</label>
       <div>
         <label class="inline-flex items-center">
           <input
             type="radio"
             name="is_variation"
-            value="false"
+            value="true"  <!-- Wartość 'true' oznacza "Produkt z wariacjami" -->
             class="form-radio text-green-500"
             required
             onclick="toggleVariationForm()"
           />
-          <span class="ml-2 text-white">Tak</span>
+          <span class="ml-2">Tak</span>
         </label>
       </div>
       <div>
@@ -190,37 +190,37 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <input
             type="radio"
             name="is_variation"
-            value="true"
+            value="false" <!-- Wartość 'false' oznacza "Produkt bez wariacjami" -->
             class="form-radio text-green-500"
             required
             onclick="toggleVariationForm()"
           />
-          <span class="ml-2 text-white">Nie</span>
+          <span class="ml-2">Nie</span>
         </label>
       </div>
+    </div>
 
-     <!-- Formularz dodatkowych danych, który pojawi się tylko, gdy "Produkt bez wariacjami" -->
+      <!-- Formularz dodatkowych danych, który pojawi się tylko, gdy "Produkt z wariacjami" -->
     <div id="variationFields" style="display:none;">
-      <div class="mb-4 text-white">
-        <label for="price" class="block mb-2 text-sm">Cena:</label>
+      <div class="mb-4">
+        <label for="price" class="block mb-1">Cena:</label>
         <input
           type="text"
           id="price"
           name="price"
-          class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="form-input w-full"
         />
       </div>
-      <div class="mb-4 text-white">
-        <label for="description" class="block mb-2 text-sm">Opis:</label>
+      <div class="mb-4">
+        <label for="description" class="block mb-1">Opis:</label>
         <textarea
           id="description"
           name="description"
-          class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="form-textarea w-full"
         ></textarea>
       </div>
     </div>
-    
-      
+
     </div>
 
     <div class="flex justify-center mb-6">
@@ -397,19 +397,16 @@ document.querySelector('input[placeholder="Wyszukaj meble"]').addEventListener('
         });
 });
 
-// Funkcja do pokazania lub ukrycia formularza w zależności od wyboru
 function toggleVariationForm() {
-    const isVariation = document.querySelector('input[name="is_variation"]:checked').value;
+    const hasVariations = document.getElementById('hasVariations').value;
     const variationFields = document.getElementById('variationFields');
     
-    if (isVariation === 'true') {
-      // Pokazuje pola dla produktów bez wariacjami
-      variationFields.style.display = 'block';
+    if (hasVariations === 'yes') {
+        variationFields.style.display = 'block';
     } else {
-      // Ukrywa pola dla produktów z wariacjami
-      variationFields.style.display = 'none';
+        variationFields.style.display = 'none';
     }
-  }
+}
 
 
 </script>
