@@ -476,39 +476,50 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Funkcja do pobierania kolumn z bazy danych i dynamicznego tworzenia checkboxów
 function fetchColumnsAndDisplayCheckboxes() {
-  fetch('fetch_features.php')  // Zastąp ścieżką do pliku fetch_features.php
-    .then(response => response.json())
-    .then(columns => {
-      const featureContainer = document.getElementById('feature-checkboxes');
-      
-      // Usuwanie poprzednich checkboxów, jeśli są
-      featureContainer.innerHTML = '';
+      fetch('fetch_features.php')  // Zastąp ścieżką do pliku fetch_features.php
+        .then(response => response.json())
+        .then(columns => {
+          const featureContainer = document.getElementById('feature-checkboxes');
+          
+          // Usuwanie poprzednich checkboxów, jeśli są
+          featureContainer.innerHTML = '';
 
-      // Dodanie nowych checkboxów na podstawie pobranych nazw kolumn
-      columns.forEach(column => {
-        const label = document.createElement('label');
-        label.classList.add('inline-flex', 'items-center');
+          // Dodanie nowych checkboxów na podstawie pobranych nazw kolumn
+          columns.forEach(column => {
+            const label = document.createElement('label');
+            label.classList.add('inline-flex', 'items-center');
 
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = column;
-        checkbox.classList.add('feature-checkbox', 'form-checkbox', 'text-green-500');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = column;
+            checkbox.classList.add('feature-checkbox', 'form-checkbox', 'text-green-500');
 
-        const span = document.createElement('span');
-        span.classList.add('ml-2');
-        span.textContent = column;
+            const span = document.createElement('span');
+            span.classList.add('ml-2');
+            span.textContent = column;
 
-        label.appendChild(checkbox);
-        label.appendChild(span);
-        featureContainer.appendChild(label);
-      });
-    })
-    .catch(error => console.error('Error fetching columns:', error));
-}
+            label.appendChild(checkbox);
+            label.appendChild(span);
+            featureContainer.appendChild(label);
 
-// Wywołanie funkcji przy ładowaniu strony
-window.onload = fetchColumnsAndDisplayCheckboxes;
+            // Dodanie event listenera, który pokaże label po zaznaczeniu checkboxa
+            checkbox.addEventListener('change', function() {
+              if (checkbox.checked) {
+                span.classList.remove('hidden');
+              } else {
+                span.classList.add('hidden');
+              }
+            });
 
+            // Na początku ukrywamy label (span)
+            span.classList.add('hidden');
+          });
+        })
+        .catch(error => console.error('Error fetching columns:', error));
+    }
+
+    // Wywołanie funkcji przy ładowaniu strony
+    window.onload = fetchColumnsAndDisplayCheckboxes;
 
 </script>
 

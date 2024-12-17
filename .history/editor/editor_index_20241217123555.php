@@ -510,6 +510,10 @@ function fetchColumnsAndDisplayCheckboxes() {
 window.onload = fetchColumnsAndDisplayCheckboxes;
 
 
+// Wywołanie funkcji przy ładowaniu strony
+window.onload = fetchColumnsAndDisplayCheckboxes;
+
+
 </script>
 
 </body>

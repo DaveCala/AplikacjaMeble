@@ -474,9 +474,10 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+//////////////////////////
 // Funkcja do pobierania kolumn z bazy danych i dynamicznego tworzenia checkboxów
 function fetchColumnsAndDisplayCheckboxes() {
-  fetch('fetch_features.php')  // Zastąp ścieżką do pliku fetch_features.php
+  fetch('path/to/your/fetch_features.php')  // Zastąp ścieżką do pliku fetch_features.php
     .then(response => response.json())
     .then(columns => {
       const featureContainer = document.getElementById('feature-checkboxes');

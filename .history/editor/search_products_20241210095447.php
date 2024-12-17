@@ -1,6 +1,6 @@
 <?php
 // Wczytanie konfiguracji bazy danych
-include('../db.php');
+include('db.php');
 
 // Pobranie frazy wyszukiwanej
 $searchQuery = isset($_GET['query']) ? trim($_GET['query']) : '';

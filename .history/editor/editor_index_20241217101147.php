@@ -137,109 +137,102 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     class="w-full py-2 px-4 text-lg rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#B79962]">
 </div>
 
-<!-- Sekcja dodawania produktu -->
-<div class="flex justify-between items-center mt-10 mb-4 mx-6">
-  <h2 class="text-2xl text-white">Baza mebli:</h2>
-  <div class="flex items-center space-x-4">
-    <div id="delete-button-container" class="hidden">
-      <button id="delete-selected" class="bg-gray-800 text-red-500 border border-red-500 py-2 px-4 rounded-lg hover:bg-red-700 hover:text-white">
-        Usuń zaznaczone
+  <!-- Sekcja dodawania produktu -->
+  <div class="flex justify-between items-center mt-10 mb-4 mx-6">
+    <h2 class="text-2xl text-white">Baza mebli:</h2>
+    <div class="flex items-center space-x-4">
+      <div id="delete-button-container" class="hidden">
+        <button id="delete-selected" class="bg-gray-800 text-red-500 border border-red-500 py-2 px-4 rounded-lg hover:bg-red-700 hover:text-white">
+          Usuń zaznaczone
+        </button>
+      </div>
+      <button id="toggle-add-form" class="py-2 px-4 bg-gray-800 rounded-lg border border-green-500 text-green-500 text-lg hover:bg-green-500 hover:text-white">
+        Dodaj
       </button>
     </div>
-    <button id="toggle-add-form" class="py-2 px-4 bg-gray-800 rounded-lg border border-green-500 text-green-500 text-lg hover:bg-green-500 hover:text-white">
-      Dodaj
-    </button>
   </div>
-</div>
 
 
-<div id="add-product-form" class="hidden bg-gray-900 p-6 rounded-lg shadow-lg mb-6">
-  <h2 class="text-2xl text-white mb-4">Dodaj nowy produkt</h2>
-  <form id="add-product" method="POST" enctype="multipart/form-data" action="add_product.php">
-    <div class="mb-4 text-white">
-      <label for="product-title" class="block mb-2 text-sm">Tytuł produktu:</label>
-      <input type="text" id="product-title" name="title" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-    </div>
-    <div class="mb-4 text-white">
-      <label for="product-category" class="block mb-2 text-sm">Kategoria:</label>
-      <input type="text" id="product-category" name="category" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-    </div>
-    <div class="mb-4 text-white">
-      <label for="product-image" class="block mb-2 text-sm">Zdjęcie:</label>
-      <input type="file" id="product-image" name="image" class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-    </div>
-
-    <!-- Dodane pole radio dla "Produkt z wariacjami" -->
-    <div class="mb-4">
-      <label class="block mb-1 text-white">Produkt z wariacjami:</label>
-      <div>
-        <label class="inline-flex items-center">
-          <input
-            type="radio"
-            name="is_variation"
-            value="false"
-            class="form-radio text-green-500"
-            required
-            onclick="toggleVariationForm()"
-          />
-          <span class="ml-2 text-white">Tak</span>
-        </label>
+  <div id="add-product-form" class="hidden bg-gray-900 p-6 rounded-lg shadow-lg mb-6">
+    <h2 class="text-2xl text-white mb-4">Dodaj nowy produkt</h2>
+    <form id="add-product" method="POST" enctype="multipart/form-data" action="add_product.php">
+      <div class="mb-4 text-white">
+        <label for="product-title" class="block mb-2 text-sm">Tytuł produktu:</label>
+        <input type="text" id="product-title" name="title" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
       </div>
-      <div>
-        <label class="inline-flex items-center">
-          <input
-            type="radio"
-            name="is_variation"
-            value="true"
-            class="form-radio text-green-500"
-            required
-            onclick="toggleVariationForm()"
-          />
-          <span class="ml-2 text-white">Nie</span>
-        </label>
+      <div class="mb-4 text-white">
+        <label for="product-category" class="block mb-2 text-sm">Kategoria:</label>
+        <input type="text" id="product-category" name="category" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+      </div>
+      <div class="mb-4 text-white">
+        <label for="product-image" class="block mb-2 text-sm">Zdjęcie:</label>
+        <input type="file" id="product-image" name="image" class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500">
       </div>
 
-    <!-- Sekcja dodatkowych danych i cech -->
-    <div id="additional-data-container" class="hidden">
-      <!-- Formularz dodatkowych danych -->
-      <div id="variationFields">
-        <div class="mb-4 text-white">
-          <label for="price" class="block mb-2 text-sm">Cena:</label>
-          <input
-            type="text"
-            id="price"
-            name="price"
-            class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+      <!-- Dodane pole radio dla "Produkt z wariacjami" -->
+      <div class="mb-4">
+        <label class="block mb-1 text-white">Produkt z wariacjami:</label>
+        <div>
+          <label class="inline-flex items-center">
+            <input
+              type="radio"
+              name="is_variation"
+              value="false"
+              class="form-radio text-green-500"
+              required
+              onclick="toggleVariationForm()"
+            />
+            <span class="ml-2 text-white">Tak</span>
+          </label>
         </div>
-        <div class="mb-4 text-white">
-          <label for="description" class="block mb-2 text-sm">Opis:</label>
-          <textarea
-            id="description"
-            name="description"
-            class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          ></textarea>
+        <div>
+          <label class="inline-flex items-center">
+            <input
+              type="radio"
+              name="is_variation"
+              value="true"
+              class="form-radio text-green-500"
+              required
+              onclick="toggleVariationForm()"
+            />
+            <span class="ml-2 text-white">Nie</span>
+          </label>
         </div>
-      </div>
 
-      <!-- Sekcja cech -->
+      <!-- Sekcja dodatkowych danych i cech -->
+  <div id="additional-data-container" class="hidden">
+    <!-- Formularz dodatkowych danych -->
+    <div id="variationFields">
+      <div class="mb-4 text-white">
+        <label for="price" class="block mb-2 text-sm">Cena:</label>
+        <input
+          type="text"
+          id="price"
+          name="price"
+          class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+      <div class="mb-4 text-white">
+        <label for="description" class="block mb-2 text-sm">Opis:</label>
+        <textarea
+          id="description"
+          name="description"
+          class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- Sekcja cech -->
       <div id="product-features">
         <h3 class="text-xl text-white mb-4">Cechy produktu:</h3>
         <div class="mb-4 text-white">
           <label class="block mb-2 text-sm">Wybierz cechy:</label>
-          <div id="feature-checkboxes" class="flex flex-wrap gap-4">
-            <!-- Checkboxy będą dodane dynamicznie tutaj -->
-          </div>
+          <div id="feature-checkboxes" class="flex flex-wrap gap-4"></div>
         </div>
         <div id="dynamic-fields" class="space-y-4"></div>
       </div>
 
-
-    </div>
-
-    
       
-
     </div>
 
     <div class="flex justify-center mb-6">
@@ -439,76 +432,87 @@ function clearDynamicFields() {
 
 // Obsługa checkboxów - Dodawanie dynamicznych pól
 document.addEventListener("DOMContentLoaded", function () {
-  const featureCheckboxes = document.querySelectorAll(".feature-checkbox");
   const dynamicFieldsContainer = document.getElementById("dynamic-fields");
 
-  featureCheckboxes.forEach((checkbox) => {
-    checkbox.addEventListener("change", function () {
-      const featureName = this.value;
+  // Funkcja do obsługi checkboxów
+  function handleCheckboxChange(event) {
+    const checkbox = event.target;
+    const featureName = checkbox.value;
 
-      if (this.checked) {
-        // Tworzenie nowego pola
-        const newField = document.createElement("div");
-        newField.classList.add("feature-field", "mb-4", "text-white");
-        newField.setAttribute("data-feature", featureName);
+    if (checkbox.checked) {
+      // Tworzenie nowego pola
+      const newField = document.createElement("div");
+      newField.classList.add("feature-field", "mb-4", "text-white");
+      newField.setAttribute("data-feature", featureName);
 
-        newField.innerHTML = `
-          <label class="block mb-2 text-sm">${featureName}:</label>
-          <input 
-            type="text" 
-            name="features[${featureName}]" 
-            class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-            placeholder="Podaj wartość dla ${featureName}" 
-          />
-        `;
+      newField.innerHTML = `
+        <label class="block mb-2 text-sm">${featureName}:</label>
+        <input 
+          type="text" 
+          name="features[${featureName}]" 
+          class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+          placeholder="Podaj wartość dla ${featureName}" 
+        />
+      `;
 
-        dynamicFieldsContainer.appendChild(newField);
-      } else {
-        // Usunięcie pola
-        const existingField = document.querySelector(`.feature-field[data-feature="${featureName}"]`);
-        if (existingField) {
-          dynamicFieldsContainer.removeChild(existingField);
-        }
+      dynamicFieldsContainer.appendChild(newField);
+    } else {
+      // Usunięcie pola
+      const existingField = document.querySelector(`.feature-field[data-feature="${featureName}"]`);
+      if (existingField) {
+        dynamicFieldsContainer.removeChild(existingField);
       }
-    });
+    }
+  }
+
+  // Obsługuje kliknięcia w checkboxy już załadowane
+  document.getElementById("feature-checkboxes").addEventListener("change", function (event) {
+    if (event.target && event.target.matches(".feature-checkbox")) {
+      handleCheckboxChange(event);
+    }
   });
+
+  // Ładowanie cech z bazy danych
+  function loadFeatures() {
+    const featureCheckboxesContainer = document.getElementById('feature-checkboxes');
+    
+    fetch('/get_features.php')
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Dodaj checkboxy dla cech
+          data.features.forEach(feature => {
+            const label = document.createElement('label');
+            label.classList.add('inline-flex', 'items-center');
+            
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.value = feature.name;
+            input.classList.add('feature-checkbox', 'form-checkbox', 'text-green-500');
+            
+            const span = document.createElement('span');
+            span.classList.add('ml-2');
+            span.textContent = feature.name;
+            
+            label.appendChild(input);
+            label.appendChild(span);
+            featureCheckboxesContainer.appendChild(label);
+          });
+
+          // Ponowne przypisanie nasłuchiwaczy dla nowych checkboxów
+          document.querySelectorAll(".feature-checkbox").forEach((checkbox) => {
+            checkbox.addEventListener("change", handleCheckboxChange);
+          });
+        } else {
+          console.error('Nie udało się załadować cech');
+        }
+      })
+      .catch(error => console.error('Błąd ładowania cech:', error));
+  }
+
+  // Wywołaj funkcję ładującą cechy po załadowaniu strony
+  loadFeatures();
 });
-
-// Funkcja do pobierania kolumn z bazy danych i dynamicznego tworzenia checkboxów
-function fetchColumnsAndDisplayCheckboxes() {
-  fetch('fetch_features.php')  // Zastąp ścieżką do pliku fetch_features.php
-    .then(response => response.json())
-    .then(columns => {
-      const featureContainer = document.getElementById('feature-checkboxes');
-      
-      // Usuwanie poprzednich checkboxów, jeśli są
-      featureContainer.innerHTML = '';
-
-      // Dodanie nowych checkboxów na podstawie pobranych nazw kolumn
-      columns.forEach(column => {
-        const label = document.createElement('label');
-        label.classList.add('inline-flex', 'items-center');
-
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = column;
-        checkbox.classList.add('feature-checkbox', 'form-checkbox', 'text-green-500');
-
-        const span = document.createElement('span');
-        span.classList.add('ml-2');
-        span.textContent = column;
-
-        label.appendChild(checkbox);
-        label.appendChild(span);
-        featureContainer.appendChild(label);
-      });
-    })
-    .catch(error => console.error('Error fetching columns:', error));
-}
-
-// Wywołanie funkcji przy ładowaniu strony
-window.onload = fetchColumnsAndDisplayCheckboxes;
-
 
 </script>
 

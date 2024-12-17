@@ -223,16 +223,16 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
 
       <!-- Sekcja cech -->
-      <div id="product-features">
-        <h3 class="text-xl text-white mb-4">Cechy produktu:</h3>
-        <div class="mb-4 text-white">
-          <label class="block mb-2 text-sm">Wybierz cechy:</label>
-          <div id="feature-checkboxes" class="flex flex-wrap gap-4">
-            <!-- Checkboxy będą dodane dynamicznie tutaj -->
-          </div>
-        </div>
-        <div id="dynamic-fields" class="space-y-4"></div>
-      </div>
+<div id="product-features">
+  <h3 class="text-xl text-white mb-4">Cechy produktu:</h3>
+  <div class="mb-4 text-white">
+    <label class="block mb-2 text-sm">Wybierz cechy:</label>
+    <div id="feature-checkboxes" class="flex flex-wrap gap-4">
+      <!-- Checkboxy będą dodane dynamicznie tutaj -->
+    </div>
+  </div>
+  <div id="dynamic-fields" class="space-y-4"></div>
+</div>
 
 
     </div>
@@ -474,9 +474,10 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+//////////////////////////
 // Funkcja do pobierania kolumn z bazy danych i dynamicznego tworzenia checkboxów
 function fetchColumnsAndDisplayCheckboxes() {
-  fetch('fetch_features.php')  // Zastąp ścieżką do pliku fetch_features.php
+  fetch('path/to/your/fetch_features.php')  // Zastąp ścieżką do pliku fetch_features.php
     .then(response => response.json())
     .then(columns => {
       const featureContainer = document.getElementById('feature-checkboxes');

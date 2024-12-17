@@ -200,46 +200,53 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
 
     <!-- Sekcja dodatkowych danych i cech -->
-    <div id="additional-data-container" class="hidden">
-      <!-- Formularz dodatkowych danych -->
-      <div id="variationFields">
-        <div class="mb-4 text-white">
-          <label for="price" class="block mb-2 text-sm">Cena:</label>
-          <input
-            type="text"
-            id="price"
-            name="price"
-            class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <div class="mb-4 text-white">
-          <label for="description" class="block mb-2 text-sm">Opis:</label>
-          <textarea
-            id="description"
-            name="description"
-            class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          ></textarea>
-        </div>
-      </div>
-
-      <!-- Sekcja cech -->
-      <div id="product-features">
-        <h3 class="text-xl text-white mb-4">Cechy produktu:</h3>
-        <div class="mb-4 text-white">
-          <label class="block mb-2 text-sm">Wybierz cechy:</label>
-          <div id="feature-checkboxes" class="flex flex-wrap gap-4">
-            <!-- Checkboxy będą dodane dynamicznie tutaj -->
-          </div>
-        </div>
-        <div id="dynamic-fields" class="space-y-4"></div>
-      </div>
-
-
+<div id="additional-data-container" class="hidden">
+  <!-- Formularz dodatkowych danych -->
+  <div id="variationFields">
+    <div class="mb-4 text-white">
+      <label for="price" class="block mb-2 text-sm">Cena:</label>
+      <input
+        type="text"
+        id="price"
+        name="price"
+        class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
     </div>
+    <div class="mb-4 text-white">
+      <label for="description" class="block mb-2 text-sm">Opis:</label>
+      <textarea
+        id="description"
+        name="description"
+        class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      ></textarea>
+    </div>
+  </div>
 
-    
+  <!-- Sekcja cech -->
+  <div id="product-features">
+    <h3 class="text-xl text-white mb-4">Cechy produktu:</h3>
+    <div class="mb-4 text-white">
+      <label class="block mb-2 text-sm">Wybierz cechy:</label>
+      <div id="feature-checkboxes" class="flex flex-wrap gap-4">
+        <label class="inline-flex items-center">
+          <input type="checkbox" value="Szerokość" class="feature-checkbox form-checkbox text-green-500" />
+          <span class="ml-2">Szerokość</span>
+        </label>
+        <label class="inline-flex items-center">
+          <input type="checkbox" value="Wysokość siedziska" class="feature-checkbox form-checkbox text-green-500" />
+          <span class="ml-2">Wysokość siedziska</span>
+        </label>
+        <label class="inline-flex items-center">
+          <input type="checkbox" value="Liczba szuflad" class="feature-checkbox form-checkbox text-green-500" />
+          <span class="ml-2">Liczba szuflad</span>
+        </label>
+      </div>
+    </div>
+    <div id="dynamic-fields" class="space-y-4"></div>
+  </div>
+</div>
+
       
-
     </div>
 
     <div class="flex justify-center mb-6">
@@ -337,20 +344,20 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
   // Funkcja do monitorowania zaznaczenia checkboxów
-  document.querySelectorAll('.product-checkbox').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-      // Sprawdzenie, czy przynajmniej jeden checkbox jest zaznaczony
-      const anyChecked = Array.from(document.querySelectorAll('.product-checkbox')).some(cb => cb.checked);
-      
-      // Pokazanie lub ukrycie przycisku "Usuń"
-      const deleteButtonContainer = document.getElementById('delete-button-container');
-      if (anyChecked) {
-        deleteButtonContainer.classList.remove('hidden');
-      } else {
-        deleteButtonContainer.classList.add('hidden');
-      }
-    });
+document.querySelectorAll('.product-checkbox').forEach(checkbox => {
+  checkbox.addEventListener('change', function() {
+    // Sprawdzenie, czy przynajmniej jeden checkbox jest zaznaczony
+    const anyChecked = Array.from(document.querySelectorAll('.product-checkbox')).some(cb => cb.checked);
+    
+    // Pokazanie lub ukrycie przycisku "Usuń"
+    const deleteButtonContainer = document.getElementById('delete-button-container');
+    if (anyChecked) {
+      deleteButtonContainer.classList.remove('hidden');
+    } else {
+      deleteButtonContainer.classList.add('hidden');
+    }
   });
+});
 
 
 document.getElementById('delete-selected').addEventListener('click', function() {
@@ -418,18 +425,20 @@ document.querySelector('input[placeholder="Wyszukaj meble"]').addEventListener('
 
 // Funkcja do pokazania lub ukrycia formularza w zależności od wyboru
 function toggleVariationForm() {
-  const isVariation = document.querySelector('input[name="is_variation"]:checked').value;
-  const additionalDataContainer = document.getElementById("additional-data-container");
-
-  if (isVariation === "true") {
-    // Pokaż kontener dla dodatkowych danych i cech
-    additionalDataContainer.classList.remove("hidden");
-  } else {
-    // Ukryj kontener i wyczyść dynamicznie dodane dane
-    additionalDataContainer.classList.add("hidden");
-    clearDynamicFields();
+    const isVariation = document.querySelector('input[name="is_variation"]:checked').value;
+    const variationFields = document.getElementById('variationFields');
+    
+    if (isVariation === 'true') {
+      // Pokazuje pola dla produktów bez wariacjami
+      variationFields.style.display = 'block';
+      productFeatures.classList.add("hidden");
+      clearDynamicFields();
+    } else {
+      // Ukrywa pola dla produktów z wariacjami
+      variationFields.style.display = 'none';
+      productFeatures.classList.remove("hidden");
+    }
   }
-}
 
 // PRACA NAD CECHAMI
 function clearDynamicFields() {
@@ -473,42 +482,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
-
-// Funkcja do pobierania kolumn z bazy danych i dynamicznego tworzenia checkboxów
-function fetchColumnsAndDisplayCheckboxes() {
-  fetch('fetch_features.php')  // Zastąp ścieżką do pliku fetch_features.php
-    .then(response => response.json())
-    .then(columns => {
-      const featureContainer = document.getElementById('feature-checkboxes');
-      
-      // Usuwanie poprzednich checkboxów, jeśli są
-      featureContainer.innerHTML = '';
-
-      // Dodanie nowych checkboxów na podstawie pobranych nazw kolumn
-      columns.forEach(column => {
-        const label = document.createElement('label');
-        label.classList.add('inline-flex', 'items-center');
-
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = column;
-        checkbox.classList.add('feature-checkbox', 'form-checkbox', 'text-green-500');
-
-        const span = document.createElement('span');
-        span.classList.add('ml-2');
-        span.textContent = column;
-
-        label.appendChild(checkbox);
-        label.appendChild(span);
-        featureContainer.appendChild(label);
-      });
-    })
-    .catch(error => console.error('Error fetching columns:', error));
-}
-
-// Wywołanie funkcji przy ładowaniu strony
-window.onload = fetchColumnsAndDisplayCheckboxes;
-
 
 </script>
 
