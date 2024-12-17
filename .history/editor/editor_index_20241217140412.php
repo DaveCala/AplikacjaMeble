@@ -516,7 +516,7 @@ function fetchColumnsAndDisplayCheckboxes() {
               const inputField = document.createElement('input');
               inputField.type = 'text';
               inputField.name = column;
-              inputField.classList.add('form-input', 'mt-1', 'w-full', 'bg-gray-700', 'text-white');
+              inputField.classList.add('form-input', 'mt-1', 'w-full', 'bg-gray-800', 'text-white');
               inputField.placeholder = `Wpisz wartość dla ${column}`;
               inputFieldWrapper.appendChild(inputField);
 
@@ -570,48 +570,6 @@ function fetchColumnsAndDisplayCheckboxes() {
 
   // Obsługa kliknięcia w przycisk zapisywania
   document.getElementById('save-button').addEventListener('click', saveData);
-
-  document.getElementById('save-product').addEventListener('click', () => {
-  const title = document.querySelector('input[name="title"]').value;
-  const ean = document.querySelector('input[name="ean"]').value;
-  const product_id = document.querySelector('input[name="product_id"]').value;
-
-  // Zbieranie dynamicznych cech
-  const featureInputs = document.querySelectorAll('.dynamic-feature-input');
-  const features = {};
-  featureInputs.forEach(input => {
-    features[input.dataset.featureName] = input.value;
-  });
-
-  // Tworzenie obiektu do wysłania
-  const formData = new FormData();
-  formData.append('title', title);
-  formData.append('ean', ean);
-  formData.append('product_id', product_id);
-
-  // Dodanie cech dynamicznych
-  formData.append('features', JSON.stringify(features));
-
-  // Wysłanie danych do PHP
-  fetch('add_product.php', {
-    method: 'POST',
-    body: formData
-  })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        alert('Produkt zapisany!');
-      } else {
-        alert('Błąd: ' + data.message);
-      }
-    })
-    .catch(error => {
-      console.error('Błąd:', error);
-      alert('Wystąpił błąd podczas zapisywania produktu.');
-    });
-});
-
-
 </script>
 
 </body>
