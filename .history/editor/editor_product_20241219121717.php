@@ -138,8 +138,8 @@ if ($productId) {
   </div>
 
   <!-- Przycisk dodawania nowej wariacji -->
-  <div class="flex justify-between items-center mt-10  mx-6">
-  <h2 class="text-2xl text-white"></h2>
+  <div class="flex justify-between items-center mt-10 mb-4 mx-6">
+  <h2 class="text-2xl text-white">Dodaj nową wariację:</h2>
   <button id="delete-selected-variations" class="py-2 px-4 bg-red-600 text-white text-lg rounded-lg hidden hover:bg-red-500">
           Usuń zaznaczone
   </button>
@@ -151,7 +151,6 @@ if ($productId) {
 <div class="p-6 bg-gray-800 text-white rounded-lg">
   <form id="add-variation-form" enctype="multipart/form-data">
   <h2 class="text-2xl text-white">Dodaj nową wariację:</h2>
-  <br>
     <input type="hidden" name="product_id" value="12345" id="product-id" /> <!-- Ustaw właściwe ID produktu -->
 
     <div class="mb-4">
@@ -203,7 +202,6 @@ if ($productId) {
 
   <!-- Lista wariacji -->
   <div id="variation-list" class="grid grid-cols-1 gap-2 w-full">
-  <h2 class="text-2xl text-white">Lista wariacji:</h2>
     <?php foreach ($variations as $variation) : ?>
       <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
         <!-- Checkbox do zaznaczenia wariacji -->

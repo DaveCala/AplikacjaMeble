@@ -138,7 +138,7 @@ if ($productId) {
   </div>
 
   <!-- Przycisk dodawania nowej wariacji -->
-  <div class="flex justify-between items-center mt-10  mx-6">
+  <div class="flex justify-between items-center mt-10 mb-4 mx-6">
   <h2 class="text-2xl text-white"></h2>
   <button id="delete-selected-variations" class="py-2 px-4 bg-red-600 text-white text-lg rounded-lg hidden hover:bg-red-500">
           Usuń zaznaczone
@@ -149,7 +149,7 @@ if ($productId) {
 </div>
 
 <div class="p-6 bg-gray-800 text-white rounded-lg">
-  <form id="add-variation-form" enctype="multipart/form-data">
+  <form id="add-variation-form" class="hidden" enctype="multipart/form-data">
   <h2 class="text-2xl text-white">Dodaj nową wariację:</h2>
   <br>
     <input type="hidden" name="product_id" value="12345" id="product-id" /> <!-- Ustaw właściwe ID produktu -->

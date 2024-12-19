@@ -241,7 +241,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     </div>
 
-    <br>
     <div class="flex justify-center mb-6">
       <button type="submit" class="py-2 px-4 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
         Dodaj

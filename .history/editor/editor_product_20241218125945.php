@@ -135,144 +135,28 @@ if ($productId) {
       </button>
     </form>
         <br>
-  </div>
-
-  <!-- Przycisk dodawania nowej wariacji -->
-  <div class="flex justify-between items-center mt-10  mx-6">
-  <h2 class="text-2xl text-white"></h2>
-  <button id="delete-selected-variations" class="py-2 px-4 bg-red-600 text-white text-lg rounded-lg hidden hover:bg-red-500">
-          Usuń zaznaczone
-  </button>
-  <button id="toggle-add-variation-form" class="py-2 px-4 bg-gray-800 rounded-lg border border-green-500 text-green-500 text-lg hover:bg-green-500 hover:text-white">
-    Dodaj wariację
-  </button>
-</div>
-
-<div class="p-6 bg-gray-800 text-white rounded-lg">
-  <form id="add-variation-form" enctype="multipart/form-data">
-  <h2 class="text-2xl text-white">Dodaj nową wariację:</h2>
-  <br>
-    <input type="hidden" name="product_id" value="12345" id="product-id" /> <!-- Ustaw właściwe ID produktu -->
-
-    <div class="mb-4">
-      <label for="title" class="block mb-1">Tytuł</label>
-      <input
-        type="text"
-        id="title"
-        name="title"
-        class="w-full p-2 text-white bg-gray-600 rounded-lg"
-        required
-      />
-    </div>
-
-    <div class="mb-4">
-      <label for="ean" class="block mb-1">EAN</label>
-      <input
-        type="text"
-        id="ean"
-        name="ean"
-        class="w-full p-2 text-white bg-gray-600 rounded-lg"
-        required
-      />
-    </div>
-
-    <div class="mb-4">
-      <label for="main-image" class="block mb-1">Zdjęcie</label>
-      <input
-        type="file"
-        id="main-image"
-        name="main_image"
-        class="w-full p-2 text-gray-900 rounded-lg"
-        accept="image/*"
-      />
-    </div>
-
-
-    <button
-      type="submit"
-      class="py-2 px-4 bg-blue-600 text-white text-lg rounded-lg hover:bg-blue-500"
-    >
-      Dodaj Wariację
-    </button>
-  </form>
-
-</div>
-
-
-
-
-  <!-- Lista wariacji -->
-  <div id="variation-list" class="grid grid-cols-1 gap-2 w-full">
-  <h2 class="text-2xl text-white">Lista wariacji:</h2>
-    <?php foreach ($variations as $variation) : ?>
-      <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
-        <!-- Checkbox do zaznaczenia wariacji -->
-        <div class="flex items-center">
-          <input type="checkbox" class="variation-checkbox" data-variation-id="<?php echo htmlspecialchars($variation['id']); ?>">
-        </div>
-
-        <!-- Zdjęcie wariacji - 1/6 szerokości -->
-        <div class="w-1/6 flex justify-center">
-          <img src="../img/<?php echo htmlspecialchars($variation['main_image']); ?>" 
-               alt="Zdjęcie wariacji" 
-               class="h-16 w-16 object-contain rounded-lg">
-        </div>
-
-        <!-- Tytuł wariacji - 3/6 szerokości -->
-        <div class="w-3/6 px-4">
-          <h3 class="text-white text-lg truncate"><?php echo htmlspecialchars($variation['title']); ?></h3>
-          <p class="text-gray-400 text-sm truncate">EAN: <?php echo htmlspecialchars($variation['ean']); ?></p>
-        </div>
-
-        <!-- Przycisk "Obejrzyj" - 2/6 szerokości -->
-        <div class="w-2/6 flex justify-end">
-          <button class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm toggle-details" 
-                  data-variation-id="<?php echo htmlspecialchars($variation['id']); ?>">
-            Obejrzyj
-          </button>
-        </div>
-      </div>
-      <!-- Miejsce na szczegóły wariacji z formularzem edycji -->
-      <div id="details-<?php echo $variation['id']; ?>" class="hidden mt-4 p-4 bg-gray-800 rounded-lg">
-    <form id="edit-variation-form-<?php echo $variation['id']; ?>" data-variation-id="<?php echo $variation['id']; ?>">
-        <!-- Tytuł -->
-        <label for="title-<?php echo $variation['id']; ?>" class="block text-white">Tytuł:</label>
-        <input type="text" id="title-<?php echo $variation['id']; ?>" name="title" 
-               value="<?php echo htmlspecialchars($variation['title']); ?>" 
-               class="w-full p-2 rounded bg-gray-700 text-white">
-
-        <!-- EAN -->
-        <label for="ean-<?php echo $variation['id']; ?>" class="block text-white mt-4">EAN:</label>
-        <input type="text" id="ean-<?php echo $variation['id']; ?>" name="ean" 
-               value="<?php echo htmlspecialchars($variation['ean']); ?>" 
-               class="w-full p-2 rounded bg-gray-700 text-white">
-
-        <!-- Zdjęcie główne -->
-
-            <label for="main_image-<?php echo $variation['id']; ?>" class="block text-white mt-4">Główne zdjęcie:</label>
-            <div class="file-upload-area border-dashed border-2 border-gray-500 rounded-lg p-4 text-center mt-2">
-                <p class="text-gray-400 mb-2">Przeciągnij lub wybierz zdjęcie</p>
-                <div class="relative">
-                    <img id="preview-<?php echo $variation['id']; ?>" src="#" alt="Podgląd zdjęcia" class="hidden w-32 h-32 object-cover mx-auto mb-4 rounded-lg">
-                    <p class="text-gray-400 mb-2" id="file-name-<?php echo $variation['id']; ?>">Brak pliku</p>
-                    <input type="file" id="main_image-<?php echo $variation['id']; ?>" name="main_image"
-                          class="hidden file-input" accept="image/*" />
-                    <button type="button" class="py-2 px-4 bg-blue-600 text-white rounded-lg">
-                        Wybierz zdjęcie
-                    </button>
+        <h2 class="text-2xl mb-4">Wariacje</h2>
+        <div id="variation-list" class="grid grid-cols-1 gap-2 w-full">
+            <?php foreach ($variations as $variation): ?>
+                <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
+                    <div class="w-1/6 flex justify-center">
+                        <img src="../img/<?php echo htmlspecialchars($variation['main_image']); ?>" 
+                             alt="Zdjęcie wariacji" 
+                             class="h-16 w-16 object-contain rounded-lg">
+                    </div>
+                    <div class="w-3/6 px-4">
+                        <h3 class="text-white text-lg truncate"><?php echo htmlspecialchars($variation['title']); ?></h3>
+                        <p class="text-gray-400 text-sm truncate">EAN: <?php echo htmlspecialchars($variation['ean']); ?></p>
+                    </div>
+                    <div class="w-2/6 flex justify-end">
+                        <button class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-sm toggle-details" 
+                                data-variation-id="<?php echo htmlspecialchars($variation['id']); ?>">
+                            Obejrzyj
+                        </button>
+                    </div>
                 </div>
-            </div>
-
-        <!-- Przycisk zapisania zmian -->
-        <button type="button" class="mt-4 py-2 px-4 bg-green-600 rounded-lg text-white save-variation"
-                data-variation-id="<?php echo $variation['id']; ?>">
-            Zapisz zmiany
-        </button>
-    </form>
-</div>
-    <?php endforeach; ?>
-  </div>
-</div>
+            <?php endforeach; ?>
+        </div>
     <?php endif; ?>
 </div>
 
@@ -462,7 +346,7 @@ function loadVariationList(productId) {
 //DODAWANIE WARIACJI
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("add-variation-form");
-  const variationsList = document.getElementById("variation-list");
+  const variationsList = document.getElementById("variations-list");
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -478,23 +362,21 @@ document.addEventListener("DOMContentLoaded", () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data); // Debugowanie odpowiedzi
         if (data.success) {
-          alert(data.message || "Wariacja została dodana pomyślnie.");
+          alert(data.message || 'Wariacja została dodany pomyślnie.');
+          form.reset();
+          location.reload();
+          // Aktualizuj listę wariacji
           addVariationToList({
             title: formData.get("title"),
             ean: formData.get("ean"),
-            main_image: data.main_image || null,
+            main_image: formData.get("main_image").name || null,
           });
-          form.reset(); // Reset formularza
+          form.reset();
         } else {
           alert("Błąd: " + data.message);
         }
       })
-      .catch((error) => {
-        console.error("Błąd podczas żądania:", error);
-        // alert("Wystąpił problem z serwerem.");
-      });
   });
 
   const addVariationToList = (variation) => {
@@ -517,15 +399,8 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 });
 
-document.getElementById('toggle-add-variation-form').addEventListener('click', function () {
-    const form = document.getElementById('add-variation-form');
-    // Sprawdzamy aktualny styl wyświetlania
-    if (form.style.display === 'none') {
-      form.style.display = 'block'; // Pokazujemy formularz
-    } else {
-      form.style.display = 'none'; // Ukrywamy formularz
-    }
-  });
+
+
 
 </script>
 

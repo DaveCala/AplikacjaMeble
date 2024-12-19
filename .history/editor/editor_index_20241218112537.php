@@ -223,13 +223,27 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
 
       <!-- Sekcja cech -->
+<!-- Sekcja cech -->
 <div id="product-features">
   <h3 class="text-xl text-white mb-4">Cechy produktu:</h3>
   <div class="mb-4 text-white">
     <label class="block mb-2 text-sm">Wybierz cechy:</label>
-    <div id="feature-checkboxes" class="grid grid-cols-3 gap-4">
+    <div id="feature-checkboxes" class="grid grid-flow-col auto-rows-max gap-4">
       <!-- Checkboxy będą dodane dynamicznie tutaj -->
-      
+      <!-- Przykładowe checkboxy -->
+      <label class="flex items-center">
+        <input type="checkbox" class="form-checkbox mr-2"> Cecha 1
+      </label>
+      <label class="flex items-center">
+        <input type="checkbox" class="form-checkbox mr-2"> Cecha 2
+      </label>
+      <label class="flex items-center">
+        <input type="checkbox" class="form-checkbox mr-2"> Cecha 3
+      </label>
+      <label class="flex items-center">
+        <input type="checkbox" class="form-checkbox mr-2"> Cecha 4
+      </label>
+      <!-- Dodaj więcej checkboxów -->
     </div>
   </div>
   <div id="dynamic-fields" class="space-y-4"></div>
@@ -241,7 +255,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     </div>
 
-    <br>
     <div class="flex justify-center mb-6">
       <button type="submit" class="py-2 px-4 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
         Dodaj

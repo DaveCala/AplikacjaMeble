@@ -223,25 +223,23 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
 
       <!-- Sekcja cech -->
-<div id="product-features">
-  <h3 class="text-xl text-white mb-4">Cechy produktu:</h3>
-  <div class="mb-4 text-white">
-    <label class="block mb-2 text-sm">Wybierz cechy:</label>
-    <div id="feature-checkboxes" class="grid grid-cols-3 gap-4">
-      <!-- Checkboxy będą dodane dynamicznie tutaj -->
-      
-    </div>
-  </div>
-  <div id="dynamic-fields" class="space-y-4"></div>
-</div>
+      <div id="product-features">
+        <h3 class="text-xl text-white mb-4">Cechy produktu:</h3>
+        <div class="mb-4 text-white">
+          <label class="block mb-2 text-sm">Wybierz cechy:</label>
+          <div id="feature-checkboxes" class="flex flex-wrap gap-4">
+            <!-- Checkboxy będą dodane dynamicznie tutaj -->
+          </div>
+        </div>
+        <!-- <button id="save-button" class="mt-4 p-2 bg-blue-500 text-white rounded">Zapisz</button> -->
+        <div id="dynamic-fields" class="space-y-4"></div>
+      </div>
 
-
-
-    </div>
 
     </div>
 
-    <br>
+    </div>
+
     <div class="flex justify-center mb-6">
       <button type="submit" class="py-2 px-4 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
         Dodaj

@@ -135,11 +135,44 @@ if ($productId) {
       </button>
     </form>
         <br>
+        <h1 class="text-3xl mb-6">Edytuj Produkt</h1>
+    <form id="edit-product-form" enctype="multipart/form-data">
+      <!-- Ukryte pole przechowujące ID produktu -->
+      <input type="hidden" id="product-id" name="product_id" value="<?php echo htmlspecialchars($product['id'] ?? 0); ?>">
+
+      <!-- Tytuł produktu -->
+      <div class="mb-4">
+        <label for="edit-product-title" class="block mb-2 text-sm">Tytuł produktu:</label>
+        <input type="text" id="edit-product-title" name="title"
+               value="<?php echo htmlspecialchars($product['title'] ?? ''); ?>"
+               class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Kategoria produktu -->
+      <div class="mb-4">
+        <label for="edit-product-category" class="block mb-2 text-sm">Kategoria:</label>
+        <input type="text" id="edit-product-category" name="category"
+               value="<?php echo htmlspecialchars($product['category'] ?? ''); ?>"
+               class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Zdjęcie produktu -->
+      <div class="mb-4">
+        <label for="edit-product-image" class="block mb-2 text-sm">Zdjęcie produktu:</label>
+        <input type="file" id="edit-product-image" name="image"
+               class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+      </div>
+
+      <button type="button" id="save-product-details"
+              class="py-3 px-6 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
+        Zapisz zmiany
+      </button>
+    </form>
   </div>
 
   <!-- Przycisk dodawania nowej wariacji -->
-  <div class="flex justify-between items-center mt-10  mx-6">
-  <h2 class="text-2xl text-white"></h2>
+  <div class="flex justify-between items-center mt-10 mb-4 mx-6">
+  <h2 class="text-2xl text-white">Dodaj nową wariację:</h2>
   <button id="delete-selected-variations" class="py-2 px-4 bg-red-600 text-white text-lg rounded-lg hidden hover:bg-red-500">
           Usuń zaznaczone
   </button>
@@ -150,8 +183,6 @@ if ($productId) {
 
 <div class="p-6 bg-gray-800 text-white rounded-lg">
   <form id="add-variation-form" enctype="multipart/form-data">
-  <h2 class="text-2xl text-white">Dodaj nową wariację:</h2>
-  <br>
     <input type="hidden" name="product_id" value="12345" id="product-id" /> <!-- Ustaw właściwe ID produktu -->
 
     <div class="mb-4">
@@ -203,7 +234,6 @@ if ($productId) {
 
   <!-- Lista wariacji -->
   <div id="variation-list" class="grid grid-cols-1 gap-2 w-full">
-  <h2 class="text-2xl text-white">Lista wariacji:</h2>
     <?php foreach ($variations as $variation) : ?>
       <div class="bg-gray-900 p-4 border border-gray-700 rounded-lg shadow-md flex items-center">
         <!-- Checkbox do zaznaczenia wariacji -->
@@ -462,7 +492,7 @@ function loadVariationList(productId) {
 //DODAWANIE WARIACJI
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("add-variation-form");
-  const variationsList = document.getElementById("variation-list");
+  const variationsList = document.getElementById("variations-list");
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -478,23 +508,22 @@ document.addEventListener("DOMContentLoaded", () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data); // Debugowanie odpowiedzi
+        console.log(data); // Dodaj to, aby sprawdzić, co jest zwracane
         if (data.success) {
-          alert(data.message || "Wariacja została dodana pomyślnie.");
+          alert(data.message || 'Wariacja została dodany pomyślnie.');
+          form.reset();
+          location.reload();
+          // Aktualizuj listę wariacji
           addVariationToList({
             title: formData.get("title"),
             ean: formData.get("ean"),
-            main_image: data.main_image || null,
+            main_image: formData.get("main_image").name || null,
           });
-          form.reset(); // Reset formularza
+          form.reset();
         } else {
           alert("Błąd: " + data.message);
         }
       })
-      .catch((error) => {
-        console.error("Błąd podczas żądania:", error);
-        // alert("Wystąpił problem z serwerem.");
-      });
   });
 
   const addVariationToList = (variation) => {
@@ -517,15 +546,8 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 });
 
-document.getElementById('toggle-add-variation-form').addEventListener('click', function () {
-    const form = document.getElementById('add-variation-form');
-    // Sprawdzamy aktualny styl wyświetlania
-    if (form.style.display === 'none') {
-      form.style.display = 'block'; // Pokazujemy formularz
-    } else {
-      form.style.display = 'none'; // Ukrywamy formularz
-    }
-  });
+
+
 
 </script>
 

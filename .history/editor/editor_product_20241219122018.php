@@ -138,7 +138,7 @@ if ($productId) {
   </div>
 
   <!-- Przycisk dodawania nowej wariacji -->
-  <div class="flex justify-between items-center mt-10  mx-6">
+  <div class="flex justify-between items-center mt-10 mb-4 mx-6">
   <h2 class="text-2xl text-white"></h2>
   <button id="delete-selected-variations" class="py-2 px-4 bg-red-600 text-white text-lg rounded-lg hidden hover:bg-red-500">
           Usuń zaznaczone
