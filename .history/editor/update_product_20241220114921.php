@@ -4,9 +4,9 @@ require_once '../db.php';
 $response = ['success' => false, 'message' => ''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $productId = $_POST['product_id'] ?? 0;
     $title = $_POST['title'] ?? '';
     $category = $_POST['category'] ?? '';
+    $productId = $_POST['product_id'] ?? 0;
 
     if (empty($title) || empty($category) || empty($productId)) {
         $response['message'] = 'Wszystkie pola muszą być wypełnione.';
@@ -14,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Obsługa przesyłania obrazu
     $imagePath = null;
     if (!empty($_FILES['image']['name'])) {
         $targetDir = "../img/";
@@ -38,33 +37,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $imagePath = $imageFileName;
     }
 
-    // Dynamiczne budowanie zapytania SQL
-    $fieldsToUpdate = ['title' => $title, 'category' => $category];
-    if ($imagePath) {
-        $fieldsToUpdate['image'] = $imagePath;
-    }
-
-    // Dodawanie dynamicznych pól do zapytania
-    foreach ($_POST as $key => $value) {
-        if (!in_array($key, ['product_id', 'title', 'category']) && !empty($value)) {
-            $fieldsToUpdate[$key] = $value;
-        }
-    }
-
     try {
-        $query = "UPDATE products SET ";
-        $setClauses = [];
-        foreach ($fieldsToUpdate as $field => $value) {
-            $setClauses[] = "`$field` = :$field";
+        $query = "UPDATE products SET title = :title, category = :category";
+        if ($imagePath) {
+            $query .= ", image = :image";
         }
-        $query .= implode(', ', $setClauses);
         $query .= " WHERE id = :id";
 
         $stmt = $pdo->prepare($query);
-        foreach ($fieldsToUpdate as $field => $value) {
-            $stmt->bindValue(":$field", $value);
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':category', $category);
+        $stmt->bindParam(':id', $productId, PDO::PARAM_INT);
+        if ($imagePath) {
+            $stmt->bindParam(':image', $imagePath);
         }
-        $stmt->bindValue(':id', $productId, PDO::PARAM_INT);
 
         if ($stmt->execute()) {
             $response['success'] = true;

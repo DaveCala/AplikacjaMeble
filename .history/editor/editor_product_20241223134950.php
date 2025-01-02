@@ -218,77 +218,55 @@ if ($productId) {
   </button>
 </div>
 
-<div class="p-6 bg-gray-800 text-white rounded-lg">
-  <form id="add-variation-form" enctype="multipart/form-data">
-    <h2 class="text-2xl text-white">Dodaj nową wariację:</h2>
-    <br />
-    <input type="hidden" name="product_id" value="12345" id="product-id" /> <!-- Ustaw właściwe ID produktu -->
+<div id="add-variation-form" class="p-6 bg-gray-800 text-white rounded-lg hidden">
+  <h2 class="text-2xl text-white mb-4">Dodaj nową wariację:</h2>
+  <form id="variation-form" enctype="multipart/form-data">
+    <input type="hidden" name="product_id" value="12345" id="product-id" />
 
+    <!-- Pole tytułu -->
     <div class="mb-4">
-      <label for="title" class="block mb-1">Tytuł</label>
-      <input
-        type="text"
-        id="title"
-        name="title"
-        class="w-full p-2 text-white bg-gray-600 rounded-lg"
-        required
-      />
+      <label for="variation-title" class="block mb-1">Tytuł</label>
+      <input type="text" id="variation-title" name="title" class="w-full p-2 text-white bg-gray-600 rounded-lg" required />
     </div>
 
+    <!-- Pole EAN -->
     <div class="mb-4">
-      <label for="ean" class="block mb-1">EAN</label>
-      <input
-        type="text"
-        id="ean"
-        name="ean"
-        class="w-full p-2 text-white bg-gray-600 rounded-lg"
-        required
-      />
+      <label for="variation-ean" class="block mb-1">EAN</label>
+      <input type="text" id="variation-ean" name="ean" class="w-full p-2 text-white bg-gray-600 rounded-lg" required />
     </div>
 
+    <!-- Zdjęcie -->
     <div class="mb-4">
-      <label for="price" class="block mb-1">Cena</label>
-      <input
-        type="number"
-        step="0.01"
-        id="price"
-        name="price"
-        class="w-full p-2 text-white bg-gray-600 rounded-lg"
-        required
-      />
+      <label for="variation-main-image" class="block mb-1">Zdjęcie</label>
+      <input type="file" id="variation-main-image" name="main_image" class="w-full p-2 text-gray-900 rounded-lg" accept="image/*" />
     </div>
 
+    <!-- Cena -->
     <div class="mb-4">
-      <label for="description" class="block mb-1">Opis</label>
-      <textarea
-        id="description"
-        name="description"
-        rows="4"
-        class="w-full p-2 text-white bg-gray-600 rounded-lg"
-        required
-      ></textarea>
+      <label for="variation-price" class="block mb-1">Cena</label>
+      <input type="text" id="variation-price" name="price" class="w-full p-2 text-white bg-gray-600 rounded-lg" />
     </div>
 
+    <!-- Opis -->
     <div class="mb-4">
-      <label for="main-image" class="block mb-1">Zdjęcie</label>
-      <input
-        type="file"
-        id="main-image"
-        name="main_image"
-        class="w-full p-2 text-gray-900 rounded-lg"
-        accept="image/*"
-      />
+      <label for="variation-description" class="block mb-1">Opis</label>
+      <textarea id="variation-description" name="description" class="w-full p-2 text-white bg-gray-600 rounded-lg"></textarea>
     </div>
 
-    <button
-      type="submit"
-      class="py-2 px-4 bg-blue-600 text-white text-lg rounded-lg hover:bg-blue-500"
-    >
+    <!-- Sekcja cech -->
+    <div id="variation-features">
+      <h3 class="text-xl text-white mb-4">Cechy wariacji:</h3>
+      <div id="feature-checkboxes" class="grid grid-cols-3 gap-4">
+        <!-- Checkboxy będą dodane dynamicznie -->
+      </div>
+    </div>
+
+    <!-- Przycisk dodania -->
+    <button type="submit" class="py-2 px-4 bg-blue-600 text-white text-lg rounded-lg hover:bg-blue-500">
       Dodaj Wariację
     </button>
   </form>
 </div>
-
 
   <!-- Lista wariacji -->
   <div id="variation-list" class="grid grid-cols-1 gap-2 w-full">
@@ -616,36 +594,79 @@ document.getElementById('toggle-add-variation-form').addEventListener('click', f
     }
   });
 
-  document.getElementById('add-variation-form').addEventListener('submit', async function (event) {
-  event.preventDefault(); // Zapobiega domyślnemu przesłaniu formularza
+document.addEventListener("DOMContentLoaded", () => {
+  // Funkcja do ładowania cech
+  const loadFeatures = () => {
+    const features = [
+      "Wysokość",
+      "Szerokość",
+      "Głębokość",
+      "Kształt narożnika",
+      "Styl",
+      "Materac w zestawie",
+    ]; // Przykładowe cechy
 
-  const form = event.target;
-  const formData = new FormData(form);
-
-  try {
-    const response = await fetch('add_variation.php', {
-      method: 'POST',
-      body: formData,
+    const featureContainer = document.getElementById("feature-checkboxes");
+    featureContainer.innerHTML = ""; // Wyczyść przed dodaniem nowych
+    features.forEach((feature) => {
+      const featureElement = document.createElement("div");
+      featureElement.innerHTML = `
+        <label class="inline-flex items-center">
+          <input type="checkbox" name="features[]" value="${feature}" class="form-checkbox text-green-500">
+          <span class="ml-2 text-white">${feature}</span>
+        </label>
+      `;
+      featureContainer.appendChild(featureElement);
     });
+  };
 
-    if (!response.ok) {
-      throw new Error('Wystąpił błąd po stronie serwera.');
-    }
+  // Wywołanie funkcji na załadowanie
+  loadFeatures();
 
-    const result = await response.json();
-
-    if (result.success) {
-      alert(result.message); // Wyświetla komunikat o sukcesie
-      form.reset(); // Resetuje formularz
-    } else {
-      alert(`Błąd: ${result.message}`); // Wyświetla komunikat błędu
-    }
-  } catch (error) {
-    alert('Wystąpił błąd podczas przesyłania danych.');
-    console.error('Błąd:', error);
-  }
+  // Pokaż/ukryj formularz
+  document.getElementById("toggle-add-variation-form").addEventListener("click", () => {
+    const form = document.getElementById("add-variation-form");
+    form.classList.toggle("hidden");
+  });
 });
-;
+
+///////////
+document.addEventListener("DOMContentLoaded", () => {
+  // Funkcja do ładowania cech
+  const loadFeatures = () => {
+    const features = [
+      "Wysokość",
+      "Szerokość",
+      "Głębokość",
+      "Kształt narożnika",
+      "Styl",
+      "Materac w zestawie",
+    ]; // Przykładowe cechy
+
+    const featureContainer = document.getElementById("feature-checkboxes");
+    featureContainer.innerHTML = ""; // Wyczyść przed dodaniem nowych
+    features.forEach((feature) => {
+      const featureElement = document.createElement("div");
+      featureElement.innerHTML = `
+        <label class="inline-flex items-center">
+          <input type="checkbox" name="features[]" value="${feature}" class="form-checkbox text-green-500">
+          <span class="ml-2 text-white">${feature}</span>
+        </label>
+      `;
+      featureContainer.appendChild(featureElement);
+    });
+  };
+
+  // Wywołanie funkcji na załadowanie
+  loadFeatures();
+
+  // Pokaż/ukryj formularz
+  document.getElementById("toggle-add-variation-form").addEventListener("click", () => {
+    const form = document.getElementById("add-variation-form");
+    form.classList.toggle("hidden");
+  });
+});
+
 
 </script>
 

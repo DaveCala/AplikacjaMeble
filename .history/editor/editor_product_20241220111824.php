@@ -68,150 +68,62 @@ if ($productId) {
 <body class="bg-gray-800 text-white">
 <div class="container mx-auto p-6">
     <h1 class="text-3xl mb-6">Edytuj Produkt</h1>
-    <?php if ($product['isVariation'] ?? false): ?>
-        <!-- Panel edycji produktu, gdy isVariation = true -->
-        <form id="edit-product-form" enctype="multipart/form-data">
-            <input type="hidden" id="product-id" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
+    <?php
+    // Lista kolumn z tabeli products
+    $columns = [
+        'title', 'category', 'description', 'isVariation', 'price',
+        'szerokosc', 'wysokosc', 'glebokosc', 'powierzchnia_spania',
+        'glebokosc_siedziska', 'wypelnienie_siedziska', 'funkcja_spania',
+        'pojemnik_na_posciel', 'regulowany_zaglowek', 'czas_wysylki',
+        'ksztalt_naroznika', 'strona_naroznika', 'styl', 'rozmiar_kanapy',
+        'obrotowe_siedzisko', 'regulowane_podlokietniki', 'pojemnik_w_pufie',
+        'ksztalt_pufy', 'wykonczenie_frontow', 'oswietlenie', 'liczba_szuflad',
+        'lustro_w_zestawie', 'szafa_z_lustrem', 'szafa_z_drazkiem', 'szafa_z_szufladami',
+        'typ_szafy', 'wysuwany_blat', 'rodzaj_lozka', 'materac_w_zestawie',
+        'stelaz_w_zestawie', 'twardosc_materaca', 'rodzaj_materaca', 'ksztalt_lustra',
+        'szerokosc_po_rozlozeniu', 'rozkladany_blat', 'ksztalt_blatu',
+        'wysokosc_siedziska', 'wysokosc_oparcia', 'rodzaj_krzesla',
+        'kolorystyka_mebla', 'glebokosc_otomany', 'rozmiar_lozka',
+        'wysokosc_boku_lozka', 'wysokosc_nog', 'rodzaj_stelaza', 'kolekcja', 'z_podnozkiem'
+    ];
+    ?>
 
-            <!-- Tytuł produktu -->
-      <div class="mb-4">
-        <label for="edit-product-title" class="block mb-2 text-sm">Tytuł produktu:</label>
-        <input type="text" id="edit-product-title" name="title"
-               value="<?php echo htmlspecialchars($product['title'] ?? ''); ?>"
-               class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
-      </div>
+    <form id="edit-product-form" enctype="multipart/form-data">
+        <input type="hidden" id="product-id" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
 
-      <!-- Kategoria produktu -->
-      <div class="mb-4">
-        <label for="edit-product-category" class="block mb-2 text-sm">Kategoria:</label>
-        <input type="text" id="edit-product-category" name="category"
-               value="<?php echo htmlspecialchars($product['category'] ?? ''); ?>"
-               class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
-      </div>
+        <?php foreach ($columns as $column): ?>
+            <?php if ($column !== 'image'): ?>
+                <div class="mb-4">
+                    <label for="edit-product-<?php echo htmlspecialchars($column); ?>" class="block mb-2 text-sm">
+                        <?php echo str_replace('_', ' ', ucfirst($column)); ?>:
+                    </label>
+                    <input type="text" id="edit-product-<?php echo htmlspecialchars($column); ?>"
+                           name="<?php echo htmlspecialchars($column); ?>"
+                           value="<?php echo htmlspecialchars($product[$column] ?? ''); ?>"
+                           class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
 
-      <!-- Zdjęcie produktu -->
-      <div class="mb-4">
-        <label for="edit-product-image" class="block mb-2 text-sm">Zdjęcie produktu:</label>
-        <input type="file" id="edit-product-image" name="image"
-               class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-      </div>
+        <!-- Zdjęcie produktu -->
+        <div class="mb-4">
+            <label for="edit-product-image" class="block mb-2 text-sm">Zdjęcie produktu:</label>
+            <input type="file" id="edit-product-image" name="image"
+                   class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+        </div>
 
-       <!-- Pola dynamiczne -->
-       <?php
-        // Lista pól do wyświetlenia
-        $fields = [
-          'price' => 'Cena',
-          'description' => 'Opis',
-          'szerokosc' => 'Szerokość',
-          'wysokosc' => 'Wysokość',
-          'glebokosc' => 'Głębokość',
-          'powierzchnia_spania' => 'Powierzchnia spania',
-          'glebokosc_siedziska' => 'Głębokość siedziska',
-          'wypelnienie_siedziska' => 'Wypełnienie siedziska',
-          'funkcja_spania' => 'Funkcja spania',
-          'pojemnik_na_posciel' => 'Pojemnik na pościel',
-          'regulowany_zaglowek' => 'Regulowany zagłówek',
-          'czas_wysylki' => 'Czas wysyłki',
-          'ksztalt_naroznika' => 'Kształt narożnika',
-          'strona_naroznika' => 'Strona narożnika',
-          'styl' => 'Styl',
-          'rozmiar_kanapy' => 'Rozmiar kanapy',
-          'obrotowe_siedzisko' => 'Obrotowe siedzisko',
-          'regulowane_podlokietniki' => 'Regulowane podłokietniki',
-          'pojemnik_w_pufie' => 'Pojemnik w pufie',
-          'ksztalt_pufy' => 'Kształt pufy',
-          'wykonczenie_frontow' => 'Wykończenie frontów',
-          'oswietlenie' => 'Oświetlenie',
-          'liczba_szuflad' => 'Liczba szuflad',
-          'lustro_w_zestawie' => 'Lustro w zestawie',
-          'szafa_z_lustrem' => 'Szafa z lustrem',
-          'szafa_z_drazkiem' => 'Szafa z drążkiem',
-          'szafa_z_szufladami' => 'Szafa z szufladami',
-          'typ_szafy' => 'Typ szafy',
-          'wysuwany_blat' => 'Wysuwany blat',
-          'rodzaj_lozka' => 'Rodzaj łóżka',
-          'materac_w_zestawie' => 'Materac w zestawie',
-          'stelaz_w_zestawie' => 'Stelaż w zestawie',
-          'twardosc_materaca' => 'Twardość materaca',
-          'rodzaj_materaca' => 'Rodzaj materaca',
-          'ksztalt_lustra' => 'Kształt lustra',
-          'szerokosc_po_rozlozeniu' => 'Szerokość po rozłożeniu',
-          'rozkladany_blat' => 'Rozkładany blat',
-          'ksztalt_blatu' => 'Kształt blatu',
-          'wysokosc_siedziska' => 'Wysokość siedziska',
-          'wysokosc_oparcia' => 'Wysokość oparcia',
-          'rodzaj_krzesla' => 'Rodzaj krzesła',
-          'kolorystyka_mebla' => 'Kolorystyka mebla',
-          'glebokosc_otomany' => 'Głębokość otomany',
-          'rozmiar_lozka' => 'Rozmiar łóżka',
-          'wysokosc_boku_lozka' => 'Wysokość boku łóżka',
-          'wysokosc_nog' => 'Wysokość nóg',
-          'rodzaj_stelaza' => 'Rodzaj stelaża',
-          'z_podnozkiem' => 'Z podnóżkiem',
-          'kolekcja' => 'Kolekcja',
-        ];
-
-
-        foreach ($fields as $field => $label) {
-            if (!empty($product[$field])) {
-                echo '
-                    <div class="mb-4">
-                        <label for="edit-product-' . $field . '" class="block mb-2 text-sm">' . $label . ':</label>
-                        <input type="text" id="edit-product-' . $field . '" name="' . $field . '"
-                               value="' . htmlspecialchars($product[$field]) . '"
-                               class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>';
-            }
-        }
-        ?>
-
-            <button type="button" id="save-product-details"
-                    class="py-3 px-6 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
-                Zapisz zmiany
-            </button>
-        </form>
-    </div>
-    <?php else: ?>
-      <!-- Panel edycji produktu, gdy isVariation = false -->
-      <form id="edit-product-form" enctype="multipart/form-data">
-            <input type="hidden" id="product-id" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
-
-            <!-- Tytuł produktu -->
-      <div class="mb-4">
-        <label for="edit-product-title" class="block mb-2 text-sm">Tytuł produktu:</label>
-        <input type="text" id="edit-product-title" name="title"
-               value="<?php echo htmlspecialchars($product['title'] ?? ''); ?>"
-               class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
-      </div>
-
-      <!-- Kategoria produktu -->
-      <div class="mb-4">
-        <label for="edit-product-category" class="block mb-2 text-sm">Kategoria:</label>
-        <input type="text" id="edit-product-category" name="category"
-               value="<?php echo htmlspecialchars($product['category'] ?? ''); ?>"
-               class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
-      </div>
-
-      <!-- Zdjęcie produktu -->
-      <div class="mb-4">
-        <label for="edit-product-image" class="block mb-2 text-sm">Zdjęcie produktu:</label>
-        <input type="file" id="edit-product-image" name="image"
-               class="block w-full text-sm text-gray-300 bg-gray-700 border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-      </div>
-
-      <button type="button" id="save-product-details"
-              class="py-3 px-6 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
-        Zapisz zmiany
-      </button>
+        <button type="button" id="save-product-details"
+                class="py-3 px-6 bg-green-600 rounded-lg text-white text-lg hover:bg-green-500">
+            Zapisz zmiany
+        </button>
     </form>
-        <br>
-  </div>
+</div>
 
-<!-- Przycisk dodawania nowej wariacji -->
-<div class="flex justify-between items-center mt-10 mx-6">
+  <!-- Przycisk dodawania nowej wariacji -->
+  <div class="flex justify-between items-center mt-10  mx-6">
   <h2 class="text-2xl text-white"></h2>
   <button id="delete-selected-variations" class="py-2 px-4 bg-red-600 text-white text-lg rounded-lg hidden hover:bg-red-500">
-    Usuń zaznaczone
+          Usuń zaznaczone
   </button>
   <button id="toggle-add-variation-form" class="py-2 px-4 bg-gray-800 rounded-lg border border-green-500 text-green-500 text-lg hover:bg-green-500 hover:text-white">
     Dodaj wariację
@@ -220,8 +132,8 @@ if ($productId) {
 
 <div class="p-6 bg-gray-800 text-white rounded-lg">
   <form id="add-variation-form" enctype="multipart/form-data">
-    <h2 class="text-2xl text-white">Dodaj nową wariację:</h2>
-    <br />
+  <h2 class="text-2xl text-white">Dodaj nową wariację:</h2>
+  <br>
     <input type="hidden" name="product_id" value="12345" id="product-id" /> <!-- Ustaw właściwe ID produktu -->
 
     <div class="mb-4">
@@ -247,29 +159,6 @@ if ($productId) {
     </div>
 
     <div class="mb-4">
-      <label for="price" class="block mb-1">Cena</label>
-      <input
-        type="number"
-        step="0.01"
-        id="price"
-        name="price"
-        class="w-full p-2 text-white bg-gray-600 rounded-lg"
-        required
-      />
-    </div>
-
-    <div class="mb-4">
-      <label for="description" class="block mb-1">Opis</label>
-      <textarea
-        id="description"
-        name="description"
-        rows="4"
-        class="w-full p-2 text-white bg-gray-600 rounded-lg"
-        required
-      ></textarea>
-    </div>
-
-    <div class="mb-4">
       <label for="main-image" class="block mb-1">Zdjęcie</label>
       <input
         type="file"
@@ -280,6 +169,7 @@ if ($productId) {
       />
     </div>
 
+
     <button
       type="submit"
       class="py-2 px-4 bg-blue-600 text-white text-lg rounded-lg hover:bg-blue-500"
@@ -287,7 +177,10 @@ if ($productId) {
       Dodaj Wariację
     </button>
   </form>
+
 </div>
+
+
 
 
   <!-- Lista wariacji -->
@@ -362,8 +255,7 @@ if ($productId) {
     <?php endforeach; ?>
   </div>
 </div>
-    <?php endif; ?>
-</div>
+
 
   <script>
   document.getElementById('save-product-details').addEventListener('click', () => {
@@ -615,37 +507,6 @@ document.getElementById('toggle-add-variation-form').addEventListener('click', f
       form.style.display = 'none'; // Ukrywamy formularz
     }
   });
-
-  document.getElementById('add-variation-form').addEventListener('submit', async function (event) {
-  event.preventDefault(); // Zapobiega domyślnemu przesłaniu formularza
-
-  const form = event.target;
-  const formData = new FormData(form);
-
-  try {
-    const response = await fetch('add_variation.php', {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new Error('Wystąpił błąd po stronie serwera.');
-    }
-
-    const result = await response.json();
-
-    if (result.success) {
-      alert(result.message); // Wyświetla komunikat o sukcesie
-      form.reset(); // Resetuje formularz
-    } else {
-      alert(`Błąd: ${result.message}`); // Wyświetla komunikat błędu
-    }
-  } catch (error) {
-    alert('Wystąpił błąd podczas przesyłania danych.');
-    console.error('Błąd:', error);
-  }
-});
-;
 
 </script>
 

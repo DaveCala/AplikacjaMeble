@@ -617,35 +617,30 @@ document.getElementById('toggle-add-variation-form').addEventListener('click', f
   });
 
   document.getElementById('add-variation-form').addEventListener('submit', async function (event) {
-  event.preventDefault(); // Zapobiega domyślnemu przesłaniu formularza
+    event.preventDefault(); // Zapobiega domyślnemu przesłaniu formularza
 
-  const form = event.target;
-  const formData = new FormData(form);
+    const form = event.target;
+    const formData = new FormData(form);
 
-  try {
-    const response = await fetch('add_variation.php', {
-      method: 'POST',
-      body: formData,
-    });
+    try {
+      const response = await fetch('dodawanie_variacji.php', {
+        method: 'POST',
+        body: formData,
+      });
 
-    if (!response.ok) {
-      throw new Error('Wystąpił błąd po stronie serwera.');
+      const result = await response.json();
+
+      if (result.success) {
+        alert('Wariacja została poprawnie dodana!');
+        form.reset(); // Resetuje formularz po poprawnym dodaniu
+      } else {
+        alert(`Błąd: ${result.message}`);
+      }
+    } catch (error) {
+      alert('Wystąpił błąd podczas przesyłania danych.');
+      console.error('Błąd:', error);
     }
-
-    const result = await response.json();
-
-    if (result.success) {
-      alert(result.message); // Wyświetla komunikat o sukcesie
-      form.reset(); // Resetuje formularz
-    } else {
-      alert(`Błąd: ${result.message}`); // Wyświetla komunikat błędu
-    }
-  } catch (error) {
-    alert('Wystąpił błąd podczas przesyłania danych.');
-    console.error('Błąd:', error);
-  }
-});
-;
+  });
 
 </script>
 

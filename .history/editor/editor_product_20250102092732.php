@@ -623,7 +623,7 @@ document.getElementById('toggle-add-variation-form').addEventListener('click', f
   const formData = new FormData(form);
 
   try {
-    const response = await fetch('add_variation.php', {
+    const response = await fetch('dodawanie_variacji.php', {
       method: 'POST',
       body: formData,
     });

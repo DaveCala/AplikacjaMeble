@@ -220,8 +220,8 @@ if ($productId) {
 
 <div class="p-6 bg-gray-800 text-white rounded-lg">
   <form id="add-variation-form" enctype="multipart/form-data">
-    <h2 class="text-2xl text-white">Dodaj nową wariację:</h2>
-    <br />
+  <h2 class="text-2xl text-white">Dodaj nową wariację:</h2>
+  <br>
     <input type="hidden" name="product_id" value="12345" id="product-id" /> <!-- Ustaw właściwe ID produktu -->
 
     <div class="mb-4">
@@ -247,29 +247,6 @@ if ($productId) {
     </div>
 
     <div class="mb-4">
-      <label for="price" class="block mb-1">Cena</label>
-      <input
-        type="number"
-        step="0.01"
-        id="price"
-        name="price"
-        class="w-full p-2 text-white bg-gray-600 rounded-lg"
-        required
-      />
-    </div>
-
-    <div class="mb-4">
-      <label for="description" class="block mb-1">Opis</label>
-      <textarea
-        id="description"
-        name="description"
-        rows="4"
-        class="w-full p-2 text-white bg-gray-600 rounded-lg"
-        required
-      ></textarea>
-    </div>
-
-    <div class="mb-4">
       <label for="main-image" class="block mb-1">Zdjęcie</label>
       <input
         type="file"
@@ -280,6 +257,7 @@ if ($productId) {
       />
     </div>
 
+
     <button
       type="submit"
       class="py-2 px-4 bg-blue-600 text-white text-lg rounded-lg hover:bg-blue-500"
@@ -287,8 +265,8 @@ if ($productId) {
       Dodaj Wariację
     </button>
   </form>
-</div>
 
+</div>
 
   <!-- Lista wariacji -->
   <div id="variation-list" class="grid grid-cols-1 gap-2 w-full">
@@ -615,37 +593,6 @@ document.getElementById('toggle-add-variation-form').addEventListener('click', f
       form.style.display = 'none'; // Ukrywamy formularz
     }
   });
-
-  document.getElementById('add-variation-form').addEventListener('submit', async function (event) {
-  event.preventDefault(); // Zapobiega domyślnemu przesłaniu formularza
-
-  const form = event.target;
-  const formData = new FormData(form);
-
-  try {
-    const response = await fetch('add_variation.php', {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new Error('Wystąpił błąd po stronie serwera.');
-    }
-
-    const result = await response.json();
-
-    if (result.success) {
-      alert(result.message); // Wyświetla komunikat o sukcesie
-      form.reset(); // Resetuje formularz
-    } else {
-      alert(`Błąd: ${result.message}`); // Wyświetla komunikat błędu
-    }
-  } catch (error) {
-    alert('Wystąpił błąd podczas przesyłania danych.');
-    console.error('Błąd:', error);
-  }
-});
-;
 
 </script>
 
