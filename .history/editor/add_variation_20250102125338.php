@@ -74,7 +74,7 @@ if (isset($_POST['title'], $_POST['ean'], $_POST['price'], $_POST['description']
     } catch (PDOException $e) {
         // Sprawdzanie błędów i pomijanie błędów dotyczących klucza obcego
         if ($e->getCode() === '23000') {
-            // echo json_encode(['success' => false, 'message' => 'Błąd klucza obcego.']);
+            echo json_encode(['success' => false, 'message' => 'Błąd klucza obcego.']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Błąd podczas zapisu do bazy danych: ' . $e->getMessage()]);
         }

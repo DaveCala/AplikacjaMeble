@@ -22,16 +22,16 @@ if (isset($_POST['title'], $_POST['ean'], $_POST['price'], $_POST['description']
     $description = $_POST['description'];
 
     try {
-        // // Sprawdzenie, czy product_id istnieje w tabeli products
-        // $sqlCheckProduct = "SELECT id FROM products WHERE id = :product_id";
-        // $stmtCheckProduct = $pdo->prepare($sqlCheckProduct);
-        // $stmtCheckProduct->execute([':product_id' => $productId]);
+        // Sprawdzenie, czy product_id istnieje w tabeli products
+        $sqlCheckProduct = "SELECT id FROM products WHERE id = :product_id";
+        $stmtCheckProduct = $pdo->prepare($sqlCheckProduct);
+        $stmtCheckProduct->execute([':product_id' => $productId]);
 
-        // // Sprawdzanie, czy produkt istnieje w tabeli products
-        // if ($stmtCheckProduct->rowCount() === 0) {
-        //     echo json_encode(['success' => false, 'message' => 'Nieprawidłowy identyfikator produktu.']);
-        //     exit;
-        // }
+        // Sprawdzanie, czy produkt istnieje w tabeli products
+        if ($stmtCheckProduct->rowCount() === 0) {
+            echo json_encode(['success' => false, 'message' => 'Nieprawidłowy identyfikator produktu.']);
+            exit;
+        }
 
         // Sprawdzenie, czy zostało przesłane nowe zdjęcie
         if (isset($_FILES['main_image']) && $_FILES['main_image']['error'] === UPLOAD_ERR_OK) {
@@ -74,7 +74,7 @@ if (isset($_POST['title'], $_POST['ean'], $_POST['price'], $_POST['description']
     } catch (PDOException $e) {
         // Sprawdzanie błędów i pomijanie błędów dotyczących klucza obcego
         if ($e->getCode() === '23000') {
-            // echo json_encode(['success' => false, 'message' => 'Błąd klucza obcego.']);
+            echo json_encode(['success' => false, 'message' => 'Błąd klucza obcego.']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Błąd podczas zapisu do bazy danych: ' . $e->getMessage()]);
         }

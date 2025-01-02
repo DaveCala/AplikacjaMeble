@@ -641,7 +641,7 @@ document.getElementById('toggle-add-variation-form').addEventListener('click', f
       alert(`Błąd: ${result.message}`); // Wyświetla komunikat błędu
     }
   } catch (error) {
-    // alert('Wystąpił błąd podczas przesyłania danych.');
+    alert('Wystąpił błąd podczas przesyłania danych.');
     console.error('Błąd:', error);
   }
 });
